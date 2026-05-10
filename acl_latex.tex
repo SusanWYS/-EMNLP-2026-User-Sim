@@ -1,130 +1,69 @@
-\documentclass{article}
+\documentclass[11pt]{article}
 
-% if you need to pass options to natbib, use, e.g.:
-%     \PassOptionsToPackage{numbers, compress}{natbib}
-% before loading neurips_2026
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+\usepackage[review]{acl}
 
-% The authors should use one of these tracks.
-% Before accepting by the NeurIPS conference, select one of the options below.
-% 0. "default" for submission
-\usepackage{neurips_2026}
-% the "default" option is equal to the "main" option, which is used for the Main Track with double-blind reviewing.
-% 1. "main" option is used for the Main Track
-%  \usepackage[main]{neurips_2026}
-% 2. "position" option is used for the Position Paper Track
-%  \usepackage[position]{neurips_2026}
-% 3. "eandd" option is used for the Evaluations & Datasets Track
- % \usepackage[eandd]{neurips_2026}
- % if you want to opt-in for a de-anomymized submission (not recommended, but OK):
- %\usepackage[eandd, nonanonymous]{neurips_2026}
-% 4. "creativeai" option is used for the Creative AI Track
-%  \usepackage[creativeai]{neurips_2026}
-% 5. "sglblindworkshop" option is used for the Workshop with single-blind reviewing
- % \usepackage[sglblindworkshop]{neurips_2026}
-% 6. "dblblindworkshop" option is used for the Workshop with double-blind reviewing
-%  \usepackage[dblblindworkshop]{neurips_2026}
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
 
-% After being accepted, the authors should add "final" behind the track to compile a camera-ready version.
-% 1. Main Track
- % \usepackage[main, final]{neurips_2026}
-% 2. Position Paper Track
-%  \usepackage[position, final]{neurips_2026}
-% 3. Evaluations & Datasets Track
- % \usepackage[eandd, final]{neurips_2026}
-% 4. Creative AI Track
-%  \usepackage[creativeai, final]{neurips_2026}
-% 5. Workshop with single-blind reviewing
-%  \usepackage[sglblindworkshop, final]{neurips_2026}
-% 6. Workshop with double-blind reviewing
-%  \usepackage[dblblindworkshop, final]{neurips_2026}
-% Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote.
-% For workshops (5., 6.), the authors should add the name of the workshop, "\workshoptitle" command is used to set the workshop title.
-% \workshoptitle{WORKSHOP TITLE}
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
 
-% "preprint" option is used for arXiv or other preprint submissions
- % \usepackage[preprint]{neurips_2026}
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
 
-% to avoid loading the natbib package, add option nonatbib:
-%    \usepackage[nonatbib]{neurips_2026}
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
 
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
-\usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
-\usepackage{xcolor}         % colors
+% This is also not strictly necessary, and may be commented out.
+% However, it will improve the aesthetics of text in
+% the typewriter font.
+\usepackage{inconsolata}
 
-% Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote. 
+%Including images in your LaTeX document requires adding
+%additional package(s)
+\usepackage{graphicx}
+
+% Additional packages
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{nicefrac}
+
 \title{Training User Models to Pass the Turing Test with Discriminative Rewards}
 
-% The \author macro works with any number of authors. There are two commands
-% used to separate the names and addresses of multiple authors: \And and \AND.
-%
-% Using \And between authors leaves it to LaTeX to determine where to break the
-% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
-% authors names on the first line, and the last on the second line, try using
-% \AND instead of \And before the third author name.
-
-
-\author{%
-  David S.~Hippocampus\thanks{Use footnote for providing further information
-    about author (webpage, alternative address)---\emph{not} for acknowledging
-    funding agencies.} \\
-  Department of Computer Science\\
-  Cranberry-Lemon University\\
-  Pittsburgh, PA 15213 \\
-  \texttt{hippo@cs.cranberry-lemon.edu} \\
-  % examples of more authors
-  % \And
-  % Coauthor \\
-  % Affiliation \\
-  % Address \\
-  % \texttt{email} \\
-  % \AND
-  % Coauthor \\
-  % Affiliation \\
-  % Address \\
-  % \texttt{email} \\
-  % \And
-  % Coauthor \\
-  % Affiliation \\
-  % Address \\
-  % \texttt{email} \\
-  % \And
-  % Coauthor \\
-  % Affiliation \\
-  % Address \\
-  % \texttt{email} \\
-}
-
+\author{First Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  \texttt{email@domain} \\\And
+  Second Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  \texttt{email@domain} \\}
 
 \begin{document}
-
-
 \maketitle
-
 
 \begin{abstract}
   The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on both the left- and right-hand margins. Use 10~point type, with a vertical spacing (leading) of 11~points. The word \textbf{Abstract} must be centered, bold, and in point size 12. Two line spaces precede the abstract. The abstract must be limited to one paragraph.
 \end{abstract}
 
-
-
 \section{Introduction}
- 
+
 As LLMs take on more human-facing roles, the ability to anticipate how real users will behave becomes essential. User simulators now serve as testbeds for conversational agents~\citep{naous2025flipping}, training environments for interactive systems~\citep{abdulhai2025consistently, mehri2025goal}, and proxies for studying human responses at scale~\citep{park2023generative, aher2023simulating, lu2025multiturn}.
- 
+
 To simulate a person is to model what makes them \textit{them}. This is fundamentally difficult: users are not interchangeable, and what distinguishes one person from another resists easy categorization. Two people with identical demographics can hold sharply different opinions~\citep{hwang2023aligning, santurkar2023opinions}, and individual preferences cannot be recovered from group-level labels alone~\citep{jiang2024indievalue, kirk2024prism}. Recent work has begun addressing this challenge through purpose-built user language models~\citep{naous2025flipping}, latent user-state alignment~\citep{wu2026humanlm}, log-probability maximization with latent reasoning~\citep{gandhi2026dialogue}, and persona induction from interaction history~\citep{ryan2025synthesizeme}. Yet these approaches share a common assumption: the training signal is derived from matching a specific ground-truth response, whether by scoring similarity against it with an LLM judge or by directly maximizing its log-probability. This overlooks a basic property of human communication: the same person in the same context could say many different things, all authentically their own. The goal of a faithful simulator is not to reproduce what the user happened to say, but to produce responses indistinguishable from what the user could have said.
- 
+
 We propose a recipe for individual user simulation: train with a \emph{discriminative Turing reward} that asks whether the generated response is distinguishable from the real user's writing, conditioning the model on the user's raw behavioral history together with an induced persona. We validate this recipe through targeted ablations across two dimensions. First, we compare three training signals: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, log-probability maximization with latent chain-of-thought~\citep{gandhi2026dialogue}, and our discriminative Turing reward. The Turing reward consistently outperforms both alternatives. Second, we test how much each component of the user representation contributes by comparing history-only, persona-only, and the combined representation. We find that the combination is critical: history provides raw behavioral evidence while the induced persona supplies a compressed summary of stable traits, and each complements the other.
- 
+
 We evaluate across two settings that differ substantially in structure and register: multi-turn human--LLM dialogue~\citep{kirk2024prism} and Reddit forum discussions~\citep{chang2020convokit}. Our results show that the Turing-trained model not only excels on its own metric but also generalizes to response similarity and state alignment evaluations~\citep{wu2026humanlm}, improving over untrained baselines and alternative training signals on both.
- 
+
 \section{Method}
- 
+
 \subsection{Problem Formulation}\label{sec:problem}
 
 We study individual user simulation: given an interaction context and information about a specific person, generate a response that the person could plausibly have produced.
@@ -135,7 +74,7 @@ We observe that $y$ is only a single sample from a broader distribution $p^\star
 
 The simulator generates a joint sequence $(z, \hat{y}) \sim p_\theta(\cdot \mid x, u)$, where $z$ is a chain-of-thought reasoning trace produced before the response. The trace is masked from reward computation and evaluation; only $\hat{y}$ is scored.
 
- \subsection{User Representation}
+\subsection{User Representation}
 
 We hypothesize that pairing raw behavioral history with an induced persona yields a more faithful user representation than either alone. Concretely, our proposed recipe uses $u = (h, \rho)$: the user's raw behavioral history $h$ (prior utterances or posts not present in $x$) together with an induced persona $\rho$ (a compact natural-language summary of stable traits derived from $h$ by a language model). In our ablation experiments, we also evaluate $u = h$ (history only) and $u = \rho$ (persona only) to isolate the contribution of each component.
 
@@ -143,58 +82,57 @@ We hypothesize that pairing raw behavioral history with an induced persona yield
 For each user, we reserve a fixed block of $k$ prior interactions, denoted $h$, once at dataset construction and reuse it across every prediction target for that user; the same block is the sole input to persona induction. We require $h$ to be disjoint from the current target context $x$ and ground-truth response $y$, so that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining targets.
 
 \paragraph{Persona Induction.}
-We prompt a language model to summarize stable traits from the user's reserved history block $h$, yielding the persona $\rho$. 
+We prompt a language model to summarize stable traits from the user's reserved history block $h$, yielding the persona $\rho$.
 
 The persona is structured along five dimensions: \emph{values} (recurring priorities and themes), \emph{verbal features} (surface-form habits such as punctuation and formatting), \emph{expression style} (tone, formality, directness), \emph{length prior} (typical response length), and \emph{background} (self-disclosed roles, experiences, and domain familiarity). Each dimension is described by one to three concise sentences. Formally, $\rho = f_{\text{LM}}(h)$, where $f_{\text{LM}}$ is a fixed inducer model. Note that $\rho$ depends only on $h$ and never on the current target context $x$ or ground-truth response $y$.
 
-\subsection{Discriminative Turing reward.}\label{sec:training}
- 
+\subsection{Discriminative Turing Reward}\label{sec:training}
+
 We train all models using Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, sampling $G$ candidate responses per example and computing advantages via within-group normalization.
- 
+
 The Turing reward asks whether a generated response could pass for the real person. An LLM judge is shown the user's behavioral history alongside two responses to the same context: one written by the real user and one generated by the model, assigned to positions A and B at random. The judge rates on a 1--7 scale which response was written by the human, considering consistency with the user's prior writing, stylistic fit, and naturalness. We canonicalize the rating into a score $s^*$ reflecting the judge's confidence that the \emph{candidate} is the real human response:
 \begin{equation}
   s^* = \begin{cases} 8 - s & \text{if the candidate is Response A} \\ s & \text{if the candidate is Response B} \end{cases}
 \end{equation}
 and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 1]$, where 0 means the candidate was identified as synthetic with maximum confidence, 0.5 means the judge could not distinguish the two, and 1 means the candidate was mistaken for the real user. Rather than optimizing for content overlap with a specific ground-truth response, this signal trains the model toward the broader quality of being indistinguishable from the target user.
- 
+
 \section{Experimental Setup}
- 
+
 \subsection{Datasets}
- 
+
 We evaluate across two interaction formats that differ in structure, register, and social context.
- 
+
 \paragraph{Multi-turn dialogue (PRISM).}
 The PRISM Alignment Dataset~\citep{kirk2024prism} contains 8,011 multi-turn conversations between human participants and LLM assistants, spanning 1,500 participants from 75 countries. Each conversation consists of alternating user and assistant turns, where participants engage with one of 21 LLMs on topics of their choosing, often involving subjective or value-laden questions. We qualify users with at least 6 conversations, yielding 1,288 users. We hold out 40\% of users at random for evaluation (515 users), with the remaining 773 users used for training. For each user, 2--4 conversations are reserved as behavioral history for constructing the user representation $u$; the rest serve as prediction targets. Because PRISM conversations are linear dialogues, we perform turn-level augmentation: each target conversation produces one training example per user turn, where the current context is all preceding turns and the ground truth is the user's utterance at that turn.
- 
+
 \paragraph{Online forum discussion (ConvoKit).}
 The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit discussions across a range of communities. We select 14 subreddits and qualify users who participate in at least 8 threads, yielding 1,282 users. Unlike PRISM, we split by subreddit rather than by user: 10 subreddits are used for training (706 users) and 4 are held out for evaluation (576 users), with overlapping users removed from the training set. For each user, 2--6 threads are reserved as behavioral history; the remaining threads serve as targets. Because Reddit threads are branching and expanding every user reply within a thread would create highly correlated examples, we use a single prediction target per thread: the user's last comment, with their earlier comments in the same thread retained as context.
 
- 
 \subsection{Evaluation}
- 
+
 We evaluate generated responses along three complementary dimensions, each operationalized via an LLM judge.
 
 \paragraph{Turing distinguishability.}
 A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale. To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. This metric captures aspects of user fidelity that content-level metrics may miss, such as stylistic consistency and appropriate response length.
- 
+
 \paragraph{Response similarity.}
 An LLM judge scores how well a generated response captures the overall content of the ground-truth human response, considering coverage of key points and penalizing extraneous or contradictory material. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said.
- 
+
 \paragraph{State alignment.}
 Following \citet{wu2026humanlm}, we separately evaluate alignment along six psychologically grounded dimensions: \emph{stance} (agreement toward an explicit target), \emph{emotion} (affect and intensity toward a target), \emph{belief} (foundational assumptions about people or the world), \emph{value} (what the user treats as important), \emph{goal} (communicative intent of the response), and \emph{communication} (tone and message structure). For each dimension, the judge extracts key aspects from the ground-truth response and scores how well the generated response reflects them. We report both per-dimension scores and the mean across all dimensions.
- 
+
 \subsection{Baselines and Ablations}
- 
+
 Our experiments are organized as follows.
- 
+
 \paragraph{Training signal comparison.}
 We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) as a zero-shot reference.
- 
+
 \paragraph{User representation ablation.}
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
- 
+
 \section{LLM as Judge Results}
- 
+
 \subsection{Turing Eval Results}
 
 \subsection{Sim Eval Results}
@@ -206,31 +144,26 @@ We fix the training signal to the Turing reward and compare three input conditio
 \section{Analysis: Input Space Ablations}
 
 \section{Discussion}
- 
+
 \section{Related Work}
- 
+
 \paragraph{LLM-based user simulation.}
 LLMs have been used to evaluate dialogue systems~\citep{davidson2023user, sekulic2024simulating}, train conversational agents via self-play~\citep{shah2018bootstrapping, abdulhai2025consistently}, and replicate human subject studies~\citep{aher2023simulating, park2023generative}. \citet{naous2025flipping} show that assistant-tuned LLMs are structurally misaligned with the user role, while \citet{mehri2025goal} address goal drift in task-oriented simulation through explicit state tracking. These works establish that user simulation benefits from purpose-built training but model generic users rather than specific individuals.
- 
+
 \paragraph{Representing individual users.}
 Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo}. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. We combine raw history with an induced persona, providing both behavioral evidence and a compressed trait summary.
- 
+
 \paragraph{Training objectives for human simulation.}
 Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. We show this signal generalizes across evaluation metrics and interaction formats.
 
-\section{Discussion}
+\section*{Limitations}
 
-\section*{References}
+\section*{Acknowledgments}
 
+\bibliography{custom}
 
 \appendix
 
-\section{Technical appendices and supplementary material}
+\section{Technical Appendices and Supplementary Material}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newpage
-\input{checklist.tex}
-\bibliographystyle{unsrtnat}
-\bibliography{neurips_2026}
 \end{document}
