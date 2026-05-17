@@ -192,15 +192,18 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \scriptsize
 \hrule\vspace{3pt}
 \begin{algorithmic}[1]
-\State \textbf{System message}
+\Statex \textbf{System message}
 \State \texttt{You write compressed first-person persona notes as if the target user wrote them about their own habits.}
-\State \texttt{Sound like the user, not like an analyst, therapist, teacher, or policy brief. Output only the requested strict JSON object and nothing else.}
+\State \texttt{Sound like the user, not like an analyst, therapist, teacher, or policy brief.}
+\State \texttt{Output only the requested strict JSON object and nothing else.}
 \Statex \hrulefill
-\State \textbf{User message}
+\Statex \textbf{User message}
 \State \texttt{<target\_speaker>[HUMAN]</target\_speaker>}
 \State \texttt{<selected\_history>} \textit{(reserved history block $h$, with [HUMAN]/[OTHER] speaker labels and bold-delimited target-user responses)} \texttt{</selected\_history>}
+\State
 \State \texttt{<task>}
 \State \texttt{Write a compact persona for [HUMAN] in [HUMAN]'s own voice.}
+\State
 \State \texttt{Rules:}
 \State \texttt{- Write each field in first person, as if [HUMAN] is describing their own habits.}
 \State \texttt{- Keep it casual and compressed, not polished or formal.}
@@ -215,13 +218,15 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \State \texttt{- Do not infer motives, worldview, morals, personality traits, or values unless they are explicitly and repeatedly stated.}
 \State \texttt{- Do not include one-off topical stances, transient emotions, or local interaction goals.}
 \State \texttt{- If evidence is weak, write `unknown`.}
-\State \texttt{- Keep each field concise. Write each field as short fragments or very short sentences, not polished mini-paragraphs.}
+\State \texttt{- Keep each field concise.}
+\State \texttt{- Write each field as short fragments or very short sentences, not polished mini-paragraphs.}
 \State \texttt{- Do not quote or reproduce complete sentences from the selected history.}
 \State \texttt{- Do not quote or reuse exact words or phrases from the selected history, including verdict labels, slang, catchphrases, or short text fragments.}
 \State \texttt{- Do not include literal examples from [HUMAN]'s messages, even single-word examples.}
 \State \texttt{- Describe lexical habits generically rather than by repeating exact tokens.}
 \State \texttt{- Non-text segments such as punctuation styles may be described, but do not quote surrounding text.}
 \State \texttt{- Do not include parenthetical example lists, `e.g.` scaffolding, or full sample sentences from [HUMAN]'s messages.}
+\State
 \State \texttt{Field descriptions:}
 \State \texttt{- values: only concrete recurring preferences, irritations, or things I keep siding with; avoid abstract moral language unless explicit in the history}
 \State \texttt{- verbal\_features: my observable surface-form habits only, such as how I use interjections, punctuation, grammar looseness, discourse markers,}
@@ -231,10 +236,11 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \State \texttt{- background: concrete background cues not already captured above, especially repeated personal experiences, self-disclosed roles, responsibilities,}
 \State \texttt{\quad constraints, routines, domain familiarity, sources of information, or recurring points of reference that likely shape future responses;}
 \State \texttt{\quad do not restate general values, tone, or reasoning style; use `unknown` if nothing strong remains}
+\State
 \State \texttt{Output only this JSON object shape: \{"values": "...", "verbal\_features": "...", "expression\_style": "...", "length\_prior": "...", "background": "..."\}}
 \State \texttt{</task>}
 \Statex \hrulefill
-\State \textbf{Model output}
+\Statex \textbf{Model output}
 \State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...", "length\_prior": "...", "background": "..."\}}
 \end{algorithmic}
 \vspace{2pt}\hrule
@@ -271,7 +277,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \small
 \hrule\vspace{4pt}
 \begin{algorithmic}[1]
-\State \textbf{System message (shared across all datasets)}
+\Statex \textbf{System message (shared across all datasets)}
 \State \texttt{You are simulating a human labeled by [HUMAN]. Your job is to predict what [HUMAN] says as if you are that person.}
 \State
 \State \texttt{[PERSONA]}
@@ -286,13 +292,16 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State \texttt{[TASK]}
 \State \texttt{Your task is to predict [HUMAN]'s next message, matching [HUMAN]'s writing intentions, style, vocabulary, and tone.}
 \State \texttt{Use all provided information about [HUMAN] and the current context to predict the next message.}
-\State \texttt{Target your message to [OTHER] or [OTHER - OP], not to people who are described in the context}
-\State \texttt{but are not participants in the thread or conversation. Do not answer as an assistant, analyst, or narrator.}
+\State \texttt{Target your message to [OTHER] or [OTHER - OP], not to people who are described in the context but are not participants}
+\State \texttt{in the thread or conversation. Do not answer as an assistant, analyst, or narrator.}
 \State
 \State \texttt{Before outputting the final answer, briefly reason about what [HUMAN] would say and think step by step.}
+\State \texttt{The generated response should naturally follow from your reasoning.}
 \State \texttt{Format your output exactly like this:}
 \State \texttt{<reasoning>...</reasoning>}
 \State \texttt{[HUMAN]: your response}
+\State \texttt{Write any reasoning before `[HUMAN]:` enclosed by the reasoning tags, and write only the final response after `[HUMAN]:`.}
+\State \texttt{Do not include reasoning after `[HUMAN]:`.}
 \end{algorithmic}
 \vspace{2pt}\hrule
 \caption{System message shared across all prompt configurations. The \texttt{[PERSONA]} block is included only in persona-conditioned settings; the \texttt{[TASK]} block specifies the prediction objective and output format.}
@@ -304,7 +313,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \small
 \hrule\vspace{4pt}
 \begin{algorithmic}[1]
-\State \textbf{User message (PRISM)}
+\Statex \textbf{User message (PRISM)}
 \State \texttt{[USER HISTORY]}
 \State \texttt{Below are previous conversations involving [HUMAN]. Use them to infer [HUMAN]'s style, values, preferences, and likely responses.}
 \State
@@ -322,9 +331,8 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State \texttt{[OTHER]:} \textit{turn 0}
 \State \texttt{[HUMAN]:} \textit{turn 1}
 \State \texttt{[OTHER]:} \textit{turn 1}
-\State
 \Statex \hrulefill
-\State \textbf{Model output}
+\Statex \textbf{Model output}
 \State \texttt{<reasoning>}...\texttt{</reasoning>}
 \State \texttt{[HUMAN]:} $\hat{y}$
 \end{algorithmic}
@@ -338,7 +346,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \small
 \hrule\vspace{4pt}
 \begin{algorithmic}[1]
-\State \textbf{User message (ConvoKit)}
+\Statex \textbf{User message (ConvoKit)}
 \State \texttt{[USER HISTORY]}
 \State \texttt{Below are [HUMAN]'s previous messages.}
 \State
@@ -359,9 +367,8 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State \texttt{[HUMAN]:} \textit{earlier comment}
 \State \texttt{[OTHER]:} \textit{ancestor reply}
 \State \texttt{[HUMAN]:}
-\State
 \Statex \hrulefill
-\State \textbf{Model output}
+\Statex \textbf{Model output}
 \State \texttt{<reasoning>}...\texttt{</reasoning>}
 \State \texttt{[HUMAN]:} $\hat{y}$
 \end{algorithmic}
