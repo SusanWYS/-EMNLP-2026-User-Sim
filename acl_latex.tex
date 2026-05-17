@@ -193,7 +193,8 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \hrule\vspace{4pt}
 \begin{algorithmic}[1]
 \Statex \textbf{System message}
-\State \texttt{You write compressed first-person persona notes as if the target user wrote them about their own habits.}
+\State \texttt{You write compressed first-person persona notes as if the target user}
+\Statex \texttt{\quad wrote them about their own habits.}
 \State \texttt{Sound like the user, not like an analyst, therapist, teacher, or policy brief.}
 \State \texttt{Output only the requested strict JSON object and nothing else.}
 \Statex \hrulefill
@@ -206,45 +207,64 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \State \texttt{Write a compact persona for [HUMAN] in [HUMAN]'s own voice.}
 \State
 \State \texttt{Rules:}
-\State \texttt{- Write each field in first person, as if [HUMAN] is describing their own habits.}
+\State \texttt{- Write each field in first person, as if [HUMAN] is}
+\Statex \texttt{\quad describing their own habits.}
 \State \texttt{- Keep it casual and compressed, not polished or formal.}
 \State \texttt{- Use only [HUMAN]'s own messages as evidence.}
-\State \texttt{- Capture only stable traits that are useful for predicting future messages across contexts.}
+\State \texttt{- Capture only stable traits that are useful for predicting}
+\Statex \texttt{\quad future messages across contexts.}
 \State \texttt{- Prefer concrete wording habits over abstract summaries.}
 \State \texttt{- Do not sound like an analyst describing a person from the outside.}
 \State \texttt{- Do not use therapist/assistant/policy-brief language.}
-\State \texttt{- Avoid abstract labels such as fairness, accountability, autonomy, respect, boundaries, power dynamics,}
-\Statex \texttt{\quad empathy, nuance, skepticism, advocacy, procedural correctness, or similar summary words unless}
-\Statex \texttt{\quad those exact words are frequent in the history.}
+\State \texttt{- Avoid abstract labels such as fairness, accountability, autonomy,}
+\Statex \texttt{\quad respect, boundaries, power dynamics, empathy, nuance, skepticism,}
+\Statex \texttt{\quad advocacy, procedural correctness, or similar summary words}
+\Statex \texttt{\quad unless those exact words are frequent in the history.}
 \State \texttt{- Do not infer demographics or sensitive attributes.}
-\State \texttt{- Do not infer motives, worldview, morals, personality traits, or values unless they are explicitly}
-\Statex \texttt{\quad and repeatedly stated.}
-\State \texttt{- Do not include one-off topical stances, transient emotions, or local interaction goals.}
+\State \texttt{- Do not infer motives, worldview, morals, personality traits,}
+\Statex \texttt{\quad or values unless they are explicitly and repeatedly stated.}
+\State \texttt{- Do not include one-off topical stances, transient emotions,}
+\Statex \texttt{\quad or local interaction goals.}
 \State \texttt{- If evidence is weak, write `unknown`.}
 \State \texttt{- Keep each field concise.}
-\State \texttt{- Write each field as short fragments or very short sentences, not polished mini-paragraphs.}
-\State \texttt{- Do not quote or reproduce complete sentences from the selected history.}
-\State \texttt{- Do not quote or reuse exact words or phrases from the selected history, including verdict labels,}
-\Statex \texttt{\quad slang, catchphrases, or short text fragments.}
-\State \texttt{- Do not include literal examples from [HUMAN]'s messages, even single-word examples.}
-\State \texttt{- Describe lexical habits generically rather than by repeating exact tokens.}
-\State \texttt{- Non-text segments such as punctuation styles may be described, but do not quote surrounding text.}
-\State \texttt{- Do not include parenthetical example lists, `e.g.` scaffolding, or full sample sentences}
-\Statex \texttt{\quad from [HUMAN]'s messages.}
+\State \texttt{- Write each field as short fragments or very short sentences,}
+\Statex \texttt{\quad not polished mini-paragraphs.}
+\State \texttt{- Do not quote or reproduce complete sentences from the}
+\Statex \texttt{\quad selected history.}
+\State \texttt{- Do not quote or reuse exact words or phrases from the selected}
+\Statex \texttt{\quad history, including verdict labels, slang, catchphrases, or short}
+\Statex \texttt{\quad text fragments.}
+\State \texttt{- Do not include literal examples from [HUMAN]'s messages, even}
+\Statex \texttt{\quad single-word examples.}
+\State \texttt{- Describe lexical habits generically rather than by repeating}
+\Statex \texttt{\quad exact tokens.}
+\State \texttt{- Non-text segments such as punctuation styles may be described,}
+\Statex \texttt{\quad but do not quote surrounding text.}
+\State \texttt{- Do not include parenthetical example lists, `e.g.`}
+\Statex \texttt{\quad scaffolding, or full sample sentences from [HUMAN]'s messages.}
 \State
 \State \texttt{Field descriptions:}
-\State \texttt{- values: only concrete recurring preferences, irritations, or things I keep siding with; avoid}
-\Statex \texttt{\quad abstract moral language unless it is explicit in the history}
-\State \texttt{- verbal\_features: my observable surface-form habits only, such as how I use interjections,}
-\Statex \texttt{\quad punctuation, grammar looseness, discourse markers, formatting quirks, or short repeated lexical}
-\Statex \texttt{\quad patterns. Do not include exact verdict labels or quoted wording from the history.}
-\State \texttt{- expression\_style: how I usually come across at the sentence level; keep this concrete and plain,}
-\Statex \texttt{\quad not psychological, evaluative, or therapist-like}
-\State \texttt{- length\_prior: my usual reply length in plain language, mainly sentence count and rough brevity}
-\State \texttt{- background: concrete background cues not already captured above, especially repeated personal}
-\Statex \texttt{\quad experiences, self-disclosed roles, responsibilities, constraints, routines, domain familiarity,}
-\Statex \texttt{\quad sources of information, or recurring points of reference that likely shape future responses;}
-\Statex \texttt{\quad do not restate general values, tone, or reasoning style; use `unknown` if nothing strong remains}
+\State \texttt{- values: only concrete recurring preferences, irritations,}
+\Statex \texttt{\quad or things I keep siding with; avoid abstract moral language}
+\Statex \texttt{\quad unless it is explicit in the history}
+\State \texttt{- verbal\_features: my observable surface-form habits only,}
+\Statex \texttt{\quad such as how I use interjections, punctuation, grammar}
+\Statex \texttt{\quad looseness, discourse markers, formatting quirks, or short}
+\Statex \texttt{\quad repeated lexical patterns. Do not include exact verdict}
+\Statex \texttt{\quad labels or quoted wording from the history.}
+\State \texttt{- expression\_style: how I usually come across at the sentence}
+\Statex \texttt{\quad level; keep this concrete and plain, not psychological,}
+\Statex \texttt{\quad evaluative, or therapist-like}
+\State \texttt{- length\_prior: my usual reply length in plain language,}
+\Statex \texttt{\quad mainly sentence count and rough brevity}
+\State \texttt{- background: concrete background cues not already captured}
+\Statex \texttt{\quad above, especially repeated personal experiences,}
+\Statex \texttt{\quad self-disclosed roles, responsibilities, constraints,}
+\Statex \texttt{\quad routines, domain familiarity, sources of information,}
+\Statex \texttt{\quad or recurring points of reference that likely shape}
+\Statex \texttt{\quad future responses; do not restate general values, tone,}
+\Statex \texttt{\quad or reasoning style; use `unknown` if nothing strong}
+\Statex \texttt{\quad remains}
 \State
 \State \texttt{Output only this JSON object shape:}
 \State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...",}
