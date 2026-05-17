@@ -33,6 +33,8 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{nicefrac}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \title{Training User Models to Pass the Turing Test}
 
@@ -168,44 +170,126 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{w
 
 \subsection{Dataset Preprocessing and Statistics}
 
-\paragraph{Common format.}
-We convert each source dataset into a common individual-prediction format. For each target user, we reserve a fixed behavioral history block $h$, which is reused across all prediction examples for that user. The current context $x$ and ground-truth response $y$ are drawn from interactions disjoint from this history block. In persona-conditioned settings, the persona $\rho$ is induced only from $h$, so neither the raw history nor the persona contains the target response.
+Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground-truth response $y$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
 
 \paragraph{PRISM.}
-We group PRISM conversations by participant and retain users with at least six conversations. For each user, we reserve 2--4 conversations as behavioral history. The remaining conversations provide prediction targets. Since PRISM is linear dialogue, every eligible user turn yields one example: the context is all preceding turns in the conversation and the target is the next user utterance. We hold out 40\% of qualified users and use the remaining users for training. This yields 1,288 qualified users, with 773 train users and 515 held-out users.
+We retain PRISM participants with at least six conversations and hold out 40\% of qualified users for evaluation, yielding 773 train and 515 held-out users from 1,288 total. Per user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation is one example: $x$ is all preceding turns and $y$ is the user's utterance at that turn. 30\% of each held-out user's non-history conversations form the validation split; the remainder form the test split.
 
 \paragraph{ConvoKit.}
-We reconstruct Reddit threads from comment identifiers and parent pointers. Unusable roots are excluded, and deleted, removed, or non-user comments are not eligible as target-user responses or profile-building comments. Non-root unusable comments may be retained as structural anchors so that descendant replies remain connected to the ancestor chain. We split by subreddit: ten subreddits are used for train/validation and four are held out for testing, with overlapping users removed from training. For each user, we reserve 2--6 threads as behavioral history. Each target thread contributes one example, using the user's final comment as the target and the original post plus ancestor reply chain as context. This avoids producing many highly correlated examples from long Reddit threads.
+We reconstruct Reddit threads from comment identifiers and parent pointers. Deleted, removed, and non-user comments cannot serve as targets or enter $h$, but non-root unusable comments may be kept as structural anchors so that descendant replies stay connected to the ancestor chain. We split by subreddit rather than by user---ten subreddits for train/validation, four held out for testing---and remove overlapping users from the training side. Per user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
+
+\begin{quote}
+\small
+\textbf{Train/Val:} AmItheAsshole, AskMen, AskWomen, business, changemyview, Frugal, news, relationship\_advice, tifu, worldnews \\
+\textbf{Test:} Economics, TrueReddit, relationships, MaliciousCompliance
+\end{quote}
 
 \paragraph{Persona induction.}
-Personas are induced once per user from the reserved history block $h$. The persona contains five fields: values, verbal features, expression style, length prior, and background. Each field is described by one to three concise sentences. Persona-conditioned settings attach this fixed persona to every example for the corresponding user. We use GPT-5.4-nano as the inducer model with temperature 0.2 and a maximum completion length of 2,048 tokens.
+We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal features, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user.
 
-\paragraph{OOD held-out sets.}
-We construct two small out-of-distribution held-out sets used only for evaluation: a Chatbot Arena-derived set (50 examples, 23 users) and a Humanual opinion set (50 examples, 17 users). Selection prioritizes covering all available users before adding additional examples in deterministic round-robin order.
+\paragraph{OOD evaluation sets.}
+Two small out-of-distribution sets are reserved for evaluation only: Chatbot Arena (50 examples, 23 users, drawn from 94 candidates) and Humanual Opinion (50 examples, 17 users, drawn from 135 candidates). Selection covers every available user first, then fills remaining slots by deterministic round-robin.
 
 \begin{table}[t]
 \centering
 \small
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Dataset & Users & History & Train & Val & Test \\
+ & Humanual Op. (OOD) & Chatbot Arena (OOD) & ConvoKit & PRISM \\
 \midrule
-PRISM & 1,288 & 2--4 conv. & 5,444 & 1,202 & 2,385 \\
-ConvoKit & 1,282 & 2--6 threads & 4,338 & 1,512 & 5,612 \\
-\midrule
-Chatbot Arena (OOD) & 23 & --- & --- & --- & 50 \\
-Humanual Opinion (OOD) & 17 & --- & --- & --- & 50 \\
+Users & 17 & 23 & 1,282 & 1,288 \\
+History & --- & --- & 2--6 threads & 2--4 conv. \\
+Train & --- & --- & 4,338 & 5,444 \\
+Val & --- & --- & 1,512 & 1,202 \\
+Test & 50 & 50 & 5,612 & 2,385 \\
 \bottomrule
 \end{tabular}
-\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM is split by user; ConvoKit is split by subreddit, with overlapping users removed from training. OOD sets are used only for evaluation.}
+\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM is split by user; ConvoKit is split by subreddit with overlapping users removed. OOD sets are evaluation-only.}
 \label{tab:preprocessing_stats}
 \end{table}
 
-\begin{quote}
+\paragraph{Prompt format.}
+Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$; and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $\hat{y}$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the layout for each dataset.
+
+\begin{figure}[t]
+\centering
 \small
-\textbf{Train/Val subreddits:} AmItheAsshole, AskMen, AskWomen, business, changemyview, Frugal, news, relationship\_advice, tifu, worldnews \\
-\textbf{Test subreddits:} Economics, TrueReddit, relationships, MaliciousCompliance
-\end{quote}
+\begin{algorithmic}[0]
+\State \textbf{System message}
+\State \texttt{You are simulating a human labeled}
+\State \quad \texttt{by [HUMAN]. Your job is to predict}
+\State \quad \texttt{what [HUMAN] says as if you are}
+\State \quad \texttt{that person.}
+\State
+\State \texttt{[PERSONA]}
+\State \texttt{<persona>}
+\State \quad \texttt{<values>}...\texttt{</values>}
+\State \quad \texttt{<verbal\_features>}...\texttt{</verbal\_features>}
+\State \quad \texttt{<expression\_style>}...\texttt{</expression\_style>}
+\State \texttt{</persona>}
+\State
+\Statex \hrulefill
+\State \textbf{User message}
+\State \texttt{[USER HISTORY]}
+\State \texttt{Below are previous conversations}
+\State \quad \texttt{involving [HUMAN]. ...}
+\State
+\State \texttt{<Conversation 1>}
+\State \texttt{[MESSAGES]}
+\State \texttt{[HUMAN]:} \textit{user turn} \quad \texttt{[OTHER]:} \textit{assistant turn}
+\State \texttt{...}
+\State \texttt{</Conversation 1>}
+\State
+\State \texttt{[CURRENT CONTEXT]}
+\State \texttt{[MESSAGES SO FAR]}
+\State \texttt{[HUMAN]:} \textit{turn 0} \quad \texttt{[OTHER]:} \textit{turn 0}
+\State \texttt{[HUMAN]:} \textit{turn 1} \quad \texttt{[OTHER]:} \textit{turn 1}
+\State \texttt{...}
+\State
+\Statex \hrulefill
+\State \textbf{Model output}
+\State \texttt{<reasoning>}...\texttt{</reasoning>}
+\State \texttt{[HUMAN]:} $\hat{y}$
+\end{algorithmic}
+\caption{Prompt layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt{<Conversation>} tags; the current context lists turns up to the prediction point.}
+\label{fig:prism_format}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\small
+\begin{algorithmic}[0]
+\State \textbf{System message}
+\State \textit{(same simulation instruction and persona as PRISM)}
+\State
+\Statex \hrulefill
+\State \textbf{User message}
+\State \texttt{[USER HISTORY]}
+\State \texttt{Below are [HUMAN]'s previous messages.}
+\State
+\State \texttt{<Post 1>}
+\State \texttt{[OTHER - OP]}
+\State \textit{original post text}
+\State
+\State \texttt{[OTHER]:} \textit{reply} \quad \texttt{[HUMAN]:} \textit{reply}
+\State \texttt{...}
+\State \texttt{</Post 1>}
+\State
+\State \texttt{[CURRENT CONTEXT]}
+\State \texttt{[OTHER - OP]}
+\State \textit{original post text}
+\State
+\State \textit{ancestor reply chain}
+\State \texttt{[HUMAN]:}
+\State
+\Statex \hrulefill
+\State \textbf{Model output}
+\State \texttt{<reasoning>}...\texttt{</reasoning>}
+\State \texttt{[HUMAN]:} $\hat{y}$
+\end{algorithmic}
+\caption{Prompt layout for ConvoKit (Reddit forum). History threads are wrapped in numbered \texttt{<Post>} tags; the original poster is marked \texttt{[OTHER - OP]}. The current context shows the OP and ancestor reply chain up to the prediction point.}
+\label{fig:convokit_format}
+\end{figure}
 
 \subsection{}
 \end{document}
