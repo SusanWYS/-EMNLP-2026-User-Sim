@@ -34,7 +34,7 @@
 \usepackage{amsmath}
 \usepackage{nicefrac}
 
-\title{Training User Models to Pass the Turing Test with Discriminative Rewards}
+\title{Training User Models to Pass the Turing Test}
 
 \author{First Author \\
   Affiliation / Address line 1 \\
@@ -78,7 +78,7 @@ The simulator generates a joint sequence $(z, \hat{y}) \sim p_\theta(\cdot \mid 
 
 We hypothesize that pairing raw behavioral history with an induced persona yields a more faithful user representation than either alone. Concretely, our proposed recipe uses $u = (h, \rho)$: the user's raw behavioral history $h$ (prior utterances or posts not present in $x$) together with an induced persona $\rho$ (a compact natural-language summary of stable traits derived from $h$ by a language model). In our ablation experiments, we also evaluate $u = h$ (history only) and $u = \rho$ (persona only) to isolate the contribution of each component.
 
-\paragraph{History Sampling.}
+\paragraph{History Messages.}
 For each user, we reserve a fixed block of $k$ prior interactions, denoted $h$, once at dataset construction and reuse it across every prediction target for that user; the same block is the sole input to persona induction. We require $h$ to be disjoint from the current target context $x$ and ground-truth response $y$, so that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining targets.
 
 \paragraph{Persona Induction.}
@@ -131,15 +131,11 @@ We fix the user representation to $u = (h, \rho)$ and compare four training cond
 \paragraph{User representation ablation.}
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
-\section{LLM as Judge Results}
+\section{Turing Eval Results}
 
-\subsection{Turing Eval Results}
+\section{Latent State Eval Results}
 
-\subsection{Sim Eval Results}
-
-\subsection{Latent State Eval Results}
-
-\section{Human Eval Results}
+\section{Human Evaluation and Systems Level Comparison}
 
 \section{Analysis: Input Space Ablations}
 
@@ -166,4 +162,11 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{w
 
 \section{Technical Appendices and Supplementary Material}
 
+\subsection{Generation Prompts}
+
+\subsection{Judge Prompts}
+
+\subsection{Dataset Preprocessing and Stats}
+
+\subsection{}
 \end{document}
