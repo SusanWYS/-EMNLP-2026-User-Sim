@@ -211,40 +211,31 @@ Test & 50 & 50 & 5,612 & 2,385 \\
 \paragraph{Prompt format.}
 Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$; and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $\hat{y}$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the layout for each dataset.
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
 \small
 \begin{algorithmic}[0]
 \State \textbf{System message}
-\State \texttt{You are simulating a human labeled}
-\State \quad \texttt{by [HUMAN]. Your job is to predict}
-\State \quad \texttt{what [HUMAN] says as if you are}
-\State \quad \texttt{that person.}
+\State \texttt{You are simulating a human labeled by [HUMAN]. Your job is to predict what [HUMAN] says as if you are that person.}
 \State
 \State \texttt{[PERSONA]}
 \State \texttt{<persona>}
-\State \quad \texttt{<values>}...\texttt{</values>}
-\State \quad \texttt{<verbal\_features>}...\texttt{</verbal\_features>}
-\State \quad \texttt{<expression\_style>}...\texttt{</expression\_style>}
+\State \quad \texttt{<values>}...\texttt{</values>} \quad \texttt{<verbal\_features>}...\texttt{</verbal\_features>} \quad \texttt{<expression\_style>}...\texttt{</expression\_style>}
 \State \texttt{</persona>}
 \State
 \Statex \hrulefill
 \State \textbf{User message}
 \State \texttt{[USER HISTORY]}
-\State \texttt{Below are previous conversations}
-\State \quad \texttt{involving [HUMAN]. ...}
+\State \texttt{Below are previous conversations involving [HUMAN]. Use them to infer [HUMAN]'s style, values, preferences, and likely responses.}
 \State
 \State \texttt{<Conversation 1>}
 \State \texttt{[MESSAGES]}
-\State \texttt{[HUMAN]:} \textit{user turn} \quad \texttt{[OTHER]:} \textit{assistant turn}
-\State \texttt{...}
+\State \texttt{[HUMAN]:} \textit{user turn} \quad \texttt{[OTHER]:} \textit{assistant turn} \quad \texttt{[HUMAN]:} \textit{user turn} \quad \texttt{[OTHER]:} \textit{assistant turn} \quad \texttt{...}
 \State \texttt{</Conversation 1>}
 \State
 \State \texttt{[CURRENT CONTEXT]}
 \State \texttt{[MESSAGES SO FAR]}
-\State \texttt{[HUMAN]:} \textit{turn 0} \quad \texttt{[OTHER]:} \textit{turn 0}
-\State \texttt{[HUMAN]:} \textit{turn 1} \quad \texttt{[OTHER]:} \textit{turn 1}
-\State \texttt{...}
+\State \texttt{[HUMAN]:} \textit{turn 0} \quad \texttt{[OTHER]:} \textit{turn 0} \quad \texttt{[HUMAN]:} \textit{turn 1} \quad \texttt{[OTHER]:} \textit{turn 1} \quad \texttt{...}
 \State
 \Statex \hrulefill
 \State \textbf{Model output}
@@ -253,7 +244,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \end{algorithmic}
 \caption{Prompt layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt{<Conversation>} tags; the current context lists turns up to the prediction point.}
 \label{fig:prism_format}
-\end{figure}
+\end{figure*}
 
 \begin{figure}[t]
 \centering
