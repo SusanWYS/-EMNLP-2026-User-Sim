@@ -185,7 +185,63 @@ We reconstruct Reddit threads from comment identifiers and parent pointers. Dele
 \end{quote}
 
 \paragraph{Persona induction.}
-We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal features, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user.
+We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal features, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user. Figure~\ref{fig:persona_induction} shows the induction prompt.
+
+\begin{figure*}[t]
+\centering
+\small
+\begin{algorithmic}[0]
+\State \textbf{System message}
+\State \texttt{You write compressed first-person persona notes as if the target user wrote them about their own habits.}
+\State \texttt{Sound like the user, not like an analyst, therapist, teacher, or policy brief.}
+\State \texttt{Output only the requested strict JSON object and nothing else.}
+\State
+\Statex \hrulefill
+\State \textbf{User message}
+\State \texttt{<target\_speaker>[HUMAN]</target\_speaker>}
+\State \texttt{<selected\_history>}
+\State \textit{Below are examples of [HUMAN]'s responses to Reddit threads. These examples may come from multiple subreddits.}
+\State \textit{[HUMAN]'s messages are enclosed in ** ** for emphasis.}
+\State
+\State \texttt{<|Start of Example 1|>}
+\State \texttt{[OTHER - OP]}
+\State \textit{original post text}
+\State \texttt{[OTHER]:} \textit{reply}
+\State \texttt{**[HUMAN]'s Response:} \textit{user reply}\texttt{**}
+\State \texttt{<|End of Example 1|>}
+\State \texttt{</selected\_history>}
+\State
+\State \texttt{<task>}
+\State \texttt{Write a compact persona for [HUMAN] in [HUMAN]'s own voice.}
+\State
+\State \texttt{Rules:}
+\State \texttt{- Write each field in first person, as if [HUMAN] is describing their own habits.}
+\State \texttt{- Keep it casual and compressed, not polished or formal.}
+\State \texttt{- Use only [HUMAN]'s own messages as evidence.}
+\State \texttt{- Capture only stable traits that are useful for predicting future messages across contexts.}
+\State \texttt{- Prefer concrete wording habits over abstract summaries.}
+\State \texttt{- Do not sound like an analyst describing a person from the outside.}
+\State \texttt{- If evidence is weak, write `unknown`.}
+\State \texttt{...}
+\State
+\State \texttt{Field descriptions:}
+\State \texttt{- values: only concrete recurring preferences, irritations, or things I keep siding with}
+\State \texttt{- verbal\_features: observable surface-form habits (interjections, punctuation, formatting quirks, ...)}
+\State \texttt{- expression\_style: how I usually come across at the sentence level}
+\State \texttt{- length\_prior: my usual reply length in plain language}
+\State \texttt{- background: concrete background cues (self-disclosed roles, domain familiarity, ...)}
+\State
+\State \texttt{Output only this JSON object shape:}
+\State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...", "length\_prior": "...", "background": "..."\}}
+\State \texttt{</task>}
+\State
+\Statex \hrulefill
+\State \textbf{Model output}
+\State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...", "length\_prior": "...", "background": "..."\}}
+\end{algorithmic}
+\caption{Persona induction prompt. The inducer receives the user's reserved history $h$ formatted with bold-delimited target-user responses, and outputs a structured JSON persona. Rules are abridged; the full prompt includes additional constraints against quoting history verbatim, inferring demographics, and using abstract moral language.}
+\label{fig:persona_induction}
+\end{figure*}
 
 \paragraph{OOD evaluation sets.}
 Two small out-of-distribution sets are reserved for evaluation only: Chatbot Arena (50 examples, 23 users, drawn from 94 candidates) and Humanual Opinion (50 examples, 17 users, drawn from 135 candidates). Selection covers every available user first, then fills remaining slots by deterministic round-robin.
@@ -223,6 +279,8 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State \quad \texttt{<values>}...\texttt{</values>}
 \State \quad \texttt{<verbal\_features>}...\texttt{</verbal\_features>}
 \State \quad \texttt{<expression\_style>}...\texttt{</expression\_style>}
+\State \quad \texttt{<length\_prior>}...\texttt{</length\_prior>}
+\State \quad \texttt{<background>}...\texttt{</background>}
 \State \texttt{</persona>}
 \State
 \State \texttt{[TASK]}
