@@ -192,41 +192,20 @@ Dataset & Users & History & Train & Val & Test \\
 \midrule
 PRISM & 1,288 & 2--4 conv. & 5,444 & 1,202 & 2,385 \\
 ConvoKit & 1,282 & 2--6 threads & 4,338 & 1,512 & 5,612 \\
+\midrule
+Chatbot Arena (OOD) & 23 & --- & --- & --- & 50 \\
+Humanual Opinion (OOD) & 17 & --- & --- & --- & 50 \\
 \bottomrule
 \end{tabular}
-\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM is split by user; ConvoKit is split by subreddit, with overlapping users removed from training.}
+\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM is split by user; ConvoKit is split by subreddit, with overlapping users removed from training. OOD sets are used only for evaluation.}
 \label{tab:preprocessing_stats}
 \end{table}
 
-\begin{table}[t]
-\centering
+\begin{quote}
 \small
-\begin{tabular}{ll}
-\toprule
-Split & Subreddits \\
-\midrule
-Train/Val & AmItheAsshole, AskMen, AskWomen, business, changemyview, Frugal, news, relationship\_advice, tifu, worldnews \\
-Test & Economics, TrueReddit, relationships, MaliciousCompliance \\
-\bottomrule
-\end{tabular}
-\caption{Subreddit split used for ConvoKit preprocessing.}
-\label{tab:convokit_subreddits}
-\end{table}
-
-\begin{table}[t]
-\centering
-\small
-\begin{tabular}{lrrr}
-\toprule
-OOD set & Input rows & Users & Selected examples \\
-\midrule
-Chatbot Arena & 94 & 23 & 50 \\
-Humanual Opinion & 135 & 17 & 50 \\
-\bottomrule
-\end{tabular}
-\caption{OOD held-out evaluation sets.}
-\label{tab:ood_sets}
-\end{table}
+\textbf{Train/Val subreddits:} AmItheAsshole, AskMen, AskWomen, business, changemyview, Frugal, news, relationship\_advice, tifu, worldnews \\
+\textbf{Test subreddits:} Economics, TrueReddit, relationships, MaliciousCompliance
+\end{quote}
 
 \subsection{}
 \end{document}
