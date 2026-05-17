@@ -200,15 +200,7 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \State \textbf{User message}
 \State \texttt{<target\_speaker>[HUMAN]</target\_speaker>}
 \State \texttt{<selected\_history>}
-\State \textit{Below are examples of [HUMAN]'s responses to Reddit threads. These examples may come from multiple subreddits.}
-\State \textit{[HUMAN]'s messages are enclosed in ** ** for emphasis.}
-\State
-\State \texttt{<|Start of Example 1|>}
-\State \texttt{[OTHER - OP]}
-\State \textit{original post text}
-\State \texttt{[OTHER]:} \textit{reply}
-\State \texttt{**[HUMAN]'s Response:} \textit{user reply}\texttt{**}
-\State \texttt{<|End of Example 1|>}
+\State \textit{(reserved history block $h$, formatted with [HUMAN]/[OTHER] speaker labels and bold-delimited target-user responses)}
 \State \texttt{</selected\_history>}
 \State
 \State \texttt{<task>}
@@ -221,15 +213,39 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \State \texttt{- Capture only stable traits that are useful for predicting future messages across contexts.}
 \State \texttt{- Prefer concrete wording habits over abstract summaries.}
 \State \texttt{- Do not sound like an analyst describing a person from the outside.}
+\State \texttt{- Do not use therapist/assistant/policy-brief language.}
+\State \texttt{- Avoid abstract labels such as fairness, accountability, autonomy, respect, boundaries, power dynamics,}
+\State \texttt{\quad empathy, nuance, skepticism, advocacy, procedural correctness, or similar summary words unless those}
+\State \texttt{\quad exact words are frequent in the history.}
+\State \texttt{- Do not infer demographics or sensitive attributes.}
+\State \texttt{- Do not infer motives, worldview, morals, personality traits, or values unless they are explicitly and}
+\State \texttt{\quad repeatedly stated.}
+\State \texttt{- Do not include one-off topical stances, transient emotions, or local interaction goals.}
 \State \texttt{- If evidence is weak, write `unknown`.}
-\State \texttt{...}
+\State \texttt{- Keep each field concise.}
+\State \texttt{- Write each field as short fragments or very short sentences, not polished mini-paragraphs.}
+\State \texttt{- Do not quote or reproduce complete sentences from the selected history.}
+\State \texttt{- Do not quote or reuse exact words or phrases from the selected history, including verdict labels, slang,}
+\State \texttt{\quad catchphrases, or short text fragments.}
+\State \texttt{- Do not include literal examples from [HUMAN]'s messages, even single-word examples.}
+\State \texttt{- Describe lexical habits generically rather than by repeating exact tokens.}
+\State \texttt{- Non-text segments such as punctuation styles may be described, but do not quote surrounding text.}
+\State \texttt{- Do not include parenthetical example lists, `e.g.` scaffolding, or full sample sentences from [HUMAN]'s}
+\State \texttt{\quad messages.}
 \State
 \State \texttt{Field descriptions:}
-\State \texttt{- values: only concrete recurring preferences, irritations, or things I keep siding with}
-\State \texttt{- verbal\_features: observable surface-form habits (interjections, punctuation, formatting quirks, ...)}
-\State \texttt{- expression\_style: how I usually come across at the sentence level}
-\State \texttt{- length\_prior: my usual reply length in plain language}
-\State \texttt{- background: concrete background cues (self-disclosed roles, domain familiarity, ...)}
+\State \texttt{- values: only concrete recurring preferences, irritations, or things I keep siding with; avoid abstract}
+\State \texttt{\quad moral language unless it is explicit in the history}
+\State \texttt{- verbal\_features: my observable surface-form habits only, such as how I use interjections, punctuation,}
+\State \texttt{\quad grammar looseness, discourse markers, formatting quirks, or short repeated lexical patterns. Do not}
+\State \texttt{\quad include exact verdict labels or quoted wording from the history.}
+\State \texttt{- expression\_style: how I usually come across at the sentence level; keep this concrete and plain, not}
+\State \texttt{\quad psychological, evaluative, or therapist-like}
+\State \texttt{- length\_prior: my usual reply length in plain language, mainly sentence count and rough brevity}
+\State \texttt{- background: concrete background cues not already captured above, especially repeated personal experiences,}
+\State \texttt{\quad self-disclosed roles, responsibilities, constraints, routines, domain familiarity, sources of information,}
+\State \texttt{\quad or recurring points of reference that likely shape future responses; do not restate general values, tone,}
+\State \texttt{\quad or reasoning style; use `unknown` if nothing strong remains}
 \State
 \State \texttt{Output only this JSON object shape:}
 \State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...", "length\_prior": "...", "background": "..."\}}
@@ -239,7 +255,7 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \State \textbf{Model output}
 \State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...", "length\_prior": "...", "background": "..."\}}
 \end{algorithmic}
-\caption{Persona induction prompt. The inducer receives the user's reserved history $h$ formatted with bold-delimited target-user responses, and outputs a structured JSON persona. Rules are abridged; the full prompt includes additional constraints against quoting history verbatim, inferring demographics, and using abstract moral language.}
+\caption{Persona induction prompt. The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho$.}
 \label{fig:persona_induction}
 \end{figure*}
 
@@ -251,13 +267,13 @@ Two small out-of-distribution sets are reserved for evaluation only: Chatbot Are
 \small
 \begin{tabular}{lrrrr}
 \toprule
- & Humanual Op. (OOD) & Chatbot Arena (OOD) & ConvoKit & PRISM \\
+ & PRISM & ConvoKit & Chatbot Arena (OOD) & Humanual Op. (OOD) \\
 \midrule
-Users & 17 & 23 & 1,282 & 1,288 \\
-History & --- & --- & 2--6 threads & 2--4 conv. \\
-Train & --- & --- & 4,338 & 5,444 \\
-Val & --- & --- & 1,512 & 1,202 \\
-Test & 50 & 50 & 5,612 & 2,385 \\
+Users & 1,288 & 1,282 & 23 & 17 \\
+History & 2--4 conv. & 2--6 threads & 2--4 conv. & 2--6 conv. \\
+Train & 5,444 & 4,338 & --- & --- \\
+Val & 1,202 & 1,512 & --- & --- \\
+Test & 2,385 & 5,612 & 50 & 50 \\
 \bottomrule
 \end{tabular}
 \caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM is split by user; ConvoKit is split by subreddit with overlapping users removed. OOD sets are evaluation-only.}
