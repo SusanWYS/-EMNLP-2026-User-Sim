@@ -248,12 +248,24 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \State \texttt{\quad or reasoning style; use `unknown` if nothing strong remains}
 \State
 \State \texttt{Output only this JSON object shape:}
-\State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...", "length\_prior": "...", "background": "..."\}}
+\State \texttt{\{}
+\State \texttt{\quad "values": "...",}
+\State \texttt{\quad "verbal\_features": "...",}
+\State \texttt{\quad "expression\_style": "...",}
+\State \texttt{\quad "length\_prior": "...",}
+\State \texttt{\quad "background": "..."}
+\State \texttt{\}}
 \State \texttt{</task>}
 \State
 \Statex \hrulefill
 \State \textbf{Model output}
-\State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...", "length\_prior": "...", "background": "..."\}}
+\State \texttt{\{}
+\State \texttt{\quad "values": "...",}
+\State \texttt{\quad "verbal\_features": "...",}
+\State \texttt{\quad "expression\_style": "...",}
+\State \texttt{\quad "length\_prior": "...",}
+\State \texttt{\quad "background": "..."}
+\State \texttt{\}}
 \end{algorithmic}
 \caption{Persona induction prompt. The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho$.}
 \label{fig:persona_induction}
