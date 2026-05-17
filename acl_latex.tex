@@ -166,7 +166,67 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{w
 
 \subsection{Judge Prompts}
 
-\subsection{Dataset Preprocessing and Stats}
+\subsection{Dataset Preprocessing and Statistics}
+
+\paragraph{Common format.}
+We convert each source dataset into a common individual-prediction format. For each target user, we reserve a fixed behavioral history block $h$, which is reused across all prediction examples for that user. The current context $x$ and ground-truth response $y$ are drawn from interactions disjoint from this history block. In persona-conditioned settings, the persona $\rho$ is induced only from $h$, so neither the raw history nor the persona contains the target response.
+
+\paragraph{PRISM.}
+We group PRISM conversations by participant and retain users with at least six conversations. For each user, we reserve 2--4 conversations as behavioral history. The remaining conversations provide prediction targets. Since PRISM is linear dialogue, every eligible user turn yields one example: the context is all preceding turns in the conversation and the target is the next user utterance. We hold out 40\% of qualified users and use the remaining users for training. This yields 1,288 qualified users, with 773 train users and 515 held-out users.
+
+\paragraph{ConvoKit.}
+We reconstruct Reddit threads from comment identifiers and parent pointers. Unusable roots are excluded, and deleted, removed, or non-user comments are not eligible as target-user responses or profile-building comments. Non-root unusable comments may be retained as structural anchors so that descendant replies remain connected to the ancestor chain. We split by subreddit: ten subreddits are used for train/validation and four are held out for testing, with overlapping users removed from training. For each user, we reserve 2--6 threads as behavioral history. Each target thread contributes one example, using the user's final comment as the target and the original post plus ancestor reply chain as context. This avoids producing many highly correlated examples from long Reddit threads.
+
+\paragraph{Persona induction.}
+Personas are induced once per user from the reserved history block $h$. The persona contains five fields: values, verbal features, expression style, length prior, and background. Each field is described by one to three concise sentences. Persona-conditioned settings attach this fixed persona to every example for the corresponding user. We use GPT-5.4-nano as the inducer model with temperature 0.2 and a maximum completion length of 2,048 tokens.
+
+\paragraph{OOD held-out sets.}
+We construct two small out-of-distribution held-out sets used only for evaluation: a Chatbot Arena-derived set (50 examples, 23 users) and a Humanual opinion set (50 examples, 17 users). Selection prioritizes covering all available users before adding additional examples in deterministic round-robin order.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Dataset & Users & History & Train & Val & Test \\
+\midrule
+PRISM & 1,288 & 2--4 conv. & 5,444 & 1,202 & 2,385 \\
+ConvoKit & 1,282 & 2--6 threads & 4,338 & 1,512 & 5,612 \\
+\bottomrule
+\end{tabular}
+\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM is split by user; ConvoKit is split by subreddit, with overlapping users removed from training.}
+\label{tab:preprocessing_stats}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+Split & Subreddits \\
+\midrule
+Train/Val & AmItheAsshole, AskMen, AskWomen, business, changemyview, Frugal, news, relationship\_advice, tifu, worldnews \\
+Test & Economics, TrueReddit, relationships, MaliciousCompliance \\
+\bottomrule
+\end{tabular}
+\caption{Subreddit split used for ConvoKit preprocessing.}
+\label{tab:convokit_subreddits}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+OOD set & Input rows & Users & Selected examples \\
+\midrule
+Chatbot Arena & 94 & 23 & 50 \\
+Humanual Opinion & 135 & 17 & 50 \\
+\bottomrule
+\end{tabular}
+\caption{OOD held-out evaluation sets.}
+\label{tab:ood_sets}
+\end{table}
 
 \subsection{}
 \end{document}
