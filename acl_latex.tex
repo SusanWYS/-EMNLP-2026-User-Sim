@@ -220,8 +220,21 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State
 \State \texttt{[PERSONA]}
 \State \texttt{<persona>}
-\State \quad \texttt{<values>}...\texttt{</values>} \quad \texttt{<verbal\_features>}...\texttt{</verbal\_features>} \quad \texttt{<expression\_style>}...\texttt{</expression\_style>}
+\State \quad \texttt{<values>}...\texttt{</values>}
+\State \quad \texttt{<verbal\_features>}...\texttt{</verbal\_features>}
+\State \quad \texttt{<expression\_style>}...\texttt{</expression\_style>}
 \State \texttt{</persona>}
+\State
+\State \texttt{[TASK]}
+\State \texttt{Your task is to predict [HUMAN]'s next message, matching [HUMAN]'s writing intentions, style, vocabulary, and tone.}
+\State \texttt{Use all provided information about [HUMAN] and the current context to predict the next message.}
+\State \texttt{Target your message to [OTHER] or [OTHER - OP], not to people who are described in the context}
+\State \texttt{but are not participants in the thread or conversation. Do not answer as an assistant, analyst, or narrator.}
+\State
+\State \texttt{Before outputting the final answer, briefly reason about what [HUMAN] would say and think step by step.}
+\State \texttt{Format your output exactly like this:}
+\State \texttt{<reasoning>...</reasoning>}
+\State \texttt{[HUMAN]: your response}
 \State
 \Statex \hrulefill
 \State \textbf{User message}
@@ -230,12 +243,18 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State
 \State \texttt{<Conversation 1>}
 \State \texttt{[MESSAGES]}
-\State \texttt{[HUMAN]:} \textit{user turn} \quad \texttt{[OTHER]:} \textit{assistant turn} \quad \texttt{[HUMAN]:} \textit{user turn} \quad \texttt{[OTHER]:} \textit{assistant turn} \quad \texttt{...}
+\State \texttt{[HUMAN]:} \textit{user turn}
+\State \texttt{[OTHER]:} \textit{assistant turn}
+\State \texttt{[HUMAN]:} \textit{user turn}
+\State \texttt{[OTHER]:} \textit{assistant turn}
 \State \texttt{</Conversation 1>}
 \State
 \State \texttt{[CURRENT CONTEXT]}
 \State \texttt{[MESSAGES SO FAR]}
-\State \texttt{[HUMAN]:} \textit{turn 0} \quad \texttt{[OTHER]:} \textit{turn 0} \quad \texttt{[HUMAN]:} \textit{turn 1} \quad \texttt{[OTHER]:} \textit{turn 1} \quad \texttt{...}
+\State \texttt{[HUMAN]:} \textit{turn 0}
+\State \texttt{[OTHER]:} \textit{turn 0}
+\State \texttt{[HUMAN]:} \textit{turn 1}
+\State \texttt{[OTHER]:} \textit{turn 1}
 \State
 \Statex \hrulefill
 \State \textbf{Model output}
@@ -246,12 +265,12 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \label{fig:prism_format}
 \end{figure*}
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
 \small
 \begin{algorithmic}[0]
 \State \textbf{System message}
-\State \textit{(same simulation instruction and persona as PRISM)}
+\State \textit{(same simulation instruction, persona, and task as Figure~\ref{fig:prism_format})}
 \State
 \Statex \hrulefill
 \State \textbf{User message}
@@ -262,15 +281,18 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State \texttt{[OTHER - OP]}
 \State \textit{original post text}
 \State
-\State \texttt{[OTHER]:} \textit{reply} \quad \texttt{[HUMAN]:} \textit{reply}
-\State \texttt{...}
+\State \texttt{[OTHER]:} \textit{reply}
+\State \texttt{[HUMAN]:} \textit{reply}
+\State \texttt{[OTHER]:} \textit{reply}
 \State \texttt{</Post 1>}
 \State
 \State \texttt{[CURRENT CONTEXT]}
 \State \texttt{[OTHER - OP]}
 \State \textit{original post text}
 \State
-\State \textit{ancestor reply chain}
+\State \texttt{[OTHER]:} \textit{ancestor reply}
+\State \texttt{[HUMAN]:} \textit{earlier comment}
+\State \texttt{[OTHER]:} \textit{ancestor reply}
 \State \texttt{[HUMAN]:}
 \State
 \Statex \hrulefill
@@ -280,7 +302,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \end{algorithmic}
 \caption{Prompt layout for ConvoKit (Reddit forum). History threads are wrapped in numbered \texttt{<Post>} tags; the original poster is marked \texttt{[OTHER - OP]}. The current context shows the OP and ancestor reply chain up to the prediction point.}
 \label{fig:convokit_format}
-\end{figure}
+\end{figure*}
 
 \subsection{}
 \end{document}
