@@ -262,7 +262,7 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \paragraph{OOD evaluation sets.}
 Two small out-of-distribution sets are reserved for evaluation only: Chatbot Arena (50 examples, 23 users, drawn from 94 candidates) and Humanual Opinion (50 examples, 17 users, drawn from 135 candidates). Selection covers every available user first, then fills remaining slots by deterministic round-robin.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \small
 \begin{tabular}{lrrrr}
@@ -278,16 +278,16 @@ Test & 2,385 & 5,612 & 50 & 50 \\
 \end{tabular}
 \caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM is split by user; ConvoKit is split by subreddit with overlapping users removed. OOD sets are evaluation-only.}
 \label{tab:preprocessing_stats}
-\end{table}
+\end{table*}
 
 \paragraph{Prompt format.}
-Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$; and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $\hat{y}$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the layout for each dataset.
+Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $\hat{y}$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
 
 \begin{figure*}[t]
 \centering
 \small
 \begin{algorithmic}[0]
-\State \textbf{System message}
+\State \textbf{System message (shared across all datasets)}
 \State \texttt{You are simulating a human labeled by [HUMAN]. Your job is to predict what [HUMAN] says as if you are that person.}
 \State
 \State \texttt{[PERSONA]}
@@ -309,9 +309,16 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State \texttt{Format your output exactly like this:}
 \State \texttt{<reasoning>...</reasoning>}
 \State \texttt{[HUMAN]: your response}
-\State
-\Statex \hrulefill
-\State \textbf{User message}
+\end{algorithmic}
+\caption{System message shared across all prompt configurations. The \texttt{[PERSONA]} block is included only in persona-conditioned settings; the \texttt{[TASK]} block specifies the prediction objective and output format.}
+\label{fig:system_prompt}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\small
+\begin{algorithmic}[0]
+\State \textbf{User message (PRISM)}
 \State \texttt{[USER HISTORY]}
 \State \texttt{Below are previous conversations involving [HUMAN]. Use them to infer [HUMAN]'s style, values, preferences, and likely responses.}
 \State
@@ -335,7 +342,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \State \texttt{<reasoning>}...\texttt{</reasoning>}
 \State \texttt{[HUMAN]:} $\hat{y}$
 \end{algorithmic}
-\caption{Prompt layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt{<Conversation>} tags; the current context lists turns up to the prediction point.}
+\caption{User message layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt{<Conversation>} tags; the current context lists turns up to the prediction point.}
 \label{fig:prism_format}
 \end{figure*}
 
@@ -343,11 +350,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \centering
 \small
 \begin{algorithmic}[0]
-\State \textbf{System message}
-\State \textit{(same simulation instruction, persona, and task as Figure~\ref{fig:prism_format})}
-\State
-\Statex \hrulefill
-\State \textbf{User message}
+\State \textbf{User message (ConvoKit)}
 \State \texttt{[USER HISTORY]}
 \State \texttt{Below are [HUMAN]'s previous messages.}
 \State
