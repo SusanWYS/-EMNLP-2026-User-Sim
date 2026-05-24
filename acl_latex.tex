@@ -36,7 +36,8 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
-\title{Training User Models to Pass the Turing Test}
+% \title{Training Language Models to Pass the User Turing Test}
+\title{Learning User Simulation through the Personal Turing Test}
 
 \author{First Author \\
   Affiliation / Address line 1 \\
@@ -134,9 +135,14 @@ We fix the user representation to $u = (h, \rho)$ and compare four training cond
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
 \section{Turing Eval Results}
+\subsection{Chat}
+on heldout subjects
 
+untrained / sft / grpo-logprob / grpo-turing 
+\subsection{Reddit}
 \section{Latent State Eval Results}
-
+\subsection{Chat}
+\subsection{Reddit}
 \section{Human Evaluation and Systems Level Comparison}
 
 \section{Analysis: Input Space Ablations}
