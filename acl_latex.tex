@@ -106,10 +106,10 @@ and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 
 We evaluate across two interaction formats that differ in structure, register, and social context.
 
 \paragraph{Multi-turn dialogue (PRISM).}
-The PRISM Alignment Dataset~\citep{kirk2024prism} contains 8,011 multi-turn conversations between human participants and LLM assistants, spanning 1,500 participants from 75 countries. Each conversation consists of alternating user and assistant turns, where participants engage with one of 21 LLMs on topics of their choosing, often involving subjective or value-laden questions. We qualify users with at least 6 conversations, yielding 1,288 users. We hold out 40\% of users at random for evaluation (515 users), with the remaining 773 users used for training. For each user, 2--4 conversations are reserved as behavioral history for constructing the user representation $u$; the rest serve as prediction targets. Because PRISM conversations are linear dialogues, we perform turn-level augmentation: each target conversation produces one training example per user turn, where the current context is all preceding turns and the ground truth is the user's utterance at that turn.
+The PRISM Alignment Dataset~\citep{kirk2024prism} contains 8,011 multi-turn conversations between human participants and LLM assistants, spanning 1,500 participants from 75 countries. Each conversation consists of alternating user and assistant turns, where participants engage with one of 21 LLMs on topics of their choosing, often involving subjective or value-laden questions. We qualify users with at least 6 conversations, yielding 1,288 users. To keep supervised cold-start training disjoint from reinforcement learning, we hold out 10\% of users at random for evaluation (128 users, 880 examples), then split the remaining users into separate GRPO and SFT pools: 696 users for GRPO train/validation and 464 users for SFT. For each user, 2--4 conversations are reserved as behavioral history for constructing the user representation $u$; the rest serve as prediction targets. Because PRISM conversations are linear dialogues, we perform turn-level augmentation: each target conversation produces one training example per user turn, where the current context is all preceding turns and the ground truth is the user's utterance at that turn.
 
 \paragraph{Online forum discussion (ConvoKit).}
-The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit discussions across a range of communities. We select 14 subreddits and qualify users who participate in at least 8 threads, yielding 1,282 users. Unlike PRISM, we split by subreddit rather than by user: 10 subreddits are used for training (706 users) and 4 are held out for evaluation (576 users), with overlapping users removed from the training set. For each user, 2--6 threads are reserved as behavioral history; the remaining threads serve as targets. Because Reddit threads are branching and expanding every user reply within a thread would create highly correlated examples, we use a single prediction target per thread: the user's last comment, with their earlier comments in the same thread retained as context.
+The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit discussions across a range of communities. We select 14 subreddits and qualify users who participate in at least 8 threads, yielding 1,282 users. To keep supervised cold-start training disjoint from reinforcement learning, we partition non-held-out users into separate SFT and GRPO pools: 472 users for SFT and 707 users for GRPO train/validation. We hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation, yielding 102 test users and 267 test examples, with no user overlap with either training pool. For each user, 2--6 threads are reserved as behavioral history; the remaining threads serve as targets. Because Reddit threads are branching and expanding every user reply within a thread would create highly correlated examples, we use a single prediction target per thread: the user's last comment, with their earlier comments in the same thread retained as context.
 
 \subsection{Evaluation}
 
@@ -135,6 +135,21 @@ We fix the user representation to $u = (h, \rho)$ and compare four training cond
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
 \section{Turing Eval Results}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.95\textwidth]{figures/sonnet46_turing_scores.pdf}
+\caption{Turing judge scores.}
+\label{fig:sonnet46_turing_scores}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.95\textwidth]{figures/sonnet46_specificity_scores.pdf}
+\caption{Specificity judge scores.}
+\label{fig:sonnet46_specificity_scores}
+\end{figure*}
+
 \subsection{Chat}
 on heldout subjects
 
@@ -179,15 +194,15 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{w
 Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground-truth response $y$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
 
 \paragraph{PRISM.}
-We retain PRISM participants with at least six conversations and hold out 40\% of qualified users for evaluation, yielding 773 train and 515 held-out users from 1,288 total. Per user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation is one example: $x$ is all preceding turns and $y$ is the user's utterance at that turn. 30\% of each held-out user's non-history conversations form the validation split; the remainder form the test split.
+We retain PRISM participants with at least six conversations, yielding 1,288 qualified users. We randomly hold out 10\% of qualified users with a fixed seed, giving 128 held-out test users and 880 test examples. The remaining 1,160 users are split with the same seed into disjoint GRPO and SFT pools using a 60/40 user ratio: 696 users for GRPO and 464 users for SFT. Per user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation is one example: $x$ is all preceding turns and $y$ is the user's utterance at that turn. GRPO train and validation examples are split within each GRPO user using a deterministic tail-split policy: for a user with $n$ target rows, $\lfloor 0.1n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation. Before applying this tail split, target rows are sorted by conversation id and target turn index, so validation rows come from later target turns and training does not use a later target from the same conversation than validation.
 
 \paragraph{ConvoKit.}
-We reconstruct Reddit threads from comment identifiers and parent pointers. Deleted, removed, and non-user comments cannot serve as targets or enter $h$, but non-root unusable comments may be kept as structural anchors so that descendant replies stay connected to the ancestor chain. We split by subreddit rather than by user---ten subreddits for train/validation, four held out for testing---and remove overlapping users from the training side. Per user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
+We reconstruct Reddit threads from comment identifiers and parent pointers. Deleted, removed, and non-user comments cannot serve as targets or enter $h$, but non-root unusable comments may be kept as structural anchors so that descendant replies stay connected to the ancestor chain. We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training. The remaining users are split deterministically into disjoint SFT and GRPO pools using a 40/60 ratio. GRPO train and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO train/validation. Per user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
 
 \begin{quote}
 \small
-\textbf{Train/Val:} AmItheAsshole, AskMen, AskWomen, business, changemyview, Frugal, news, relationship\_advice, tifu, worldnews \\
-\textbf{Test:} Economics, TrueReddit, relationships, MaliciousCompliance
+\textbf{SFT/GRPO pool:} AmItheAsshole, AskMen, AskWomen, business, changemyview, Economics, Frugal, MaliciousCompliance, news, relationship\_advice, relationships, TrueReddit \\
+\textbf{Held-out test:} tifu, worldnews
 \end{quote}
 
 \paragraph{Persona induction.}
@@ -298,12 +313,13 @@ Two small out-of-distribution sets are reserved for evaluation only: Chatbot Are
 \midrule
 Users & 1,288 & 1,282 & 23 & 17 \\
 History & 2--4 conv. & 2--6 threads & 2--4 conv. & 2--6 conv. \\
-Train & 5,444 & 4,338 & --- & --- \\
-Val & 1,202 & 1,512 & --- & --- \\
-Test & 2,385 & 5,612 & 50 & 50 \\
+SFT train & 3,272 & 4,264 & --- & --- \\
+GRPO train & 4,174 & 4,737 & --- & --- \\
+GRPO val & 705 & 1,661 & --- & --- \\
+Test & 880 & 267 & 50 & 50 \\
 \bottomrule
 \end{tabular}
-\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM is split by user; ConvoKit is split by subreddit with overlapping users removed. OOD sets are evaluation-only.}
+\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt{r/tifu} and \texttt{r/worldnews}. OOD sets are evaluation-only.}
 \label{tab:preprocessing_stats}
 \end{table*}
 
