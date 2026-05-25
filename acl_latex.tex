@@ -176,13 +176,29 @@ We fix the training signal to the Turing reward and compare three input conditio
 \label{fig:specificity}
 \end{figure}
 
+\section{Human Evaluation}
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/human_eval_winrate.pdf}
-\caption{Human evaluation: model win rate by majority vote over 50 target users. Each user's label is determined by majority vote across 3 independent annotators. Error bars show 95\% Wilson score confidence intervals. The dashed line marks chance performance (50\%).}
+\caption{Human evaluation: per-annotator model win rate distributions across 50 target users per condition. Each data point is one annotator's win rate over 10 targets. The dashed line marks chance performance (50\%).}
 \label{fig:human_eval_winrate}
 \end{figure}
-\section{Human Evaluation}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+ & SFT & GRPO-Sim & GRPO-Turing \\
+\midrule
+Reddit & 14/38 (37\%) & 18/40 (45\%) & 22/44 (50\%) \\
+Chat   & 22/44 (50\%) & 23/43 (53\%) & 26/43 (60\%) \\
+\bottomrule
+\end{tabular}
+\caption{Model win rate by majority vote over 50 target users per condition, excluding tied targets (3--3 splits). Each target's label is determined by majority vote across ${\sim}6$ independent annotators.}
+\label{tab:human_eval_majority}
+\end{table}
 \section{Analysis: Input Space Ablations}
 
 
