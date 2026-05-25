@@ -119,9 +119,7 @@ The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit
 
 \subsection{SFT Cold Start}
 
-Before reinforcement learning, we warm-start the policy with supervised fine-tuning on ground-truth user responses augmented with reasoning traces. For each training example $(u, x, y)$, we prompt a teacher model with the user's history $h$, persona $\rho$, the current context $x$, and the ground-truth response $y$, asking it to generate a hidden reasoning trace that explains what could lead the user to write that response. The trace reasons about the interlocutor's latest message, the user's likely stance, emotion, communicative goal, and communication style, drawing on evidence from the history and persona. Crucially, the trace must not reproduce or closely paraphrase the ground-truth response itself.
-
-The SFT training target concatenates the trace and the ground truth in a structured format: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$, where $t$ is the generated trace. The model is trained with LoRA ($r{=}16$, $\alpha{=}32$) using completion-only loss, so gradients flow only through the assistant turn. At inference time, the model generates both the reasoning trace and the response autoregressively, with the trace serving as a chain-of-thought before the final \texttt{[HUMAN]:} output. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
+Before reinforcement learning, we warm-start the policy with supervised fine-tuning on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, a teacher model generates a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \subsection{GRPO Training}
 
@@ -215,19 +213,45 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{w
 \subsubsection{Thinking Trace Elicitation}
 \label{app:thinking-trace-prompt}
 
-The following prompt is used to generate reasoning traces for SFT cold-start data. A teacher model receives the user's history, persona, current context, and the ground-truth response, and produces a reasoning trace explaining what could lead the user to write that response.
-
-\begin{quote}
+\begin{figure*}[t]
+\centering
 \small
-\textbf{System:} You generate hidden reasoning traces for user-simulation SFT data. Given \texttt{[HUMAN]}'s history, \texttt{[HUMAN]}'s persona, the current conversation context, and \texttt{[HUMAN]}'s actual next response, explain the reasoning process that could lead \texttt{[HUMAN]} to write that response.
-
-\textbf{User:}
-The prompt provides the user history, persona, context, and ground-truth response in delimited sections, then instructs:
-
-\emph{Generate the hidden reasoning trace that could lead \texttt{[HUMAN]} to write the given response. The trace should reason carefully about what \texttt{[OTHER]} or \texttt{[OTHER - OP]} most recently said, what exact point \texttt{[HUMAN]}'s response should target, \texttt{[HUMAN]}'s likely stance, emotion, goal, and communication style, and what response length and level of detail are plausible for \texttt{[HUMAN]}. Bring in supporting evidence from \texttt{[HUMAN]}'s history messages or persona.}
-
-\emph{Do not reproduce the given response. Do not copy, quote, closely paraphrase, or reveal its final wording. The trace may describe the response's intent, stance, target, and style, but must not restate the response itself.}
-\end{quote}
+\hrule\vspace{4pt}
+\begin{algorithmic}[1]
+\Statex \textbf{System message}
+\State \texttt{You generate hidden reasoning traces for user-simulation SFT data.}
+\State \texttt{Given [HUMAN]'s history, [HUMAN]'s persona, the current conversation}
+\Statex \texttt{\quad context, and [HUMAN]'s actual next response, explain the reasoning}
+\Statex \texttt{\quad process that could lead [HUMAN] to write that response.}
+\Statex \hrulefill
+\Statex \textbf{User message}
+\State \texttt{<|Target User Evidence|>} \textit{(reserved history block $h$)} \texttt{<|End Target User Evidence|>}
+\State \texttt{<|Persona|>} \textit{(induced persona $\rho$)} \texttt{<|End Persona|>}
+\State \texttt{<|Interaction Context|>} \textit{(current context $x$)} \texttt{<|End Interaction Context|>}
+\State \texttt{<|Given Response|>} \textit{(ground-truth response $y$)} \texttt{<|End Given Response|>}
+\State
+\State \texttt{Generate the hidden reasoning trace that could lead [HUMAN]}
+\Statex \texttt{\quad to write the given response.}
+\State
+\State \texttt{The trace should reason carefully about:}
+\State \texttt{- what [OTHER] or [OTHER - OP] most recently said}
+\State \texttt{- what exact point [HUMAN]'s response should target}
+\State \texttt{- [HUMAN]'s likely stance, emotion, goal, and communication style}
+\State \texttt{- what response length and level of detail are plausible for [HUMAN]}
+\State
+\State \texttt{Bring in supporting evidence from [HUMAN]'s history messages or persona.}
+\State
+\State \texttt{Do not reproduce the given response. Do not copy, quote, closely}
+\Statex \texttt{\quad paraphrase, or reveal its final wording. The trace may describe}
+\Statex \texttt{\quad the response's intent, stance, target, and style, but must not}
+\Statex \texttt{\quad restate the response itself.}
+\State
+\State \texttt{Output only the reasoning trace text, with no XML tags or headings.}
+\end{algorithmic}
+\vspace{2pt}\hrule
+\caption{Thinking trace elicitation prompt. A teacher model receives the user's history $h$, persona $\rho$, current context $x$, and the ground-truth response $y$, and generates a reasoning trace explaining what could lead the user to write that response without reproducing it.}
+\label{fig:thinking_trace_prompt}
+\end{figure*}
 
 \subsubsection{Inference Prompt}
 \label{app:inference-prompt}
