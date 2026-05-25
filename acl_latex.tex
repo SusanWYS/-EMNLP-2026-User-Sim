@@ -119,7 +119,7 @@ The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversati
 \paragraph{(Reddit) Online Forum Discussion: ConvoKit.}
 The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit discussions. We select 14 subreddits, qualify users with at least 8 threads (1,282 users), and hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation (102 users, 267 examples), with no user overlap with training. Each target thread yields one example: the user's last comment, with earlier comments retained as context.
 
-\subsection{SFT Cold Start}
+\subsection{SFT Warm Start}
 
 Before reinforcement learning, we warm-start the policy with supervised fine-tuning on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untrained instruct model to generate a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
@@ -127,7 +127,7 @@ Before reinforcement learning, we warm-start the policy with supervised fine-tun
 
 We optimize each reward signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples $G$ candidate responses per training example and computes advantages via within-group normalization, eliminating the need for a separate value model. All models are initialized from a SFT checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-For the Turing reward, we apply two additional reward-shaping mechanisms. First, we impose a length deadband: responses whose length falls within $[\ell_{\min}, \ell_{\max}]$ times the ground-truth length incur no penalty, while shorter or longer responses receive a proportional penalty with asymmetric lambdas (stronger for short responses). The penalty is capped to prevent length regularization from overwhelming the judge signal. Second, we clip the raw Turing judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards.
+For the Turing reward, we apply two additional reward-shaping mechanisms: a \emph{length deadband} that penalizes responses falling outside a tolerance band around the ground-truth length, and \emph{score clipping} that caps the raw judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards. The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
 
 \subsection{Evaluation}
 
@@ -351,18 +351,46 @@ PPO epochs per batch & 1 \\
 Total epochs & 3 \\
 Max response length & 1024 tokens \\
 PPO clip ratio & 0.2 \\
-\midrule
-\multicolumn{2}{l}{\emph{Turing reward shaping}} \\
-Length deadband (Reddit) & $[0.8, 1.1] \times$ GT length \\
-Length deadband (Chat) & $[0.6, 1.4] \times$ GT length \\
-Short penalty $\lambda$ (Reddit / Chat) & 0.45 / 0.40 \\
-Long penalty $\lambda$ (Reddit / Chat) & 0.15 / 0.20 \\
-Length penalty cap (Reddit / Chat) & 0.25 / 0.40 \\
-Judge score clip max & 5.0 \\
 \bottomrule
 \end{tabular}
-\caption{GRPO training hyperparameters.}
+\caption{GRPO training hyperparameters shared across all reward variants.}
 \label{tab:hyperparams}
+\end{table}
+
+\subsection{Turing Reward Shaping}
+\label{app:reward-shaping}
+
+The Turing reward applies two shaping mechanisms not used by the similarity or log-probability rewards.
+
+\paragraph{Length deadband.}
+Let $\ell$ be the generated response length and $\ell_{\mathrm{gt}}$ the ground-truth length. Responses within the deadband $[\ell_{\min} \cdot \ell_{\mathrm{gt}},\; \ell_{\max} \cdot \ell_{\mathrm{gt}}]$ incur no penalty. Outside the band, the penalty is proportional to the relative violation with asymmetric lambdas (stronger for short responses), and capped:
+\begin{align}
+p_{\mathrm{short}} &= \lambda_{\mathrm{short}} \cdot \max\!\bigl(\ell_{\min} - \ell/\ell_{\mathrm{gt}},\; 0\bigr) / \ell_{\min} \nonumber\\
+p_{\mathrm{long}} &= \lambda_{\mathrm{long}} \cdot \max\!\bigl(\ell/\ell_{\mathrm{gt}} - \ell_{\max},\; 0\bigr) / \ell_{\max} \nonumber\\
+p_{\mathrm{len}} &= \min(p_{\mathrm{short}} + p_{\mathrm{long}},\; p_{\mathrm{cap}})
+\end{align}
+
+\paragraph{Score clipping.}
+The raw Turing judge score (1--7) is clipped to a maximum of $s_{\mathrm{clip}}$ before canonicalization, reducing the influence of extreme ratings.
+
+Table~\ref{tab:reward-shaping} lists the parameter values for each dataset.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Parameter} & \textbf{Reddit} & \textbf{Chat} \\
+\midrule
+Deadband $[\ell_{\min}, \ell_{\max}]$ & $[0.8, 1.1]$ & $[0.6, 1.4]$ \\
+$\lambda_{\mathrm{short}}$ & 0.45 & 0.40 \\
+$\lambda_{\mathrm{long}}$ & 0.15 & 0.20 \\
+Penalty cap $p_{\mathrm{cap}}$ & 0.25 & 0.40 \\
+Score clip max $s_{\mathrm{clip}}$ & \multicolumn{2}{c}{5.0} \\
+\bottomrule
+\end{tabular}
+\caption{Turing reward shaping parameters by dataset.}
+\label{tab:reward-shaping}
 \end{table}
 
 \subsection{Dataset Preprocessing and Statistics}
