@@ -66,7 +66,7 @@ To simulate a person is to model what makes them \textit{them}. This is fundamen
 
 % This overlooks a basic property of human communication, where the same person in the same context could say many different things, all authentically their own.
 
-This paper describes a recipe for learning user simulator models based on a \emph{discriminative Turing reward} that asks whether the generated response is distinguishable from the real user's writing, conditioning the model on the user's raw behavioral history together with an induced persona. We validate this recipe through targeted ablations across two dimensions. First, we compare three training signals: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, log-probability maximization with latent chain-of-thought~\citep{gandhi2026dialogue}, and our discriminative Turing reward. The Turing reward consistently outperforms both alternatives. Second, we test how much each component of the user representation contributes by comparing history-only, persona-only, and the combined representation. We find that the combination is critical: history provides raw behavioral evidence while the induced persona supplies a compressed summary of stable traits, and each complements the other.
+This paper describes a recipe for learning user simulator models based on a \emph{discriminative Turing reward} that asks whether the generated response is distinguishable from the real user's writing, conditioning the model on the user's raw behavioral history together with an induced persona. We compare three training signals: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, log-probability maximization with latent chain-of-thought~\citep{gandhi2026dialogue}, and our discriminative Turing reward. The Turing reward consistently outperforms both alternatives. Second, we test how much each component of the user representation contributes by comparing history-only, persona-only, and the combined representation. We find that [insert input ablation results].
 
 We evaluate across two settings that differ substantially in structure and register: multi-turn human--LLM dialogue~\citep{kirk2024prism} and Reddit forum discussions~\citep{chang2020convokit}. Our results show that the Turing-trained model not only excels on its own metric but also generalizes to response similarity and state alignment evaluations~\citep{wu2026humanlm}, improving over untrained baselines and alternative training signals on both.
 
@@ -142,16 +142,10 @@ We fix the training signal to the Turing reward and compare three input conditio
 
 \section{Turing Eval Results}
 
-\subsection{Chat}
-on heldout subjects
 
-untrained / sft / grpo-logprob / grpo-turing 
-\subsection{Reddit}
-\section{Latent State Eval Results}
-\subsection{Chat}
-\subsection{Reddit}
-\section{Human Evaluation}
+\section{Response Similarity Judge}
 
+\section{Specificity Judge}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/human_eval_winrate.pdf}
@@ -161,12 +155,7 @@ untrained / sft / grpo-logprob / grpo-turing
 
 \section{Analysis: Input Space Ablations}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/turing_reward_ablation.pdf}
-\caption{Unadjusted Turing reward during GRPO training for three user representation ablations: history only ($u = h$), persona only ($u = \rho$), and the combined representation ($u = (h, \rho)$).}
-\label{fig:turing_reward_ablation}
-\end{figure}
+
 
 \section{Discussion}
 
