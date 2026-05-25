@@ -140,7 +140,7 @@ and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024dee
 
 \subsection{Datasets}
 
-We evaluate across two interaction formats that differ in structure, register, and social context. In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
+We evaluate across two interaction formats\llq{what does this mean?}that differ in structure, register\llq{what does this mean?}, and social context. In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
 \paragraph{(Chat) Multi-turn Chat: PRISM.}
 The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between human participants and LLM assistants, spanning 1,500 participants from 75 countries. We qualify users with at least 6 conversations (1,288 users) and hold out 128 users (880 examples) for evaluation. Each user turn in a target conversation yields one training example.
@@ -168,16 +168,14 @@ We evaluate whether a generated response is specifically grounded in the current
 We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
 
 
-
+\section{Training}
 \subsection{SFT Warm Start}\label{sec:sft}
-
 Before reinforcement learning, we warm-start the policy with supervised fine-tuning on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untrained instruct model to generate a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \subsection{GRPO Training}
-
 We optimize each reward signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint as described in \ref{sec:sft} and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-For the Turing reward, we apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards. \llq{do we have a justification why not apply length penalty to other rewards? might need to discuss baselines before, since sim and logprob are not discussed. Also might need to add this ablation later} The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
+For the Turing reward, we apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. \llq{do we have a justification why not apply length penalty to other rewards? might need to discuss baselines before, since sim and logprob are not discussed. Also might need to add this ablation later} The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
 
 \subsection{Baselines and Ablations}
 
