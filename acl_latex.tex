@@ -30,6 +30,7 @@
 
 % Additional packages
 \usepackage{booktabs}
+\usepackage{multirow}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{nicefrac}
@@ -206,26 +207,20 @@ We fix the training signal to the Turing reward and compare three input conditio
 
 \section{Human Evaluation}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/human_eval_winrate.pdf}
-\caption{Human evaluation: per-annotator model win rate distributions across 50 target users per condition. Each data point is one annotator's win rate over 10 targets. The dashed line marks chance performance (50\%).}
-\label{fig:human_eval_winrate}
-\end{figure}
-
 \begin{table}[t]
 \centering
 \small
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \toprule
- & SFT & GRPO-Sim & GRPO-Turing \\
+ & \textbf{Reddit} & \textbf{Chat} \\
 \midrule
-Reddit & 14/38 (37\%) & 18/40 (45\%) & 22/44 (50\%) \\
-Chat   & 22/44 (50\%) & 23/43 (53\%) & 26/43 (60\%) \\
+SFT         & $.43 \pm .06$ & $.50 \pm .09$ \\
+GRPO-Sim    & $.50 \pm .07$ & $.50 \pm .08$ \\
+GRPO-Turing & $.52 \pm .06$ & $.55 \pm .07$ \\
 \bottomrule
 \end{tabular}
-\caption{Model win rate by majority vote over 50 target users per condition, excluding tied targets (3--3 splits). Each target's label is determined by majority vote across ${\sim}6$ independent annotators.}
-\label{tab:human_eval_majority}
+\caption{Human evaluation: mean model win rate ($\pm$ 95\% CI half-width) across 50 target users per condition (${\sim}6$ annotators per target). WR $> 0.5$ means annotators chose the model-generated response over ground truth more often than chance.}
+\label{tab:human_eval_winrate}
 \end{table}
 \section{Analysis: Input Space Ablations}
 
