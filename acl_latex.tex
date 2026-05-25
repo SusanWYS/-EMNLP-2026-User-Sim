@@ -154,7 +154,7 @@ The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit
 
 \subsection{Evaluation}
 
-We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6 for all evaluations.
+We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations.
 
 \paragraph{Turing distinguishability.}
 A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
@@ -180,7 +180,7 @@ Before reinforcement learning, we warm-start the policy with supervised fine-tun
 \paragraph{GRPO Training with Discriminative Rewards}
 We optimize the Turing discriminative judge signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B as the reward model by default.
+We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default.
 
 % \subsection{Baselines and Ablations}
 
