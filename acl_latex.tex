@@ -223,9 +223,11 @@ response specificity is caveated since real humans often pivot in real-time conv
 \subsection{Human Evaluation}
 
 \paragraph{Setup.}
-We recruit crowd workers via Prolific for a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate SFT-Init, GRPO-Sim, and GRPO-Turing on 50 target users per dataset, collecting ${\sim}300$ binary judgments per condition after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools humans above chance. Full annotation details are given in the appendix.
+We recruit crowd workers via Prolific for a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate SFT-Init, GRPO-Sim, and GRPO-Turing on 50 target users per dataset, collecting ${\sim}300$ binary judgments per condition after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools humans above chance. Full annotation details are given in Appendix~\ref{app:human-eval}.
 
 \paragraph{Results.}
+Table~\ref{tab:human_eval_winrate} reports win rates across conditions. GRPO-Turing achieves the highest WR in both domains, reaching $.55$ on Chat and $.52$ on Reddit. One-sided tests against chance (WR $= 0.5$) show that GRPO-Turing on Chat is marginally significant (pooled binomial $p = .053$; per-participant $t$-test $p = .092$). Conversely, SFT-Init on Reddit falls significantly \emph{below} chance (WR $= .43$, $p < .05$), indicating that humans can reliably distinguish its outputs from real user responses. GRPO-Sim hovers near chance in both domains. Paired comparisons over the shared 50 targets confirm that GRPO-Turing significantly outperforms SFT-Init on Reddit (paired $t$-test $p = .024$).
+
 \begin{table}[t]
 \centering
 \small
@@ -506,6 +508,9 @@ Score clip max $s_{\mathrm{clip}}$ & \multicolumn{2}{c}{5.0} \\
 \caption{Turing reward shaping parameters by dataset.}
 \label{tab:reward-shaping}
 \end{table}
+
+\subsection{Human Evaluation Details}
+\label{app:human-eval}
 
 \subsection{Dataset Preprocessing and Statistics}
 \label{app:dataset-stats}
