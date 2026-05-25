@@ -154,7 +154,7 @@ The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit
 
 \subsection{Evaluation}
 
-We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use \llq{?} for all evaluations.
+We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6 for all evaluations.
 
 \paragraph{Turing distinguishability.}
 A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
@@ -174,14 +174,13 @@ We compare our method with supervised fine-tuning (SFT) and other GRPO-based met
 
 
 \subsection{Training}
-\label{sec:sft}
 \paragraph{SFT Warm Start}
 Before reinforcement learning, we warm-start the policy with supervised fine-tuning on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untrained instruct model to generate a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \paragraph{GRPO Training with Discriminative Rewards}
-We optimize the Turing discriminative judge signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint as described in \ref{sec:sft} and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
+We optimize the Turing discriminative judge signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
+We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B as the reward model by default.
 
 % \subsection{Baselines and Ablations}
 
