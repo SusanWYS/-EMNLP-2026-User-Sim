@@ -140,7 +140,7 @@ and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024dee
 
 \subsection{Datasets}
 
-We evaluate two domains: chat and Reddit. Both domains contain users and their interactions. We reserve a fixed block of prior interactions as behavior history $h$, and use the remaining interactions as prediction targets. We split users into training and evaluation sets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
+We evaluate two domains: multi-turn chat and Reddit. Both domains contain users and their interactions. We reserve a fixed block of prior interactions as behavior history $h$, and use the remaining interactions as prediction targets. We split users into training and evaluation sets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
 % We evaluate across two interaction formats that differ in structure, register, and social context.
 % In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
@@ -181,7 +181,7 @@ Before reinforcement learning, we warm-start the policy with supervised fine-tun
 \subsection{GRPO Training with Discriminative Rewards}
 We optimize each reward signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint as described in \ref{sec:sft} and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-For the Turing reward, we apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. \llq{do we have a justification why not apply length penalty to other rewards? might need to discuss baselines before, since sim and logprob are not discussed. Also might need to add this ablation later} The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
+For the Turing reward, we apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
 
 % \subsection{Baselines and Ablations}
 
