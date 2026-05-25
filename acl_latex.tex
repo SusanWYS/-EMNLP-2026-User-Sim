@@ -141,7 +141,7 @@ and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024dee
 \subsection{Datasets}
 
 We evaluate across two interaction formats that differ in structure, register, and social context. 
-We evaluate two interactive domains: chat and reddit. both domains have users with their interaction history $h$. we split users 
+We evaluate two domains: chat and reddit. both domains have users with their interactions. we reserve a fixed block of piro interations as behavior history $h$, and the rest as prediction targes. we split users for trainnig nad evaluation. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
 In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
