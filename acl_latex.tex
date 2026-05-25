@@ -140,7 +140,10 @@ and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024dee
 
 \subsection{Datasets}
 
-We evaluate across two interaction formats\llq{what does this mean?}that differ in structure, register\llq{what does this mean?}, and social context. In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
+We evaluate across two interaction formats\llq{what does this mean?}that differ in structure, register\llq{what does this mean?}, and social context. 
+We evaluate two interactive domains: chat and reddit. 
+
+In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
 \paragraph{(Chat) Multi-turn Chat: PRISM.}
 The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between human participants and LLM assistants, spanning 1,500 participants from 75 countries. We qualify users with at least 6 conversations (1,288 users) and hold out 128 users (880 examples) for evaluation. Each user turn in a target conversation yields one training example.
