@@ -155,7 +155,7 @@ Before reinforcement learning, we warm-start the policy with supervised fine-tun
 
 We optimize each reward signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples $G$ candidate responses per training example and computes advantages via within-group normalization, eliminating the need for a separate value model. All models are initialized from a SFT checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-For the Turing reward, we apply two additional reward-shaping mechanisms: a \emph{length deadband} that penalizes responses falling outside a tolerance band around the ground-truth length, and \emph{score clipping} that caps the raw judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards. The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
+For the Turing reward, we apply two additional reward-shaping mechanisms: a \emph{length deadband} that penalizes responses falling outside a tolerance band around the ground-truth length, and \emph{score clipping} that caps the raw judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards. \llq{do we have a justification why not apply length penatly to other rewards?} The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
 
 \subsection{Evaluation}
 
