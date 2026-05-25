@@ -170,15 +170,15 @@ We evaluate whether a generated response is specifically grounded in the current
 Before RL, we warm-start the policy with SFT on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untuned instruct model to generate a reasoning trace given the context and ground-truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \paragraph{GRPO training.}
-We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Training uses a disjoint dataset from the SFT training. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
+We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. GRPO training uses a dataset disjoint from the SFT training set. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default.
+We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default. \llq{Should we change this to one additional reward-shaping term (length penalty)? The reward clipping one seems to be included by default.}
 
 \subsection{Baselines}
 
 % \paragraph{Training signal comparison.}
 We use Qwen3-8B with reasoning mode disabled as our base model.
-We compare our method with supervised fine-tuning (SFT) and other GRPO-based methods using different rewards. Specifically, we consider GRPO with response similarity reward~\citep{wu2026humanlm}, and GRPO with log-probability and latent thinking rewards~\citep{gandhi2026dialogue}. All GRPO-based methods are initialized from the SFT model. We also report the performance of the untuned base model and OpenAI GPT-5 (minimal reasoning effort) as zero-shot references.
+We compare our method with supervised fine-tuning (SFT) and other GRPO-based methods using different rewards. Specifically, we consider GRPO with response similarity reward~\citep{wu2026humanlm}, and GRPO with log-probability and latent thinking rewards~\citep{gandhi2026dialogue}. All GRPO-based methods are initialized from the SFT model. We also report the performance of the base Qwen3-8B model and OpenAI GPT-5 (minimal reasoning effort) as zero-shot references.
 
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
 
@@ -199,17 +199,16 @@ We compare our method with supervised fine-tuning (SFT) and other GRPO-based met
 \label{fig:turing_dot}
 \end{figure}
 
+user modeling is still very hard. assistant-trained models (GPT-5) produce verbose and naturally  involuted??? responses. refer to qualitative examples. 
+
+Using similarity as signal did not significantly improve the turing score from the sft-init checkpoint.
 \subsection{Response Similarity to Ground Truth}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
 \caption{Sim reward judge scores across Reddit and Chat domains. The dashed line and shaded band show the Base model mean and 95\% CI.}
 \label{fig:sim_dot}
-\end{figure}
-
-user modeling is still very hard. assistant-trained models (GPT-5) produce verbose and naturally  involuted??? responses. refer to qualitative examples. 
-
-Using similarity as signal did not significantly improve the turing score from the sft-init checkpoint. 
+\end{figure} 
 
 \subsection{Response Specificity}
 \begin{figure}[t]
@@ -218,6 +217,7 @@ Using similarity as signal did not significantly improve the turing score from t
 \caption{Response specificity scores across Reddit (top) and Chat (bottom). The dashed line and shaded band show the untrained baseline mean and 95\% CI.}
 \label{fig:specificity}
 \end{figure}
+why do we need to measure response specificity
 response specificity is caveated since real humans often pivot in real-time conversations. see gt in chat, which 
 
 \subsection{Human Evaluation}
