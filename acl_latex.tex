@@ -111,10 +111,10 @@ and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 
 
 We evaluate across two interaction formats that differ in structure, register, and social context.
 
-\paragraph{Multi-turn dialogue (PRISM).}
+\paragraph{(Chat) Multi-turn Chat: PRISM.}
 The PRISM Alignment Dataset~\citep{kirk2024prism} contains 8,011 multi-turn conversations between human participants and LLM assistants, spanning 1,500 participants from 75 countries. Each conversation consists of alternating user and assistant turns, where participants engage with one of 21 LLMs on topics of their choosing, often involving subjective or value-laden questions. We qualify users with at least 6 conversations, yielding 1,288 users. To keep supervised cold-start training disjoint from reinforcement learning, we hold out 10\% of users at random for evaluation (128 users, 880 examples), then split the remaining users into separate GRPO and SFT pools: 696 users for GRPO train/validation and 464 users for SFT. For each user, 2--4 conversations are reserved as behavioral history for constructing the user representation $u$; the rest serve as prediction targets. Because PRISM conversations are linear dialogues, we perform turn-level augmentation: each target conversation produces one training example per user turn, where the current context is all preceding turns and the ground truth is the user's utterance at that turn.
 
-\paragraph{Online forum discussion (ConvoKit).}
+\paragraph{(Reddit) Online Forum Discussion: ConvoKit.}
 The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit discussions across a range of communities. We select 14 subreddits and qualify users who participate in at least 8 threads, yielding 1,282 users. To keep supervised cold-start training disjoint from reinforcement learning, we partition non-held-out users into separate SFT and GRPO pools: 472 users for SFT and 707 users for GRPO train/validation. We hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation, yielding 102 test users and 267 test examples, with no user overlap with either training pool. For each user, 2--6 threads are reserved as behavioral history; the remaining threads serve as targets. Because Reddit threads are branching and expanding every user reply within a thread would create highly correlated examples, we use a single prediction target per thread: the user's last comment, with their earlier comments in the same thread retained as context.
 
 \subsection{Evaluation}
@@ -135,12 +135,12 @@ We evaluate whether a generated response is specifically grounded in the current
 Our experiments are organized as follows.
 
 \paragraph{Training signal comparison.}
-We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) as a zero-shot reference.
+We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
 
 \paragraph{User representation ablation.}
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
-\section{Turing Eval Results}
+\section{Response Human-Likedness}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
@@ -148,7 +148,7 @@ We fix the training signal to the Turing reward and compare three input conditio
 \label{fig:turing_dot}
 \end{figure}
 
-\section{Response Similarity Judge}
+\section{Response Similarity to Ground Truth}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
@@ -156,7 +156,7 @@ We fix the training signal to the Turing reward and compare three input conditio
 \label{fig:sim_dot}
 \end{figure}
 
-\section{Specificity Judge}
+\section{Response Specificity}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/human_eval_winrate.pdf}
