@@ -141,9 +141,20 @@ We fix the user representation to $u = (h, \rho)$ and compare four training cond
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
 \section{Turing Eval Results}
-
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
+\caption{Turing judge scores across Reddit and Chat domains. The dashed line and shaded band show the Base model mean and 95\% CI. Hollow markers denote non-RL baselines (GPT-5, SFT); filled markers denote RL-trained models.}
+\label{fig:turing_dot}
+\end{figure}
 
 \section{Response Similarity Judge}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
+\caption{Sim reward judge scores across Reddit and Chat domains. The dashed line and shaded band show the Base model mean and 95\% CI.}
+\label{fig:sim_dot}
+\end{figure}
 
 \section{Specificity Judge}
 \begin{figure}[t]
