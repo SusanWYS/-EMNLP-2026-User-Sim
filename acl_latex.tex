@@ -252,6 +252,19 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \Statex \texttt{\quad or local interaction goals.}
 \State \texttt{- If evidence is weak, write `unknown`.}
 \State \texttt{- Keep each field concise.}
+\end{algorithmic}
+\vspace{2pt}\hrule
+\caption{Persona induction prompt (part 1 of 2). The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho$.}
+\label{fig:persona_induction}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\small
+\hrule\vspace{4pt}
+\begin{algorithmic}[1]
+\setcounter{ALG@line}{20}
+\Statex \texttt{Rules (continued):}
 \State \texttt{- Write each field as short fragments or very short sentences,}
 \Statex \texttt{\quad not polished mini-paragraphs.}
 \State \texttt{- Do not quote or reproduce complete sentences from the}
@@ -301,8 +314,8 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 \Statex \texttt{\quad "length\_prior": "...", "background": "..."\}}
 \end{algorithmic}
 \vspace{2pt}\hrule
-\caption{Persona induction prompt. The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho$.}
-\label{fig:persona_induction}
+\caption{Persona induction prompt (part 2 of 2). Continuation of rules and field descriptions.}
+\label{fig:persona_induction_2}
 \end{figure*}
 
 \paragraph{OOD evaluation sets.}
