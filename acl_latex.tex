@@ -103,7 +103,7 @@ The Turing reward asks whether a generated response could pass for the real pers
 \begin{equation}
   s^* = \begin{cases} 8 - s & \text{if the candidate is Response A} \\ s & \text{if the candidate is Response B} \end{cases}
 \end{equation}
-and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 1]$, where 0 means the candidate was identified as synthetic with maximum confidence, 0.5 means the judge could not distinguish the two, and 1 means the candidate was mistaken for the real user. Rather than optimizing for content overlap with a specific ground-truth response, this signal trains the model toward the broader quality of being indistinguishable from the target user.
+and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 1]$, where 0 means the candidate was identified as synthetic with maximum confidence, 0.5 means the judge could not distinguish the two, and 1 means the candidate was mistaken for the real user. Rather than optimizing for content overlap with a specific ground-truth response, this signal trains the model toward the broader quality of being indistinguishable from the target user. The full judge prompt is given in Appendix~\ref{app:turing-prompt}.
 
 \section{Experimental Setup}
 
@@ -122,7 +122,7 @@ The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit
 We evaluate generated responses along three complementary dimensions, each operationalized via an LLM judge.
 
 \paragraph{Turing distinguishability.}
-A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria---immediate target, human goal, and communication style---with four penalty checks for artifacts. To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
+A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style) with four penalty checks for artifacts. To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
 
 \paragraph{Response similarity.}
 An LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
@@ -157,6 +157,13 @@ We fix the training signal to the Turing reward and compare three input conditio
 \end{figure}
 
 \section{Response Specificity}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
+\caption{Response specificity scores across Reddit (top) and Chat (bottom). The dashed line and shaded band show the untrained baseline mean and 95\% CI.}
+\label{fig:specificity}
+\end{figure}
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/human_eval_winrate.pdf}
