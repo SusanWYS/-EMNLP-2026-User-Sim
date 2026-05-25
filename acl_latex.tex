@@ -121,7 +121,7 @@ The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit
 
 We optimize each reward signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples $G$ candidate responses per training example and computes advantages via within-group normalization, eliminating the need for a separate value model. All models are initialized from a supervised fine-tuning (SFT) checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-For the Turing reward, we apply two additional reward-shaping mechanisms. First, we impose a \textbf{length deadband}: responses whose length falls within $[\ell_{\min}, \ell_{\max}]$ times the ground-truth length incur no penalty, while shorter or longer responses receive a proportional penalty with asymmetric lambdas (stronger for short responses). The penalty is capped to prevent length regularization from overwhelming the judge signal. Second, we clip the raw Turing judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards.
+For the Turing reward, we apply two additional reward-shaping mechanisms. First, we impose a length deadband: responses whose length falls within $[\ell_{\min}, \ell_{\max}]$ times the ground-truth length incur no penalty, while shorter or longer responses receive a proportional penalty with asymmetric lambdas (stronger for short responses). The penalty is capped to prevent length regularization from overwhelming the judge signal. Second, we clip the raw Turing judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards.
 
 \subsection{Evaluation}
 
