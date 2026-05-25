@@ -156,7 +156,7 @@ Before reinforcement learning, we warm-start the policy with supervised fine-tun
 
 We optimize each reward signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples $G$ candidate responses per training example and computes advantages via within-group normalization, eliminating the need for a separate value model. All models are initialized from a SFT checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-For the Turing reward, we apply two additional reward-shaping mechanisms: a \emph{length deadband} that penalizes responses falling outside a tolerance band around the ground-truth length, and \emph{score clipping} that caps the raw judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards. \llq{do we have a justification why not apply length penatly to other rewards?} The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
+For the Turing reward, we apply two additional reward-shaping mechanisms: a \emph{length deadband} that penalizes responses falling outside a tolerance band around the ground-truth length, and \emph{score clipping} that caps the raw judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards. \llq{do we have a justification why not apply length penalty to other rewards? might need to discuss baselines before. also might need to add this ablation later} The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
 
 \subsection{Evaluation}
 
@@ -206,7 +206,7 @@ We fix the training signal to the Turing reward and compare three input conditio
 \end{figure}
 
 \section{Human Evaluation}
-
+should talk about how we collected data and what stats significance tests we did
 \begin{table}[t]
 \centering
 \small
@@ -219,7 +219,7 @@ GRPO-Sim    & $.50 \pm .07$ & $.50 \pm .08$ \\
 GRPO-Turing & $.52 \pm .06$ & $.55 \pm .07$ \\
 \bottomrule
 \end{tabular}
-\caption{Human evaluation: mean model win rate ($\pm$ 95\% CI half-width) across 50 target users per condition (${\sim}6$ annotators per target). WR $> 0.5$ means annotators chose the model-generated response over ground truth more often than chance.}
+\caption{Human evaluation: mean model win rate over ground truth ($\pm$ 95\% CI half-width) across 50 target users per condition (${\sim}6$ annotators per target). WR $> 0.5$ means annotators chose the model-generated response over ground truth more often than chance.}
 \label{tab:human_eval_winrate}
 \end{table}
 \section{Analysis: Input Space Ablations}
