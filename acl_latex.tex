@@ -148,28 +148,29 @@ The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversati
 \paragraph{(Reddit) Online Forum Discussion: ConvoKit.}
 The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit discussions. We select 14 subreddits, qualify users with at least 8 threads (1,282 users), and hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation (102 users, 267 examples), with no user overlap with training. Each target thread yields one example: the user's last comment, with earlier comments retained as context.
 
-\subsection{SFT Warm Start}
+
+\subsection{Evaluation}
+
+We evaluate generated responses along three dimensions, each operationalized via an LLM judge.
+
+\paragraph{Turing distinguishability.}
+A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style) with four penalty checks for artifact \llq{not sure what this mean }. To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
+
+\paragraph{Response similarity to ground truth.}
+Following \citet{wu2026humanlm}, an LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
+
+\paragraph{Context and user specificity.}
+We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
+
+\subsection{SFT Warm Start}\label{sec:sft}
 
 Before reinforcement learning, we warm-start the policy with supervised fine-tuning on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untrained instruct model to generate a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \subsection{GRPO Training}
 
-We optimize each reward signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples $G$ candidate responses per training example and computes advantages via within-group normalization, eliminating the need for a separate value model. All models are initialized from a SFT checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
+We optimize each reward signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint as described in \ref{sec:sft} and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-For the Turing reward, we apply two additional reward-shaping mechanisms: a \emph{length deadband} that penalizes responses falling outside a tolerance band around the ground-truth length, and \emph{score clipping} that caps the raw judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards. \llq{do we have a justification why not apply length penalty to other rewards? might need to discuss baselines before. also might need to add this ablation later} The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
-
-\subsection{Evaluation}
-
-We evaluate generated responses along three complementary dimensions, each operationalized via an LLM judge.
-
-\paragraph{Turing distinguishability.}
-A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style) with four penalty checks for artifacts. To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
-
-\paragraph{Response Similarity to Ground Truth.}
-Following \citet{wu2026humanlm}, an LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
-
-\paragraph{Context and User Specificity.}
-We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
+For the Turing reward, we apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. Neither mechanism is applied to the similarity or log-probability rewards. \llq{do we have a justification why not apply length penalty to other rewards? might need to discuss baselines before, since sim and logprob are not discussed. Also might need to add this ablation later} The deadband parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}.
 
 \subsection{Baselines and Ablations}
 
@@ -181,7 +182,8 @@ We fix the user representation to $u = (h, \rho)$ and compare four training cond
 \paragraph{User representation ablation.}
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
-\section{Response Humanlikedness}
+\section{Results}
+\subsection{Response Humanlikeness}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
@@ -189,7 +191,7 @@ We fix the training signal to the Turing reward and compare three input conditio
 \label{fig:turing_dot}
 \end{figure}
 
-\section{Response Similarity to Ground Truth}
+\subsection{Response Similarity to Ground Truth}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
@@ -197,7 +199,7 @@ We fix the training signal to the Turing reward and compare three input conditio
 \label{fig:sim_dot}
 \end{figure}
 
-\section{Response Specificity}
+\subsection{Response Specificity}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
@@ -205,7 +207,7 @@ We fix the training signal to the Turing reward and compare three input conditio
 \label{fig:specificity}
 \end{figure}
 
-\section{Human Evaluation}
+\subsection{Human Evaluation}
 should talk about how we collected data and what stats significance tests we did
 \begin{table}[t]
 \centering
