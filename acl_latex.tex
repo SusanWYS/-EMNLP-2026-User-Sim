@@ -140,30 +140,32 @@ and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024dee
 \section{Experimental Setup}
 
 \subsection{Datasets}
-We evaluate our approach on two domains: multi-turn chat and Reddit. Both domains contain users and their interactions. We reserve a fixed block of prior interactions as behavior history $h$, and use the remaining interactions as prediction targets. We split users into training and evaluation sets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
+We evaluate our approach on two domains: Reddit and multi-turn chat. Both domains contain users and their interactions. We reserve a fixed block of prior interactions as behavior history $h$, and use the remaining interactions as prediction targets. We split users into training and evaluation sets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
 % We evaluate across two interaction formats that differ in structure, register, and social context.
 % In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
-\paragraph{(Chat) Multi-turn chat: PRISM.}
-The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between humans and LLM assistants, spanning 1,500 participants from 75 countries. We select users with at least 6 conversations (1,288 users) and hold out 128 users (880 examples) for evaluation. Each user turn in a target conversation yields one training example.
 
 \paragraph{(Reddit) Online forum discussion: ConvoKit.}
 The ConvoKit subreddit corpus~\citep{chang2020convokit} contains  discussions on Reddit. We select 14 subreddits, selecting users with at least 8 threads (1,282 users), and hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation (102 users, 267 examples), with no user overlap with training. Each target thread yields one example: the user's last comment, and the earlier comments  as context.
 
+\paragraph{(Chat) Multi-turn chat: PRISM.}
+The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between humans and LLM assistants, spanning 1,500 participants from 75 countries. We select users with at least 6 conversations (1,288 users) and hold out 128 users (880 examples) for evaluation. Each user turn in a target conversation yields one training example.
 
-\subsection{Automatic Evaluation}
-
+\subsection{Evaluation}
+\subsubsection{Automatic Evaluation}
 We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations.
 
 \paragraph{Turing distinguishability.}
-A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
+A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response was harder to distinguish from the real one. This mirrors our training signal, See Appendix~\ref{app:turing-prompt} for the full judge prompt. 
 
 \paragraph{Response similarity to ground truth.}
 Following \citet{wu2026humanlm}, an LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
 
 \paragraph{Context and user specificity.}
 We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. For better calibration, we batch judge the specificity scores of multiple responses in one judge call. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
+
+\subsubsection{Human Evaluation}
 
 \subsection{Training}
 \paragraph{SFT warm start.}
@@ -191,7 +193,9 @@ We compare our method with supervised fine-tuning (SFT) and other GRPO-based met
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
 
 \section{Results}
-\subsection{Response Humanlikeness}
+
+\subsection{Autmoatic Evaluation}
+\paragraph{Response Humanlikeness}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
@@ -202,7 +206,8 @@ We compare our method with supervised fine-tuning (SFT) and other GRPO-based met
 user modeling is still very hard. assistant-trained models (GPT-5) produce verbose and naturally  involuted??? responses. refer to qualitative examples. 
 
 Using similarity as signal did not significantly improve the turing score from the sft-init checkpoint.
-\subsection{Response Similarity to Ground Truth}
+
+\paragraph{Response Similarity to Ground Truth}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
@@ -210,7 +215,7 @@ Using similarity as signal did not significantly improve the turing score from t
 \label{fig:sim_dot}
 \end{figure} 
 
-\subsection{Response Specificity}
+\paragraph{Response Specificity}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
