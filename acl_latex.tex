@@ -162,6 +162,13 @@ Following \citet{wu2026humanlm}, an LLM judge scores how well a generated respon
 \paragraph{Context and user specificity.}
 We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
 
+\subsection{Baselines}
+
+\paragraph{Training signal comparison.}
+We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
+
+
+
 \subsection{SFT Warm Start}\label{sec:sft}
 
 Before reinforcement learning, we warm-start the policy with supervised fine-tuning on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untrained instruct model to generate a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
