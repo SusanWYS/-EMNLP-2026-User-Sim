@@ -117,6 +117,8 @@ The PRISM Alignment Dataset~\citep{kirk2024prism} contains 8,011 multi-turn conv
 \paragraph{(Reddit) Online Forum Discussion: ConvoKit.}
 The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit discussions across a range of communities. We select 14 subreddits and qualify users who participate in at least 8 threads, yielding 1,282 users. To keep supervised cold-start training disjoint from reinforcement learning, we partition non-held-out users into separate SFT and GRPO pools: 472 users for SFT and 707 users for GRPO train/validation. We hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation, yielding 102 test users and 267 test examples, with no user overlap with either training pool. For each user, 2--6 threads are reserved as behavioral history; the remaining threads serve as targets. Because Reddit threads are branching and expanding every user reply within a thread would create highly correlated examples, we use a single prediction target per thread: the user's last comment, with their earlier comments in the same thread retained as context.
 
+\subsection{GRPO Training}
+
 \subsection{Evaluation}
 
 We evaluate generated responses along three complementary dimensions, each operationalized via an LLM judge.
@@ -124,10 +126,10 @@ We evaluate generated responses along three complementary dimensions, each opera
 \paragraph{Turing distinguishability.}
 A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style) with four penalty checks for artifacts. To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
 
-\paragraph{Response similarity.}
+\paragraph{Response Similarity to Ground Truth.}
 An LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
 
-\paragraph{Response specificity.}
+\paragraph{Context and User Specificity.}
 We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. Hard caps enforce low scores when the response contradicts the context or invents personal facts. This yields a single score in $[0, 1]$. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
 
 \subsection{Baselines and Ablations}
@@ -140,7 +142,7 @@ We fix the user representation to $u = (h, \rho)$ and compare four training cond
 \paragraph{User representation ablation.}
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
-\section{Response Human-Likedness}
+\section{Response Humanlikedness}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
