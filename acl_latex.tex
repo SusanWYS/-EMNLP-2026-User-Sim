@@ -122,13 +122,13 @@ The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit
 We evaluate generated responses along three complementary dimensions, each operationalized via an LLM judge.
 
 \paragraph{Turing distinguishability.}
-A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale. To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. This metric captures aspects of user fidelity that content-level metrics may miss, such as stylistic consistency and appropriate response length.
+A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria---immediate target, human goal, and communication style---with four penalty checks for artifacts. To control for position bias, we evaluate each pair in both orderings and average the canonicalized scores. Higher scores indicate the generated response was harder to distinguish from the real one. See Appendix~\ref{app:turing-prompt} for the full judge prompt.
 
 \paragraph{Response similarity.}
-An LLM judge scores how well a generated response captures the overall content of the ground-truth human response, considering coverage of key points and penalizing extraneous or contradictory material. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said.
+An LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
 
-\paragraph{State alignment.}
-Following \citet{wu2026humanlm}, we separately evaluate alignment along six psychologically grounded dimensions: \emph{stance} (agreement toward an explicit target), \emph{emotion} (affect and intensity toward a target), \emph{belief} (foundational assumptions about people or the world), \emph{value} (what the user treats as important), \emph{goal} (communicative intent of the response), and \emph{communication} (tone and message structure). For each dimension, the judge extracts key aspects from the ground-truth response and scores how well the generated response reflects them. We report both per-dimension scores and the mean across all dimensions.
+\paragraph{Response specificity.}
+We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. Hard caps enforce low scores when the response contradicts the context or invents personal facts. This yields a single score in $[0, 1]$. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
 
 \subsection{Baselines and Ablations}
 
@@ -194,6 +194,71 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{w
 \subsection{Generation Prompts}
 
 \subsection{Judge Prompts}
+\label{app:judge-prompts}
+
+\subsubsection{Turing Distinguishability Judge}
+\label{app:turing-prompt}
+
+The Turing judge receives the user's behavioral history, the current interaction context, and two candidate responses (one real, one generated) with positions randomized. It scores each response on three criteria and four penalty dimensions, then converts the score gap to a 1--7 rating.
+
+\begin{quote}
+\small
+\textbf{Criteria (each scored 0--1):}
+\begin{enumerate}
+\item \textbf{Immediate target}: Does the response address the correct part of the context, from \texttt{[HUMAN]}'s perspective, directed at the appropriate speaker?
+\item \textbf{Human goal}: Given the immediate target, is the response's communicative goal plausible for \texttt{[HUMAN]} in this context?
+\item \textbf{Communication style}: Does the wording, tone, length, grammar, punctuation, and level of detail match \texttt{[HUMAN]}'s past responses?
+\end{enumerate}
+
+\textbf{Penalty checks (each scored 0--1):}
+\begin{enumerate}
+\item \textbf{Source copy}: Unnatural copying from user history (natural quoting/uptake exempt).
+\item \textbf{Wrong target or role}: Speaking from the wrong role or addressing the wrong speaker.
+\item \textbf{Unsupported adversarial reframing}: Attacking a claim the other speaker did not make.
+\item \textbf{Assistant-like}: Chatbot-style formatting, template phrases, or artifact-like surface form.
+\end{enumerate}
+
+\textbf{Scoring:} $\text{base} = \text{target} + \text{goal} + \text{style}$; $\text{penalty} = \frac{\sum \text{penalties}}{4} \times 3$; $\text{final} = \max(0, \text{base} - \text{penalty})$. The score gap between Response B and Response A is mapped to a 1--7 Likert rating (1 = definitely A is human, 7 = definitely B is human).
+\end{quote}
+
+\subsubsection{Response Similarity Judge}
+\label{app:sim-prompt}
+
+The response similarity judge evaluates how well a generated response captures the content of the ground-truth human response. It operates in batched mode, scoring multiple generations against a single ground truth.
+
+\begin{quote}
+\small
+\textbf{Inputs:} User history, current context, ground-truth response, and one or more generated responses.
+
+\textbf{Scores (each in $[0, 1]$):}
+\begin{enumerate}
+\item \textbf{Semantic similarity}: How similar the generated response is to the ground truth in core meaning and information ($1.0$ = identical meaning; $0.0$ = completely different topic).
+\item \textbf{Information completeness}: How completely the generated response preserves information from the ground truth ($1.0$ = all information preserved; $0.0$ = almost no information preserved).
+\item \textbf{Overall score}: A strict final alignment score penalizing unsupported extra content, wrong perspective, source copying, sycophantic/generic agreement, and generic compromise responses that dilute specific positions.
+\end{enumerate}
+
+\textbf{Hard rules:} If the generated response speaks from the wrong perspective (e.g., as an assistant rather than as the user), all scores are set to $0.0$.
+\end{quote}
+
+\subsubsection{Response Specificity Judge}
+\label{app:specificity-prompt}
+
+The specificity judge evaluates whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply.
+
+\begin{quote}
+\small
+\textbf{Inputs:} Target user evidence, interaction context, and one candidate response.
+
+\textbf{Dimensions (each scored 0--1):}
+\begin{enumerate}
+\item \textbf{Context specificity} (weight $0.5$): How specifically the candidate engages with the exact local interaction. High scores require tight ties to the exact claim, question, event, or disagreement at issue. Low scores indicate broadly reusable responses.
+\item \textbf{User evidence compatibility} (weight $0.5$): How compatible the candidate is with the target user's observed behavior without unnaturally exposing or inventing evidence. High scores require natural compatibility; low scores indicate contradiction or persona-caricature.
+\end{enumerate}
+
+\textbf{Caps:} If the response contradicts the context or uses the wrong speaker perspective, overall $\leq 0.20$. If it invents personal facts or unnaturally imports user-history details, overall $\leq 0.40$.
+
+\textbf{Overall:} $0.5 \times \text{context\_specificity} + 0.5 \times \text{user\_evidence\_compatibility}$, subject to the caps above.
+\end{quote}
 
 \subsection{Dataset Preprocessing and Statistics}
 
