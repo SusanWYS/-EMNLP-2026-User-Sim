@@ -61,7 +61,7 @@ Simulating human users with language models holds great promise for training hum
 \section{Introduction}
 The currently dominant use cases of LLMs involves having them act as helpful assistants to human users. However, a growing range of applications would benefit  from their playing  the opposite role, i.e.,  not the assistant, but the user.
 % Such user simulators could serve as testbeds for conversational agents~\citep{naous2025flipping}, training environments for interactive systems~\citep{abdulhai2025consistently, mehri2025goal}, and proxies for studying human responses at scale~\citep{park2023generative, aher2023simulating, lu2025multiturn}.
-Such user simulators could serve as fundamental building blocks for social world models in AI agents \cite{rabinowitz2018machine, collins2024building}, training environments and testbeds for interactive systems~\citep{abdulhai2025consistently, mehri2025goal}, and proxies for studying human responses at scale~\citep{park2023generative, aher2023simulating, lu2025multiturn}.\footnote{User simulators could also have harmful applications, such as in fraud and distribution of misinformation at scale. See our discussion in \S.}
+Such user simulators could serve as fundamental building blocks for social world models in AI agents \cite{rabinowitz2018machine, collins2024building}, training environments and testbeds for interactive systems~\citep{abdulhai2025consistently, mehri2025goal}, and proxies for studying human responses at scale~\citep{park2023generative, aher2023simulating, lu2025multiturn}.\footnote{User simulators could also have harmful applications, such as in enabling fraud and distribution of misinformation. See our discussion in \S\ref{sec:discussion}.}
 
 To simulate a person is to model what makes them \textit{them}. This is fundamentally difficult: users are not interchangeable, and what distinguishes one person from another resists easy categorization. Two people with identical demographics can hold sharply different opinions~\citep{hwang2023aligning, santurkar2023opinions}, and individual preferences cannot be recovered from group-level labels alone~\citep{jiang2024indievalue, kirk2024prism}. Recent work has begun addressing this challenge through purpose-built user language models~\citep{naous2025flipping}, latent user-state alignment~\citep{wu2026humanlm}, log-probability maximization with latent reasoning~\citep{gandhi2026dialogue}, and persona induction from interaction history~\citep{ryan2025synthesizeme}. These approaches share a common assumption: the training signal is derived from matching a specific ground-truth response, whether by scoring similarity against it with an LLM judge or by directly maximizing its log-probability. Such strategies overlook a basic property of human communication---the same person in the same context could say many different things, all authentically their own. An ideal user simulator model should therefore go beyond replicating the ground-truth response, and instead produce responses indistinguishable from what the user {could have said}.
 
@@ -86,7 +86,7 @@ We evaluate our Turing reward-trained LLMs across two settings that differ subst
 
 \subsection{Problem Formulation}\label{sec:problem}
 
-We study user simulation in an interactive setting, where we are given the current session context $x$ (i.e., prior interactions in the  current conversation session or thread) and {user history} $h$ (e.g., prior utterances or posts that are not part of the current session),  and must produce a response $y$ that could have been plausibly produced by the user. 
+We study user simulation in an interactive setting, where we are given the current session context $x$ (i.e., prior interactions in the  current conversation session or thread) and {user history} $h$ (e.g., prior utterances or posts that are not part of the current session),  and need to generate a response $y$ that could have been plausibly produced by the user. 
 
 % Formally, given triples $(u, x, y)$, $x$ is the immediate interaction context (e.g., a dialogue history or a forum thread), and $u$ is user-specific information about the target individual beyond what appears in $x$. $y$ is one ground-truth response produced by that person.
 % We observe that $y$ is only a single sample from a broader distribution $p^\star(\cdot \mid x, u)$ of responses the user could authentically produce: the same person in the same context could say many different things, all genuinely their own. Our goal is therefore not to reproduce the specific $y$ in the training data, but to learn a simulator $p_\theta(\hat{y} \mid x, u)$, parameterized by $\theta$, that approximates $p^\star$ such that generated $\hat{y}$ are truly representative of the user utterance's goal, style, and perspective.
@@ -94,6 +94,7 @@ We study user simulation in an interactive setting, where we are given the curre
 
 \subsection{Latent User Personas}
 
+\llq{should we move this section to Section 5? This section is not really related to the proposed method and seems unnecessarily long. we could just merge persona $\rho$ to context/history?}
 We hypothesize that pairing raw behavioral history with an induced persona $\rho$ would yield a more stable user representation than just the raw history $h$ for producing $y$. We induce $\rho$ with via prompting an auxiliary language model to summarize stable traits from the user's  history  $h$, yielding the persona $\rho$. The persona is structured along five dimensions: \emph{values} (recurring priorities and themes), \emph{verbal features} (surface-form habits such as punctuation and formatting), \emph{expression style} (tone, formality, directness), \emph{length prior} (typical response length), and \emph{background} (self-disclosed roles, experiences, and domain familiarity). Each dimension is described by one to three concise sentences. The $\rho$ depends only on $h$ and never on the current target context $x$ or ground-truth response $y$. See the appendix for the prompt to the persona-induction LLM. We ablate on the use $\rho$ in our ablation study, where we find that $\rho$ is helpful on the chat domain.
 
 For each user, we reserve a fixed block of $k$ prior interactions  once at dataset construction and reuse it as $h$ across every prediction target for that user. The same history block is the sole input to persona induction. We require $h$ to be disjoint from the current target context $x$ and ground-truth response $y$, so that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining targets.
@@ -133,26 +134,25 @@ The final RL objective is then given by
 %   s^* = \begin{cases} 8 - s & \text{if the candidate is Response A} \\ s & \text{if the candidate is Response B} \end{cases}
 % \end{equation}
 % and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 1]$, where 0 means the candidate was identified as synthetic with maximum confidence, 0.5 means the judge could not distinguish the two, and 1 means the candidate was mistaken for the real user. 
-and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, sampling $G$ candidate responses per example and computing advantages via within-group normalization. We also perform SFT first on a disjoint subset of the training data to warm-start our model, as is commonly done in post-training pipelines.
+and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, sampling $G$ candidate responses per example and computing advantages via within-group normalization. We also perform supervised fine-tuning (SFT) first on a disjoint subset of the training data to warm-start our model, as is commonly done in post-training pipelines.
 
 
 \section{Experimental Setup}
 
 \subsection{Datasets}
-
-We evaluate two domains: multi-turn chat and Reddit. Both domains contain users and their interactions. We reserve a fixed block of prior interactions as behavior history $h$, and use the remaining interactions as prediction targets. We split users into training and evaluation sets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
+We evaluate our approach on two domains: multi-turn chat and Reddit. Both domains contain users and their interactions. We reserve a fixed block of prior interactions as behavior history $h$, and use the remaining interactions as prediction targets. We split users into training and evaluation sets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
 % We evaluate across two interaction formats that differ in structure, register, and social context.
 % In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
-\paragraph{(Chat) Multi-turn Chat: PRISM.}
-The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between human participants and LLM assistants, spanning 1,500 participants from 75 countries. We qualify users with at least 6 conversations (1,288 users) and hold out 128 users (880 examples) for evaluation. Each user turn in a target conversation yields one training example.
+\paragraph{(Chat) Multi-turn chat: PRISM.}
+The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between humans and LLM assistants, spanning 1,500 participants from 75 countries. We select users with at least 6 conversations (1,288 users) and hold out 128 users (880 examples) for evaluation. Each user turn in a target conversation yields one training example.
 
-\paragraph{(Reddit) Online Forum Discussion: ConvoKit.}
-The ConvoKit subreddit corpus~\citep{chang2020convokit} contains threaded Reddit discussions. We select 14 subreddits, qualify users with at least 8 threads (1,282 users), and hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation (102 users, 267 examples), with no user overlap with training. Each target thread yields one example: the user's last comment, with earlier comments retained as context.
+\paragraph{(Reddit) Online forum discussion: ConvoKit.}
+The ConvoKit subreddit corpus~\citep{chang2020convokit} contains  discussions on Reddit. We select 14 subreddits, selecting users with at least 8 threads (1,282 users), and hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation (102 users, 267 examples), with no user overlap with training. Each target thread yields one example: the user's last comment, and the earlier comments  as context.
 
 
-\subsection{Evaluation}
+\subsection{Automatic Evaluation}
 
 We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations.
 
@@ -163,24 +163,25 @@ A judge is presented with the user's behavioral history, the interaction context
 Following \citet{wu2026humanlm}, an LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
 
 \paragraph{Context and user specificity.}
-We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
+We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. For better calibration, we batch judge the specificity scores of multiple responses in one judge call. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
+
+\subsection{Training}
+\paragraph{SFT warm start.}
+Before RL, we warm-start the policy with supervised fine-tuning (SFT) on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untrained instruct model to generate a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
+
+\paragraph{GRPO training.}
+We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
+
+We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default.
 
 \subsection{Baselines}
 
 % \paragraph{Training signal comparison.}
-We use Qwen3-8B (reasoning=false) as our base model for all training experiments.
-We compare our method with supervised fine-tuning (SFT) and other GRPO-based methods using different rewards. Specifically, we consider GRPO with response similarity reward~\citep{wu2026humanlm}, and GRPO with log-probability and latent thinking rewards~\citep{gandhi2026dialogue}. We also report the performance of the untuned base model and OpenAI GPT-5 (minimal reasoning effort) as zero-shot references.
+We use Qwen3-8B with reasoning mode disabled as our base model.
+We compare our method with supervised fine-tuning (SFT) and other GRPO-based methods using different rewards. Specifically, we consider GRPO with response similarity reward~\citep{wu2026humanlm}, and GRPO with log-probability and latent thinking rewards~\citep{gandhi2026dialogue}. All GRPO-based methods are initialized from the SFT model. We also report the performance of the untuned base model and OpenAI GPT-5 (minimal reasoning effort) as zero-shot references.
+
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
 
-
-\subsection{Training}
-\paragraph{SFT warm start.}
-Before RL, we warm-start the policy with SFT on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untrained instruct model to generate a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
-
-\paragraph{GRPO training.}
-We optimize the Turing discriminative judge signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
-
-We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default.
 
 % \subsection{Baselines and Ablations}
 
@@ -206,7 +207,9 @@ We apply two additional reward-shaping mechanisms: \emph{length penalties} that 
 \label{fig:sim_dot}
 \end{figure}
 
-user modeling is still very hard. assistant-trained models produce verbose and naturally  involuted??? responses.  
+user modeling is still very hard. assistant-trained models (GPT-5) produce verbose and naturally  involuted??? responses. refer to qualitative examples. 
+
+Using similarity as signal did not significantly improve the turing score from the sft-init checkpoint. 
 
 \subsection{Response Specificity}
 \begin{figure}[t]
@@ -215,9 +218,11 @@ user modeling is still very hard. assistant-trained models produce verbose and n
 \caption{Response specificity scores across Reddit (top) and Chat (bottom). The dashed line and shaded band show the untrained baseline mean and 95\% CI.}
 \label{fig:specificity}
 \end{figure}
-response specificity is caveated since real humans often pivot in real-time conversations. see 
+response specificity is caveated since real humans often pivot in real-time conversations. see gt in chat, which 
 
 \subsection{Human Evaluation}
+\paragraph{Setup}
+\paragraph{Results}
 should talk about how we collected data and what stats significance tests we did
 \begin{table}[t]
 \centering
@@ -291,7 +296,7 @@ $u = \rho$       & $.52 \pm .010$ & $-.0020$ \\
 \end{table}
 
 \section{Discussion}
-
+\label{sec:discussion}
 \section{Related Work}
 
 \paragraph{LM-based user simulation.}
