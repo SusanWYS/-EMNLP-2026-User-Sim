@@ -55,7 +55,7 @@
 \maketitle
 
 \begin{abstract}
-  The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on both the left- and right-hand margins. Use 10~point type, with a vertical spacing (leading) of 11~points. The word \textbf{Abstract} must be centered, bold, and in point size 12. Two line spaces precede the abstract. The abstract must be limited to one paragraph.
+Simulating human users with language models holds great promise for training human-centered agents, evaluating interactive systems, and advancing research in the social sciences. Existing approaches train user simulators by matching a specific ground-truth response,
 \end{abstract}
 
 \section{Introduction}
@@ -174,10 +174,10 @@ We compare our method with supervised fine-tuning (SFT) and other GRPO-based met
 
 
 \subsection{Training}
-\paragraph{SFT Warm Start}
+\paragraph{SFT warm start.}
 Before reinforcement learning, we warm-start the policy with supervised fine-tuning on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untrained instruct model to generate a reasoning trace given the user representation and context, explaining what could lead the user to write the ground-truth response without reproducing it. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
-\paragraph{GRPO Training with Discriminative Rewards}
+\paragraph{GRPO training with discriminative rewards.}
 We optimize the Turing discriminative judge signal with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from a SFT  checkpoint and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
 We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B as the reward model by default.
@@ -291,14 +291,18 @@ $u = \rho$       & $.52 \pm .010$ & $-.0020$ \\
 
 \section{Related Work}
 
-\paragraph{LLM-based user simulation.}
+\paragraph{LM-based user simulation.}
 LLMs have been used to evaluate dialogue systems~\citep{davidson2023user, sekulic2024simulating}, train conversational agents via self-play~\citep{shah2018bootstrapping, abdulhai2025consistently}, and replicate human subject studies~\citep{aher2023simulating, park2023generative}. \citet{naous2025flipping} show that assistant-tuned LLMs are structurally misaligned with the user role, while \citet{mehri2025goal} address goal drift in task-oriented simulation through explicit state tracking. These works establish that user simulation benefits from purpose-built training but model generic users rather than specific individuals.
+
+\paragraph{Training objectives for human simulation.}
+Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. We show this signal generalizes across evaluation metrics and interaction formats.
 
 \paragraph{Representing individual users.}
 Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo}. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. We combine raw history with an induced persona, providing both behavioral evidence and a compressed trait summary.
 
-\paragraph{Training objectives for human simulation.}
-Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. We show this signal generalizes across evaluation metrics and interaction formats.
+\paragraph{Human behavior prediction} Predicting human behaviors, such as people's decisions, actions, and utterances, is a cornerstone 
+
+
 
 \section*{Limitations}
 
