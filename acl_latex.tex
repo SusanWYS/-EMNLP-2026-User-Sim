@@ -336,7 +336,7 @@ GRPO-Turing & $.52$ \subtle{$\pm .06$} & $.55$ \subtle{$\pm .07$} \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
-\caption{Comparing human and LLM judge accuracy at identifying the real user's response. For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge (hatched; score ${<}\,4 \to$ ground truth). \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that \textbf{GRPO-Turing is the hardest model to distinguish from real users}. Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}
+\caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that GRPO-Turing is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
 \label{fig:binary_gt_accuracy}
 \end{figure}
 
@@ -452,7 +452,7 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo} for user 
 \paragraph{Individual user representation.}
 Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo}. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. We combine raw history with an induced persona, providing both behavioral evidence and a compressed trait summary.
 
-\paragraph{Human behavior prediction} Predicting human behaviors, such as people's decisions, actions, and utterances, is a cornerstone task cognitive and social sciences. 
+\paragraph{Human behavior prediction} Predicting human behaviors, such as people's choices, actions, and utterances, is a cornerstone task cognitive and social sciences. 
 
 \section{Conclusion}
 
@@ -600,6 +600,13 @@ After excluding incomplete submissions (participants with fewer than 10 judgment
 \paragraph{Metric.}
 We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/ui_chat1.png}
+\includegraphics[width=0.7\textwidth]{figures/ui_chat2.png}
+\caption{User interface for human annotation for the Chat domain.}
+\label{fig:ui_chat}
+\end{figure*}
 
 \section{Prompts}
 
