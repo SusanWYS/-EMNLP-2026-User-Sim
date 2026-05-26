@@ -363,13 +363,13 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \toprule
 Domain & Input & Turing & Sim & Spec. \\
 \midrule
-Chat & $u = (h, \rho)$ & $4.31$ \subtle{$\pm .08$} & $.053$ \subtle{$\pm .0084$} & $.522$ \subtle{$\pm .009$} \\
-Chat & $u = h$         & $4.26$ \subtle{$\pm .08$} & $.047$ \subtle{$\pm .0075$} & $.508$ \subtle{$\pm .010$} \\
-Chat & $u = \rho$      & $4.23$ \subtle{$\pm .08$} & $.041$ \subtle{$\pm .0065$} & $.520$ \subtle{$\pm .010$} \\
+\multirow{3}{*}{Chat} & $u = (h, \rho)$ & $4.31$ \subtle{$\pm .08$} & $.053$ \subtle{$\pm .0084$} & $.522$ \subtle{$\pm .009$} \\
+ & $u = h$         & $4.26$ \subtle{$\pm .08$} & $.047$ \subtle{$\pm .0075$} & $.508$ \subtle{$\pm .010$} \\
+ & $u = \rho$      & $4.23$ \subtle{$\pm .08$} & $.041$ \subtle{$\pm .0065$} & $.520$ \subtle{$\pm .010$} \\
 \midrule
-Reddit & $u = (h, \rho)$ & $3.68$ \subtle{$\pm .18$} & $.030$ \subtle{$\pm .0089$} & $.380$ \subtle{$\pm .018$} \\
-Reddit & $u = h$         & $3.78$ \subtle{$\pm .18$} & $.033$ \subtle{$\pm .0101$} & $.377$ \subtle{$\pm .020$} \\
-Reddit & $u = \rho$      & $3.84$ \subtle{$\pm .19$} & $.027$ \subtle{$\pm .0071$} & $.350$ \subtle{$\pm .019$} \\
+\multirow{3}{*}{Reddit} & $u = (h, \rho)$ & $3.68$ \subtle{$\pm .18$} & $.030$ \subtle{$\pm .0089$} & $.380$ \subtle{$\pm .018$} \\
+ & $u = h$         & $3.78$ \subtle{$\pm .18$} & $.033$ \subtle{$\pm .0101$} & $.377$ \subtle{$\pm .020$} \\
+ & $u = \rho$      & $3.84$ \subtle{$\pm .19$} & $.027$ \subtle{$\pm .0071$} & $.350$ \subtle{$\pm .019$} \\
 \bottomrule
 \end{tabular}
 \caption{GRPO-Turing results under three input ablations on Chat and Reddit. Values are mean $\pm$ 95\% CI half-width.}
