@@ -550,10 +550,10 @@ PPO clip ratio & 0.2 \\
 % The Turing reward utilizes two shaping mechanisms not used by the similarity or log-probability rewards.
 
 % \paragraph{Length penalty}
-Let $\ell$ be the generated response length and $\ell_{\mathrm{gt}}$ the ground-truth length. Responses within the deadband $[\ell_{\min} \cdot \ell_{\mathrm{gt}},\; \ell_{\max} \cdot \ell_{\mathrm{gt}}]$ incur no penalty \llq{is this lmin or ratio?}. Outside the band, the penalty is proportional to the relative violation with asymmetric lambdas (stronger for short responses), and capped:
+Let $\ell$ be the generated response length, $\ell_{\mathrm{gt}}$ the ground truth length, and $r = \ell / \ell_{\mathrm{gt}}$ the length ratio. We define a deadband $[r_{\min},\, r_{\max}]$ within which no penalty is applied. Outside the band, the penalty is proportional to the relative violation with asymmetric weights (stronger for short responses), and capped:
 \begin{align}
-p_{\mathrm{short}} &= \lambda_{\mathrm{short}} \cdot \max~\!\bigl(\ell_{\min} - \ell/\ell_{\mathrm{gt}},\; 0\bigr) / \ell_{\min} \nonumber\\
-p_{\mathrm{long}} &= \lambda_{\mathrm{long}} \cdot \max~\!\bigl(\ell/\ell_{\mathrm{gt}} - \ell_{\max},\; 0\bigr) / \ell_{\max} \nonumber\\
+p_{\mathrm{short}} &= \lambda_{\mathrm{short}} \cdot \max\!\bigl(r_{\min} - r,\; 0\bigr) / r_{\min} \nonumber\\
+p_{\mathrm{long}} &= \lambda_{\mathrm{long}} \cdot \max\!\bigl(r - r_{\max},\; 0\bigr) / r_{\max} \nonumber\\
 p_{\mathrm{len}} &= \min(p_{\mathrm{short}} + p_{\mathrm{long}},\; p_{\mathrm{cap}})
 \end{align}
 
@@ -569,7 +569,7 @@ Table~\ref{tab:reward-shaping} lists the parameter values for each dataset.
 \toprule
 \textbf{Parameter} & \textbf{Reddit} & \textbf{Chat} \\
 \midrule
-Deadband $[\ell_{\min}, \ell_{\max}]$ & $[0.8, 1.1]$ & $[0.6, 1.4]$ \\
+Deadband $[r_{\min}, r_{\max}]$ & $[0.8, 1.1]$ & $[0.6, 1.4]$ \\
 $\lambda_{\mathrm{short}}$ & 0.45 & 0.40 \\
 $\lambda_{\mathrm{long}}$ & 0.15 & 0.20 \\
 Penalty cap $p_{\mathrm{cap}}$ & 0.25 & 0.40 \\
