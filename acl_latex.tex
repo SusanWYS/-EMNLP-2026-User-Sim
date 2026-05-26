@@ -442,6 +442,17 @@ Domain & Input & Turing & Sim & Spec. \\
 % \label{tab:ablation_specificity}
 % \end{table}
 
+\subsection{Qualitative Examples}
+
+Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing SFT, GRPO-Sim, and GRPO-Turing. On Reddit, the ground truth is a pointed, concise reply ("Medics who were shot and tear gassed, for one."). SFT simply copies the previous speaker's comment, while GRPO-Sim produces a vague editorial response. GRPO-Turing generates a sarcastic reply that matches the user's combative tone without repeating the context. On Chat, the ground truth is a casual topic pivot ("how thick is elephants skin"). SFT and GRPO-Sim both stay anchored to the AI's previous response, while GRPO-Turing asks a short follow-up question that reads as naturally curious. Additional examples including GPT-5 and Qwen3-8B baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/qualitative_examples_2.pdf}
+\caption{Qualitative comparison of SFT, GRPO-Sim, and GRPO-Turing on one Reddit and one Chat example. \textbf{GRPO-Turing produces responses closest in tone and brevity to the real user}, while SFT copies context and GRPO-Sim generates generic editorial replies.}
+\label{fig:qualitative_examples_2}
+\end{figure}
+
 \section{Discussion}
 \label{sec:discussion}
 A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground-truth content, it does not make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form, and that a discriminative signal is better suited than a matching signal for user simulation.
