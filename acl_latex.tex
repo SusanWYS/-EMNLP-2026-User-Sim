@@ -277,11 +277,13 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground-truth response. GPT-5 
 Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim produce the most contextually specific responses in both domains, substantially outperforming the base model and SFT-Init. On Reddit, the ground truth (GT) scores highest, confirming that real users produce highly specific responses. On Chat, however, GT specificity is comparable to the base model, reflecting that real users in open-ended dialogue often pivot to new topics rather than tightly engaging with prior context (see Figure~\ref{fig:qualitative_examples}).
 
 \subsection{Human Evaluation}
-Table~\ref{tab:human_eval_winrate} reports mean win rates over ground-truth. The Turing reward is the only training signal that consistently improves win rate above chance in both domains, confirming that optimizing for indistinguishability transfers to real human judges. The ranking across models closely mirrors the automatic Turing scores in Figure~\ref{fig:turing_dot}, validating the LLM judge as a reasonable proxy for human distinguishability. Notably, SFT-Init is reliably detected on Reddit (WR $= .43$), suggesting that imitation learning alone produces surface-level patterns that humans can identify.
+Table~\ref{tab:human_eval_winrate} reports mean win rates over ground-truth. The Turing reward is the only training signal that consistently improves win rate above chance in both domains, confirming that optimizing for indistinguishability transfers to real human judges. The ranking across models closely mirrors the automatic Turing scores in Figure~\ref{fig:turing_dot}, validating the LLM judge as a reasonable proxy for human distinguishability. Notably, SFT-Init is reliably detected on Reddit (WR $= .42$), suggesting that imitation learning alone produces surface-level patterns that humans can identify.
 
 We test whether each condition's win rate differs from chance using one-sided tests. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as machine-generated. Because the same 50 target users are shared across all conditions within each dataset, we can also run paired comparisons. Paired $t$-tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size of ${\sim}30$ annotators per condition.
 
-\subsection{Correlating Human And LM Judge Scores}
+\subsection{Correlating Human and LM Judge Scores}
+To further validate the LLM judge, we binarize the Sonnet~4.6 Turing score per evaluation thread (score ${<}\,4 \to$ GT, ${\geq}\,4 \to$ model) and take the majority vote per target user, mirroring the human forced-choice setup. Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across conditions. Both evaluators agree on the model ranking---GRPO-Turing is hardest to detect---though Sonnet~4.6 is more sensitive than humans on Reddit and more easily fooled on Chat/GRPO-Turing.
+
 \begin{table}[t]
 \centering
 \small
@@ -289,7 +291,7 @@ We test whether each condition's win rate differs from chance using one-sided te
 \toprule
  & \textbf{Reddit} & \textbf{Chat} \\
 \midrule
-SFT-Init         & $.43 \pm .06$ & $.50 \pm .09$ \\
+SFT-Init    & $.42 \pm .06$ & $.50 \pm .09$ \\
 GRPO-Sim    & $.50 \pm .07$ & $.50 \pm .08$ \\
 GRPO-Turing & $.52 \pm .06$ & $.55 \pm .07$ \\
 \bottomrule
@@ -298,6 +300,12 @@ GRPO-Turing & $.52 \pm .06$ & $.55 \pm .07$ \\
 \label{tab:human_eval_winrate}
 \end{table}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
+\caption{Binary ground-truth accuracy: fraction of 50 target users for which the evaluator's majority vote correctly identifies the real user's response. Solid bars show human annotators; hatched bars show the Sonnet~4.6 Turing judge (score ${<}\,4$ mapped to GT). Both evaluators agree on the ranking: GRPO-Turing is hardest to detect.}
+\label{fig:binary_gt_accuracy}
+\end{figure}
 
 \section{Ablations and Analysis}
 \paragraph{User representation ablation.}
@@ -537,6 +545,20 @@ Score clip max $s_{\mathrm{clip}}$ & \multicolumn{2}{c}{5.0} \\
 
 \subsection{Human Evaluation Details}
 \label{app:human-eval}
+
+We conduct a forced-choice Turing test on Prolific. Each participant views a target user's posting history and then judges 10 pairs of responses: one ground-truth response and one model-generated response, presented in randomized order. The participant selects which response they believe was written by the real user.
+
+\paragraph{Design.}
+We evaluate three training conditions---SFT-Init, GRPO-Sim, and GRPO-Turing---on two datasets (Reddit / ConvoKit and Chat / PRISM). For each dataset we select 50 target users, split into 5 groups of 10. Each participant is assigned to one (dataset, condition, group) cell and evaluates the 10 targets in that group. We recruit 6 annotators per cell, yielding 30 participants and 300 binary judgments per condition.
+
+\paragraph{Comprehension filtering.}
+Each trial includes comprehension checks that test whether the participant read the target user's history (e.g., identifying the user's most-discussed topic or their most recent interlocutor). We compute each participant's comprehension accuracy across all check questions and exclude participants scoring below 75\%. One participant was excluded under this criterion (PRISM/Turing, group~3; accuracy ${=} 0.65$).
+
+\paragraph{Balancing.}
+After excluding incomplete submissions (participants with fewer than 10 judgments) and those failing the comprehension filter, we retain the first 6 completions per (dataset, condition, group) cell, ordered by submission time. This ensures exactly 30 participants and 300 votes per condition. Three cells required trimming of one excess participant each (PRISM/Sim group~2, PRISM/Turing groups~1 and~4).
+
+\paragraph{Metric.}
+We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
 
 \subsection{Dataset Preprocessing and Statistics}
 \label{app:dataset-stats}
