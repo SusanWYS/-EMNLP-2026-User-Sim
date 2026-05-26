@@ -120,7 +120,17 @@ To simulate a person is to model what makes them \textit{them}. This is fundamen
 
 % This overlooks a basic property of human communication, where the same person in the same context could say many different things, all authentically their own.
 
-
+\begin{figure*}[t]
+    \centering
+    \fbox{
+        \begin{minipage}[c][0.3\textheight][c]{0.8\textwidth}
+            \centering
+            Placeholder figure
+        \end{minipage}
+    }
+    \caption{Placeholder caption.}
+    \label{fig:placeholder-wide}
+\end{figure*}
 
 The classic Turing test \citep{turing1950computing} operationalizes human-likeness through indistinguishability:  a machine passes if an evaluator cannot tell its responses from a person's. This is precisely the criterion we want from a user simulator, and it translates directly into a training signal. In this paper, we therefore train LLM user simulators via reinforcement learning on a \emph{discriminative Turing reward}, wherein an LLM judge assigns a high score when a generated response is indistinguishable from the real user's, conditioned on the user's history, which includes the current session history and the user's behaviors in previous sessions.
 
@@ -131,6 +141,7 @@ We evaluate our Turing reward-trained LLMs across two settings that differ subst
   % Our results show that the Turing-trained model not only excels on its own metric but also generalizes to response similarity and state alignment evaluations~\citep{wu2026humanlm}, improving over untrained baselines and alternative training signals on both.
 
   % and our discriminative Turing reward. 
+
 
 \section{Learning User Simulators}
 % \section{Method}
@@ -268,7 +279,7 @@ In addition to LLM-as-judge evaluation, we also recruit human participants from 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
-\caption{Mean Turing judge scores (1--7 Likert scale) for each model on Reddit and Chat, with 95\% CIs. The dashed line and shaded band show the Qwen3-8B base model mean and 95\% CI. \textbf{GRPO-Turing substantially outperforms all other models in both domains on humanlikeness}, with a particularly large gap on Chat.}
+\caption{Mean Turing judge scores (1--7 Likert scale) for each model on Reddit and Chat, with 95\% CIs. The dashed line and shaded band show the Qwen3-8B base model mean and 95\% CI. \textbf{GRPO-Turing substantially outperforms all other models on humanlikeness in both domains}, with a particularly large gap on Chat.}
 \label{fig:turing_dot}
 \end{figure}
 
@@ -331,7 +342,7 @@ GRPO-Turing & $.52$ \subtle{$\pm .06$} & $.55$ \subtle{$\pm .07$} \\
 
 User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM.   We ablate on the user representation and study three different user representations in the Chat domain: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
 
-Table~\ref{tab:ablation_combined} shows the results. 
+Table~\ref{tab:ablation_combined} shows the results. For the Turing/Specificity scores, we find that there is little difference in using the full user representation $(h, \rho)$ versus just using $\rho$ or $h$ alone. However, the similarity score benefits significantly from including the persona $\rho$. Our persona induction approach is quite basic---given the rich line of work on inducing personas and personality traits \citep{delucia2024using,zhang2024can,peters2024large,wu2025aligning}, it is possible that such techniques could further enhance performance.
 
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
@@ -349,7 +360,7 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \small
 \begin{tabular}{lccc}
 \toprule
-Input & Turing Score & Sim Score & Specificity \\
+\textbf{User Rep.} & \textbf{Turing Score} & \textbf{Sim Score} & \textbf{Specificity} \\
 \midrule
 $u = (h, \rho)$ & $4.3$ \subtle{$\pm .08$} & $.054$ \subtle{$\pm .0088$} & $.52$ \subtle{$\pm .010$} \\
 $u = h$         & $4.3$ \subtle{$\pm .08$} & $.047$ \subtle{$\pm .0076$} & $.51$ \subtle{$\pm .010$} \\
@@ -434,18 +445,20 @@ Persona-conditioned generation was introduced by \citet{zhang2018personalizing} 
 \section{Conclusion}
 
 \section*{Limitations}
-We identify several limitations of our study. The first is the range of domains for which we train user simulators. The second is that we have only trained a small model, and it would be interesting to study how well our receipe generalize to frontier size models.
+We identify several limitations of our study. The first is the range of domains for which we train user simulators. The second is that we have only trained a small model, and it would be interesting to study how well our receipe generalize to frontier size models. 
 
 %\section*{Acknowledgments}
 
 \bibliography{custom}
+
+\clearpage
 
 \appendix
 
 \section{Dataset Details}
 \label{app:dataset-stats}
 
-Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground-truth response $y$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
+Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground-truth response $y_{\star}$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
 
 \paragraph{(Reddit) ConvoKit.}
 We reconstruct Reddit threads from comment identifiers and parent pointers. Deleted, removed, and non-user comments cannot serve as targets or enter $h$, but non-root unusable comments may be kept as structural anchors so that descendant replies stay connected to the ancestor chain. We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training. The remaining users are split deterministically into disjoint SFT and GRPO pools using a 40/60 ratio. GRPO training and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO training/validation sets. For eahc user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
