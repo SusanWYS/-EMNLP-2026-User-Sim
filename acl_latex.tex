@@ -132,7 +132,7 @@ These approaches share a common assumption: the training signal is derived from 
             \includegraphics[scale=0.3]{figures/main_figure.pdf}
         \end{minipage}
     }
-    \caption{Placeholder caption.}
+    \caption{Overview of our approach. Given a user's history, induced persona, and current conversation context, an SFT-initialized policy generates multiple candidate responses via chain-of-thought (COT) reasoning. A Turing judge (LLM) compares each candidate against the ground truth human response on a 1--7 scale, scoring which is more likely written by the real user. This discriminative Turing reward is used to train the policy with GRPO.}
     \label{fig:placeholder-wide}
 \end{figure*}
 
