@@ -121,9 +121,9 @@ To simulate a person is to model what makes them \textit{them}. This is fundamen
 
 The classic Turing test \citep{turing1950computing} operationalizes human-likeness through indistinguishability:  a machine passes if an evaluator cannot tell its responses from a person's. This is precisely the criterion we want from a user simulator, and it translates directly into a training signal. In this paper, we therefore train LLM user simulators via reinforcement learning on a \emph{discriminative Turing reward}, wherein an LLM judge assigns a high score when a generated response is indistinguishable from the real user's, conditioned on the user's history, which includes the current session history and the user's behaviors in previous sessions.
 
-We evaluate our Turing reward-trained LLMs across two settings that differ substantially in structure, in particular multi-turn dialogue~\citep{kirk2024prism} and Reddit forum discussions~\citep{chang2020convokit}. We compare against baseline training signals that have been previously explored in the literature: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, and log-probability maximization with latent chain-of-thought~\citep{gandhi2026dialogue}. We find that the Turing reward consistently outperforms both alternatives across both automatic and human evaluation metrics. We further test how much each component of the user representation contributes by comparing history-only, persona-only, and the combined representation. We find that [insert input ablation results].
+We evaluate our Turing reward-trained LLMs across two settings that differ substantially in structure, in particular multi-turn dialogue~\citep{kirk2024prism} and Reddit forum discussions~\citep{chang2020convokit}. We compare against baseline training signals that have been previously explored in the literature: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, and log-probability maximization with latent chain-of-thought~\citep{gandhi2026dialogue}. We find that the Turing reward consistently outperforms both alternatives across both automatic and human evaluation metrics. 
 
-[insert summary]
+
 
   % Our results show that the Turing-trained model not only excels on its own metric but also generalizes to response similarity and state alignment evaluations~\citep{wu2026humanlm}, improving over untrained baselines and alternative training signals on both.
 
@@ -385,7 +385,7 @@ The same capability that makes a simulator useful, however, also makes it danger
 \paragraph{LM-based user simulation.}
 LLMs have been used to evaluate dialogue systems~\citep{davidson2023user, sekulic2024simulating}, train conversational agents via self-play~\citep{shah2018bootstrapping, abdulhai2025consistently}, and replicate human subject studies~\citep{aher2023simulating, park2023generative}. \citet{naous2025flipping} show that assistant-tuned LLMs are structurally misaligned with the user role, while \citet{mehri2025goal} address goal drift in task-oriented simulation through explicit state tracking. These works establish that user simulation benefits from purpose-built training but model generic users rather than specific individuals.
 
-\paragraph{Training objectives for human simulation.}
+%\paragraph{Training objectives for human simulation.}
 Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo}, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. We show this signal generalizes across evaluation metrics and interaction formats.
 
 \paragraph{Individual user representation.}
@@ -393,12 +393,12 @@ Persona-conditioned generation was introduced by \citet{zhang2018personalizing} 
 
 \paragraph{Human behavior prediction} Predicting human behaviors, such as people's decisions, actions, and utterances, is a cornerstone task cognitive and social sciences. 
 
-
+\section{Conclusion}
 
 \section*{Limitations}
 We identify several limitations of our study. The first is the range of domains for which we train user simulators. The second is that we have only trained a small model, and it would be interesting to study how well our receipe generalize to frontier size models.
 
-\section*{Acknowledgments}
+%\section*{Acknowledgments}
 
 \bibliography{custom}
 
