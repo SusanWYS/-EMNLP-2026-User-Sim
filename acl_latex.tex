@@ -108,7 +108,7 @@
 \maketitle
 
 \begin{abstract}
-Learning to simulate human users in interactive settings could advance the training of agents that serve humans, the evaluation of personalization systems, and research in the social sciences. Existing approaches generally do so by training a large language model (LLM) to match a single ground-truth response, either by maximizing the log probability or by using a similarity reward. We instead propose a Turing Test approach for learning user simulator models, where a model is trained via reinforcement learning to produce responses indistinguishable from what the user could have said. Our discriminative Turing reward uses an LLM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two substantially different domains, namely conversational chat and Reddit forum discussion, we find that the Turing reward consistently outperforms baseline methods on both LLM and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an effective route to learning user simulators.
+Learning to simulate human users in interactive settings could advance the training of agents that serve humans, the evaluation of personalization systems, and research in the social sciences. Existing approaches generally do so by training a large language model (LLM) to match a single ground truth response, either by maximizing the log probability or by using a similarity reward. We instead propose a Turing Test approach for learning user simulator models, where a model is trained via reinforcement learning to produce responses indistinguishable from what the user could have said. Our discriminative Turing reward uses an LLM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two substantially different domains, namely conversational chat and Reddit forum discussion, we find that the Turing reward consistently outperforms baseline methods on both LLM and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an effective route to learning user simulators.
 \end{abstract}
 
 \section{Introduction}
@@ -118,9 +118,9 @@ Such user simulators could serve as foundational building blocks for social worl
 
 To simulate a person is to model what makes them \textit{them}. This is fundamentally difficult: users are not interchangeable, and what distinguishes one person from another resists easy categorization. Two people with identical demographics can hold sharply different opinions~\citep{hwang2023aligning, santurkar2023opinions}, and individual preferences cannot be recovered from group-level labels alone~\citep{jiang2024indievalue, kirk2024prism}. Recent work has begun addressing this challenge through purpose-built user language models~\citep{naous2025flipping}, latent user-state alignment~\citep{wu2026humanlm}, log-probability maximization with latent reasoning~\citep{gandhi2026dialogue}, etc.
 % and persona induction from interaction history~\citep{ryan2025synthesizeme}. 
-These approaches share a common assumption: the training signal is derived from matching a specific ground-truth response, whether by scoring similarity against it with an LLM judge or by directly maximizing its log-probability. Such strategies overlook a basic property of human communication---the set of plausible responses to a given context is enormous, i.e., the same person in the same context could say many different things. An ideal user simulator model should therefore go beyond replicating the ground-truth response and instead produce responses indistinguishable from what the user {could have said}.
+These approaches share a common assumption: the training signal is derived from matching a specific ground truth response, whether by scoring similarity against it with an LLM judge or by directly maximizing its log-probability. Such strategies overlook a basic property of human communication---the set of plausible responses to a given context is enormous, i.e., the same person in the same context could say many different things. An ideal user simulator model should therefore go beyond replicating the ground truth response and instead produce responses indistinguishable from what the user {could have said}.
 
-% such strategies which encourage models to replicate the ground-truth response is not goal of user simulation, where we are interested in not necessarily  faithful simulator is not to merely reproduce what the user happened to say, but to produce responses indistinguishable from what the user could have said.
+% such strategies which encourage models to replicate the ground truth response is not goal of user simulation, where we are interested in not necessarily  faithful simulator is not to merely reproduce what the user happened to say, but to produce responses indistinguishable from what the user could have said.
 
 % This overlooks a basic property of human communication, where the same person in the same context could say many different things, all authentically their own.
 
@@ -138,8 +138,8 @@ These approaches share a common assumption: the training signal is derived from 
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/main_figure.pdf}
-    \caption{Overview of our approach. Given a user's history, induced persona, and current conversation context, an SFT-initialized policy generates multiple candidate responses via chain-of-thought (COT) reasoning. A Turing judge (LLM) compares each candidate against the ground-truth human response on a 1--7 scale, scoring which is more likely written by the real user. This discriminative Turing reward is used to train the policy with GRPO.}
+    \includegraphics[width=0.8\textwidth]{figures/main_figure.pdf}
+    \caption{Overview of our approach. Given a user's history, induced persona, and current conversation context, an SFT-initialized policy generates multiple candidate responses via chain-of-thought (COT) reasoning. A Turing judge (LLM) compares each candidate against the ground truth human response on a 1--7 scale, scoring which is more likely written by the real user. This discriminative Turing reward is used to train the policy with GRPO.}
     \label{fig:main}
 \end{figure*}
 
@@ -164,11 +164,11 @@ We evaluate our Turing reward-trained LLMs across two settings that differ subst
 
 We study user simulation in an interactive setting, where we are given the current session context $x$ (i.e., prior interactions in the current conversation session or thread) and a user representation $u$, and need to generate a response $y$ that could have been plausibly produced by the user.
 
-The most straightforward way to represent a user is through their behavior history $h$ (e.g., prior utterances or posts that are not part of the current session). For each user, we reserve a fixed block of $k$ prior interactions at dataset construction time and reuse it as $h$ across all prediction targets for that user. We require $h$ to be disjoint from the current target context $x$ and ground-truth response $y_\star$, ensuring that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining prediction targets.
+The most straightforward way to represent a user is through their behavior history $h$ (e.g., prior utterances or posts that are not part of the current session). For each user, we reserve a fixed block of $k$ prior interactions at dataset construction time and reuse it as $h$ across all prediction targets for that user. We require $h$ to be disjoint from the current target context $x$ and ground truth response $y_\star$, ensuring that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining prediction targets.
 
 Additionally, we can also pair the raw behavior history with an induced persona $\rho$. We induce $\rho$ by prompting an auxiliary language model to summarize stable traits from the same user's history block $h$. See  Figure~\ref{fig:persona_induction} of the appendix for the prompt used for persona induction. We use $u = (h, \rho)$ as the default in most of our experiments, and ablate on the choice of $u$ in the ablation study.
 
-% Formally, given triples $(u, x, y)$, $x$ is the immediate interaction context (e.g., a dialogue history or a forum thread), and $u$ is user-specific information about the target individual beyond what appears in $x$. $y$ is one ground-truth response produced by that person.
+% Formally, given triples $(u, x, y)$, $x$ is the immediate interaction context (e.g., a dialogue history or a forum thread), and $u$ is user-specific information about the target individual beyond what appears in $x$. $y$ is one ground truth response produced by that person.
 % We observe that $y$ is only a single sample from a broader distribution $p^\star(\cdot \mid x, u)$ of responses the user could authentically produce: the same person in the same context could say many different things, all genuinely their own. Our goal is therefore not to reproduce the specific $y$ in the training data, but to learn a simulator $p_\theta(\hat{y} \mid x, u)$, parameterized by $\theta$, that approximates $p^\star$ such that generated $\hat{y}$ are truly representative of the user utterance's goal, style, and perspective.
 % The simulator generates a joint sequence $(z, \hat{y}) \sim p_\theta(\cdot \mid x, u)$, where $z$ is a chain-of-thought reasoning trace produced before the response. The trace is masked from reward computation and evaluation; only $\hat{y}$ is scored.
 
@@ -188,15 +188,15 @@ Additionally, we can also pair the raw behavior history with an induced persona 
 % Concretely, our proposed recipe uses $u = (h, \rho)$: the user's raw behavioral history $h$ (prior utterances or posts not present in $x$) together with an induced persona $\rho$ (a compact natural-language summary of stable traits derived from $h$ by a language model). In our ablation experiments, we also evaluate $u = h$ (history only) and $u = \rho$ (persona only) to isolate the contribution of each component.
 
 % \paragraph{History Messages.}
-% For each user, we reserve a fixed block of $k$ prior interactions, denoted $h$, once at dataset construction and reuse it across every prediction target for that user; the same block is the sole input to persona induction. We require $h$ to be disjoint from the current target context $x$ and ground-truth response $y$, so that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining targets.
+% For each user, we reserve a fixed block of $k$ prior interactions, denoted $h$, once at dataset construction and reuse it across every prediction target for that user; the same block is the sole input to persona induction. We require $h$ to be disjoint from the current target context $x$ and ground truth response $y$, so that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining targets.
 
 % \paragraph{Persona Induction.}
 % We prompt a language model to summarize stable traits from the user's reserved history block $h$, yielding the persona $\rho$.
 
-% The persona is structured along five dimensions: \emph{values} (recurring priorities and themes), \emph{verbal features} (surface-form habits such as punctuation and formatting), \emph{expression style} (tone, formality, directness), \emph{length prior} (typical response length), and \emph{background} (self-disclosed roles, experiences, and domain familiarity). Each dimension is described by one to three concise sentences. Formally, $\rho = f_{\text{LM}}(h)$, where $f_{\text{LM}}$ is a fixed inducer model. Note that $\rho$ depends only on $h$ and never on the current target context $x$ or ground-truth response $y$.
+% The persona is structured along five dimensions: \emph{values} (recurring priorities and themes), \emph{verbal features} (surface-form habits such as punctuation and formatting), \emph{expression style} (tone, formality, directness), \emph{length prior} (typical response length), and \emph{background} (self-disclosed roles, experiences, and domain familiarity). Each dimension is described by one to three concise sentences. Formally, $\rho = f_{\text{LM}}(h)$, where $f_{\text{LM}}$ is a fixed inducer model. Note that $\rho$ depends only on $h$ and never on the current target context $x$ or ground truth response $y$.
 
 \subsection{Discriminative Turing Reward}\label{sec:training}
-We use a discriminative Turing reward as the training signal. An LLM judge is shown the user's  history $(x, h)$ alongside two responses to the same context: one written by the real user from the ground-truth distribution $y_{\star} \sim p_\star(\cdot | x,h)$ and one sampled from the model $y \sim p_\theta( \cdot | x, u )$. The judge rates on a $1$--$7$ Likert scale which response was written by the human, considering consistency with the user's prior writing, stylistic fit, and naturalness. A score of $1$ means that the judge deems the human-generated response $y_{\star}$ to be more likely to be written by the human, while a score of $7$ means the judge deems the model-generated response $y$ is more likely to be written by the human.\footnote{We randomize the ordering of the responses given to the judge to mitigate against ordering bias.} Rather than optimizing for content overlap with a specific ground-truth response, this signal trains the model toward the broader quality of being indistinguishable from the target user. The full judge prompt is given in Appendix~\ref{app:judge-prompts}.
+We use a discriminative Turing reward as the training signal. An LLM judge is shown the user's  history $(x, h)$ alongside two responses to the same context: one written by the real user from the ground truth distribution $y_{\star} \sim p_\star(\cdot | x,h)$ and one sampled from the model $y \sim p_\theta( \cdot | x, u )$. The judge rates on a $1$--$7$ Likert scale which response was written by the human, considering consistency with the user's prior writing, stylistic fit, and naturalness. A score of $1$ means that the judge deems the human-generated response $y_{\star}$ to be more likely to be written by the human, while a score of $7$ means the judge deems the model-generated response $y$ is more likely to be written by the human.\footnote{We randomize the ordering of the responses given to the judge to mitigate against ordering bias.} Rather than optimizing for content overlap with a specific ground truth response, this signal trains the model toward the broader quality of being indistinguishable from the target user. The full judge prompt is given in Appendix~\ref{app:judge-prompts}.
 
 Letting $s({y, y_\star}) \in \{1, \dots, 7\}$ be the score assigned by the LLM judge, we cap and  normalize the score to $[0,1]$ to obtain the Turing reward 
 % \llq{confirm this is 5, i updated this, ptal!}
@@ -237,35 +237,36 @@ The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversati
 
 \subsection{Training}
 \paragraph{SFT warm start.}
-Before RL, we warm-start the policy with SFT on ground-truth user responses augmented with chain-of-thought reasoning traces, a standard practice in  RL post-training \citep{ouyang2022training,rafailov2023direct}. For each training example, we use a base instruct model (of the same capacity as the model to be post-trained) to generate a reasoning trace given the context and ground-truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground-truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
+Before RL, we warm-start the policy with SFT on ground truth user responses augmented with chain-of-thought reasoning traces, a standard practice in  RL post-training \citep{ouyang2022training,rafailov2023direct}. For each training example, we use a base instruct model (of the same capacity as the model to be post-trained) to generate a reasoning trace given the context and ground truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \paragraph{RL training.}
 We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}. We sample 4 candidate responses per training example and compute advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. GRPO training uses a dataset disjoint from the SFT training set.
-We  additionally apply \emph{length penalty term} that penalize responses falling outside a tolerance band around the ground-truth length (see Appendix~\ref{app:length_penalty}). We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the judge.  Training details are given in Appendix~\ref{app:training_details}. 
+We  additionally apply \emph{length penalty term} that penalize responses falling outside a tolerance band around the ground truth length (see Appendix~\ref{app:length_penalty}). We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the judge.  Training details are given in Appendix~\ref{app:training_details}. 
 % \llq{Should we change this to one additional reward-shaping term (length penalty)? The reward clipping one seems to be included by default.}
 
 \subsection{Baselines}
 
-We use Qwen3-8B with thinking mode disabled as the base model, from which we learn a user simulator model through our pipeline. We compare our method with supervised fine-tuning (SFT) and two GRPO-based methods using alternative reward signals described below. To ensure fair comparison, all GRPO-based methods are initialized from the same SFT checkpoint and make use of the induced personas. We also report the performance of the base Qwen3-8B model and OpenAI GPT-5 (minimal reasoning effort) as zero-shot references.
+We use Qwen3-8B with thinking mode disabled as the base model, from which we learn a user simulator model through our pipeline. We compare our method with two GRPO-based methods using alternative reward signals described below. To ensure fair comparison, all GRPO-based methods are initialized from the same SFT checkpoint and make use of the induced personas. We also report the performance of the SFT-init checkpoint, base Qwen3-8B model, and OpenAI GPT-5 (minimal reasoning effort) as references.
 
 \paragraph{GRPO-Sim: response similarity reward.}
-Following \citet{wu2026humanlm}, this baseline trains with a reward that measures how well the generated response $y$ captures the content of the ground-truth response $y_\star$. An LLM judge is given the user's history, current context, and both responses, and produces an overall alignment score $r_{\mathrm{sim}}(y, y_\star) \in [0,1]$ that reflects semantic similarity while penalizing unsupported content (see Appendix Figure~\ref{fig:sim_prompt} for prompt). This reward encourages the model to say roughly \emph{what} the user said by matching the key points in ground-truths.
+Following \citet{wu2026humanlm}, this baseline trains with a reward that measures how well the generated response $y$ captures the content of the ground truth response $y_\star$. An LLM judge is given the user's history, current context, and both responses, and produces an overall alignment score $r_{\mathrm{sim}}(y, y_\star) \in [0,1]$ that reflects semantic similarity while penalizing unsupported content (see Appendix Figure~\ref{fig:sim_prompt} for prompt). This reward encourages the model to say roughly \emph{what} the user said by matching the key points in ground truths.
 
 \paragraph{GRPO-LogProb: log-probability reward.}
-\citet{gandhi2026dialogue} propose training dialogue simulators by maximizing the log-probability of the ground-truth response under the model, combined with latent chain-of-thought reasoning. In their full objective, the model generates a reasoning trace $z$ and a candidate response $y$, and the training signal combines SFT with a GRPO reward based on the log-probability of the ground-truth given $z$:
+\citet{gandhi2026dialogue} propose training dialogue simulators by maximizing the log-probability of the ground truth response under the model, combined with latent chain-of-thought reasoning. In their full objective, the model generates a reasoning trace $z$ and a candidate response $y$, and the training signal combines SFT with a GRPO reward based on the log-probability of the ground truth given $z$:
+\vspace{-1em}
 \begin{align*}
 r_{\mathrm{logprob}}(z) = \frac{1}{|y_\star|}\log p_\theta(y_\star \mid x, u, z),
 \end{align*}
-where $|y_\star|$ is the number of tokens in the ground-truth response and $z$ is the latent reasoning trace generated by the model. In our implementation, we use this log-probability as the GRPO reward but drop the auxiliary SFT loss term. 
+where $|y_\star|$ is the number of tokens in the ground truth response and $z$ is the latent reasoning trace generated by the model. In our implementation, we use this log-probability as the GRPO reward but drop the auxiliary SFT loss term. 
 
 \subsection{Evaluation}
 \subsubsection{LLM-as-Judge Evaluation}
 We use LLM-as-judge to evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations. See Appendix~\ref{app:prompts} for the full judge prompts.
 
 \paragraph{Turing distinguishability.}
- A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response is more human-like. This metric mirrors our training signal but makes use of a more powerful judge than is used for training.
+ A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response is more human-like. This metric mirrors our training signal but makes use of a more powerful judge than is used for training.
 
-\paragraph{Response similarity to ground-truth.} We also measure similarity between the generated and ground-truth responses, following \citet{wu2026humanlm}.  An LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground-truth, then scores semantic similarity, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said.
+\paragraph{Response similarity to ground truth.} We also measure similarity between the generated and ground truth responses, following \citet{wu2026humanlm}.  An LLM judge scores how well a generated response captures the overall content of the ground truth human response. The judge extracts key points from the ground truth, then scores semantic similarity, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said.
 
 \paragraph{Context and user specificity.}
 We finally evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply, which is a common failure of neural conversational models \citep{li2016diversity}. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. For better calibration, we batch judge the specificity scores of multiple responses in one judge call.
@@ -298,37 +299,38 @@ In addition to LLM-as-judge evaluation, we also recruit human participants from 
 
 Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. GRPO-Turing substantially outperforms all other models, including GRPO-Sim and SFT-Init, in both Reddit and Chat. The gap is especially large on Chat, where GRPO-Turing exceeds the next-best model by a wide margin.
 
-Notably, user simulation remains a difficult task overall. Even GPT-5, a much larger model, scores only slightly above SFT-Init. Qualitative inspection reveals that GPT-5 tends to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples} in the appendix). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground-truth response does not translate to human-like indistinguishability.
+Notably, user simulation remains a difficult task overall. Even GPT-5, a much larger model, scores only slightly above SFT-Init. Qualitative inspection reveals that GPT-5 tends to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples} in the appendix). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground truth response does not translate to human-like indistinguishability.
 
-\paragraph{Response similarity to ground-truth.}
+\paragraph{Response similarity to ground truth.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
-\caption{Response similarity to ground-truth ($[0,1]$; higher = more similar to what the user actually said) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. \textbf{GRPO-Turing matches GRPO-Sim}, the model explicitly trained to maximize similarity, showing that optimizing for indistinguishability does not sacrifice content alignment.}
+\caption{Response similarity to ground truth ($[0,1]$; higher = more similar to what the user actually said) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. \textbf{GRPO-Turing matches GRPO-Sim}, the model explicitly trained to maximize similarity, showing that optimizing for indistinguishability does not sacrifice content alignment.}
 \label{fig:sim_dot}
 \end{figure}
-Figure~\ref{fig:sim_dot} reports similarity to the ground-truth response. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground-truth key points, even though this verbosity hurts its Turing score. Among the trained models, GRPO-Sim and GRPO-Turing perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: GRPO-Turing produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said.
+Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground truth key points, even though this verbosity hurts its Turing score. Among the trained models, GRPO-Sim and GRPO-Turing perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: GRPO-Turing produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said.
 
 \paragraph{Response specificity.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
-\caption{Response specificity ($[0,1]$; higher = more grounded in the interaction context and compatible with the target user) from Sonnet~4.6, with 95\% CIs. GT is the ground-truth human response. \textbf{GRPO-Turing and GRPO-Sim produce the most contextually specific responses}, substantially outperforming SFT-Init and the base model in both domains.}
+\vspace{-0.4cm}
+\caption{Response specificity ($[0,1]$; higher = more grounded in the interaction context and compatible with the target user) from Sonnet~4.6, with 95\% CIs. GT is the ground truth human response. \textbf{GRPO-Turing and GRPO-Sim produce the most contextually specific responses}, substantially outperforming SFT-Init and the base model in both domains.}
 \label{fig:specificity}
+\vspace{-0.6cm}
 \end{figure}
 Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim produce the most contextually specific responses in both domains, substantially outperforming the base model and SFT-Init.
-
-On Reddit, the ground-truth (GT) scores highest, confirming that real users produce highly specific responses. On Chat, however, GT specificity is comparable to the base model, reflecting that real users in open-ended dialogue often pivot to new topics rather than tightly engaging with prior context (see Figure~\ref{fig:qualitative_examples}).
+On Reddit, the ground truth (GT) scores highest, confirming that real users produce highly specific responses. On Chat, however, GT specificity is comparable to the base model, reflecting that real users in open-ended dialogue often pivot to new topics rather than tightly engaging with prior context (see Figure~\ref{fig:qualitative_examples}).
 
 \subsection{Human Evaluation}
-Table~\ref{tab:human_eval_winrate} reports mean win rates over ground-truth responses. The Turing reward is the only training signal that consistently improves win rate above chance in both domains, confirming that optimizing for indistinguishability transfers to real human judges. While the confidence intervals are somewhat high (as is usually the case in human evaluation of LLM outputs), the ranking across models closely mirrors the LLM judge Turing scores in Figure~\ref{fig:turing_dot}, validating the LLM judge as a reasonable proxy for human distinguishability. Notably, SFT-Init is reliably detected on Reddit (WR $= .42$), suggesting that SFT produces surface patterns that humans can identify.
+Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. The Turing reward is the only training signal that consistently improves win rate above chance in both domains, confirming that optimizing for indistinguishability transfers to real human judges. While the confidence intervals are somewhat high (as is usually the case in human evaluation of LLM outputs), the ranking across models closely mirrors the LLM judge Turing scores in Figure~\ref{fig:turing_dot}, validating the LLM judge as a reasonable proxy for human distinguishability. Notably, SFT-Init is reliably detected on Reddit (WR $= .42$), suggesting that SFT produces surface patterns that humans can identify.
 % \footnote{As is usually the case in human evaluation of LLM outputs.}
 
-We test whether each method's win rate differs from chance. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as model generated. Because the same 50 target users are shared across all conditions within each dataset, we also run paired comparisons. Paired $t$ tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size for our human evaluation given our budgetary constraints.
+We test whether each method's win rate differs from chance. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as model generated. Because the same 50 target users are shared across all models, we also run paired comparisons. Paired $t$ tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size for our human evaluation given our budgetary constraints.
 % which we attribute to the relatively small sample size of annotators per condition.\footnote{The small sample size of ${\sim}30$ annotator was necessary given our budgetary constraints.}
 
 
-\begin{table}[t]
+\begin{table}[b]
 \centering
 \small
 \begin{tabular}{lcc}
@@ -340,7 +342,7 @@ GRPO-Sim    & .50 \subtle{$\pm .07$} & .50 \subtle{$\pm .08$} \\
 GRPO-Turing & \textbf{.52} \subtle{$\pm .06$} & \textbf{.55} \subtle{$\pm .07$} \\
 \bottomrule
 \end{tabular}
-\caption{Human Eval Turing test: forced-choice win rate (WR) of each model against the ground-truth response ($\pm$ 95\% CI), averaged over 50 target users with ${\sim}6$ annotators each. WR ${>}\,0.5$ means annotators chose the model response more often than the real user's. \textbf{GRPO-Turing is the only model that consistently fools human judges above chance in both domains.}}
+\caption{Human Eval Turing test: forced-choice win rate (WR) of each model against the ground truth response ($\pm$ 95\% CI), averaged over 50 target users with ${\sim}6$ annotators each. WR ${>}\,0.5$ means annotators chose the model response more often than the real user's. \textbf{GRPO-Turing is the only model that consistently fools human judges above chance in both domains.}}
 \label{tab:human_eval_winrate}
 \end{table}
 
@@ -349,6 +351,7 @@ GRPO-Turing & \textbf{.52} \subtle{$\pm .06$} & \textbf{.55} \subtle{$\pm .07$} 
 \includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
 \caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that GRPO-Turing is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
 \label{fig:binary_gt_accuracy}
+\vspace{-0.4cm}
 \end{figure}
 
 \section{Ablations and Analysis}
@@ -359,7 +362,7 @@ User representation is a core aspect of user simulation. As discussed in \S\ref{
 
 Table~\ref{tab:ablation_combined} shows the results. On both domains, Turing and specificity scores are largely robust to the choice of user representation: all three conditions fall within each other's confidence intervals, and no single representation consistently dominates.
 
-The fact that persona alone still achieves comparable Turing and specificity scores indicates that the persona captures stylistic and behavioral patterns sufficient for humanlikeness, even when it does not help reproduce the exact content of the ground-truth.
+The fact that persona alone achieves comparable Turing and specificity scores, but not comparable similarity scores, indicates that the persona captures stylistic and behavioral patterns sufficient for humanlikeness, even when it does not help reproduce the exact content of the ground-truth response.
 
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
@@ -369,7 +372,7 @@ Our goal is to train a model to generate responses that are indistinguishable fr
 
 Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators generally underperform Sonnet~4.6, except in the chat domain, where the LLM judge is more easily fooled by GRPO-Turing than human annotators. Nevertheless, both evaluators agree on the model ranking: GRPO-Turing is the hardest to detect.
 
-% However, the two evaluators diverge in sensitivity. Sonnet~4.6 is more sensitive than humans on Reddit, correctly identifying ground-truth at a higher rate for SFT and GRPO-Sim, while on Chat it is more easily fooled by GRPO-Turing than human annotators are.
+% However, the two evaluators diverge in sensitivity. Sonnet~4.6 is more sensitive than humans on Reddit, correctly identifying ground truth at a higher rate for SFT and GRPO-Sim, while on Chat it is more easily fooled by GRPO-Turing than human annotators are.
 
 \begin{table}[t]
 \centering
@@ -391,6 +394,7 @@ Domain & Input & Turing & Sim & Spec. \\
 }
 \caption{Ablation on user representation for GRPO-Turing. We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$. Values are mean $\pm$ 95\% CI half-width. \textbf{Performance is robust across representations}: differences between conditions are small relative to confidence intervals in both domains.}
 \label{tab:ablation_combined}
+\vspace{-0.3cm}
 \end{table}
 
 % \begin{table}[t]
@@ -443,18 +447,19 @@ Domain & Input & Turing & Sim & Spec. \\
 
 \subsection{Qualitative Examples}
 
-Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing SFT, GRPO-Sim, and GRPO-Turing. On Reddit, the ground truth is a witty rhetorical question pointing out a flaw in the law. SFT produces a bland, generic reaction, while GRPO-Sim generates an editorial response that reads as preachy and assistant-like. GRPO-Turing engages with the absurdity of the law in a sarcastic, human-sounding way. On Chat, the ground truth is a casual topic pivot ("how thick is elephants skin"). SFT and GRPO-Sim both stay anchored to the AI's previous response, while GRPO-Turing asks a short follow-up question that reads as naturally curious. Additional examples including GPT-5 and Qwen3-8B baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}.
+Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing SFT, GRPO-Sim, and GRPO-Turing. On Reddit, the ground truth is a witty rhetorical question pointing out a flaw in the law. SFT produces a bland, generic reaction, while GRPO-Sim generates an editorial response that reads as preachy and assistant-like. GRPO-Turing engages with the absurdity of the law in a sarcastic, human-sounding way. On Chat, the ground truth is a casual topic pivot ("how thick is elephants skin"). SFT and GRPO-Sim both stay anchored to the AI's previous response, while GRPO-Turing asks a short follow-up question that reads as naturally curious. Additional examples including GPT-5 and baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/qualitative_examples_2.pdf}
 \caption{Qualitative comparison of SFT, GRPO-Sim, and GRPO-Turing on one Reddit and one Chat example. \textbf{GRPO-Turing produces responses closest in tone and brevity to the real user}, while SFT copies context and GRPO-Sim generates generic editorial replies.}
 \label{fig:qualitative_examples_2}
+\vspace{-0.5cm}
 \end{figure}
 
 \section{Discussion}
 \label{sec:discussion}
-A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground-truth content, it does not make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form, and that a discriminative signal is better suited than a matching signal for user simulation.
+A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground truth content, it does not make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form, and that a discriminative signal is better suited than a matching signal for user simulation.
 % [discuss healthy score range]
 
 The same capability that makes a simulator useful, however, also makes it dangerous. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation; it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals. While we believe the research value of  user simulation is substantial and outweigh the risks,  but it should be pursued alongside safeguards such as  watermarking generated content and developing AI generation detectors.
@@ -464,18 +469,22 @@ The same capability that makes a simulator useful, however, also makes it danger
 
 \paragraph{LM-based user simulation.}
 LMs have been used to evaluate dialogue systems~\citep{davidson2023user, sekulic2024simulating}, train conversational agents via self-play~\citep{shah2018bootstrapping, abdulhai2025consistently}, and replicate human subject studies~\citep{aher2023simulating, park2023generative}. \citet{naous2025flipping} show that assistant-tuned LLMs are structurally misaligned with the user role, while \citet{mehri2025goal} address goal drift in task-oriented simulation through explicit state tracking. These works establish that user simulation benefits from purpose-built training but model generic users rather than specific individuals.
-
 %\paragraph{Training objectives for human simulation.}
-Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo} for user simulation, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. We show this signal generalizes across evaluation metrics and interaction formats.
+Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo} for user simulation, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. 
+% We show this signal generalizes across evaluation metrics and interaction formats.
 
 \paragraph{Persona and user representation.}
-It is a common practice to use a natural language description of personality, demographics, and traits to represent a character in AI and NLP research. Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo},  with \citet{jiang2024personallm} more recently showing that LLMs can reliably express assigned personality profiles in both self-report and free-form writing. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. In this work we combine raw history with an induced persona, providing analysis on different formats of user representation.
+It is a common practice to use a natural language description of personality, demographics, and traits to represent a character. Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo},  with \citet{jiang2024personallm} more recently showing that LLMs can reliably express assigned personality profiles in both self-report and free-form writing. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. In this work we combine raw history with an induced persona, providing analysis on different user representations.
 
-\paragraph{Human behavior prediction} Predicting human behaviors, such as people's choices, actions, and utterances, is a cornerstone task cognitive and social sciences. Classical approaches model human decision-making include symbolic cognitive architectures \cite{newell1994unified, anderson2013adaptive}, the framework of bounded rationality \citep{simon1955behavioral}, and prospect theory that explains heuristics and biases \citep{kahneman2013prospect}. Bayesian cognitive science has become a successful paradigm in predicting human behaviors in controlled experimental settings through building structured models that perform probabilistic inference \cite{griffiths2024bayesian}, which has been applied to studying how people simulate the minds of other people \cite{baker2009action, baker2017rational}, the ability known as Theory of Mind \cite{frith2005theory}. A complementary, data-driven approach trains neural networks on large datasets of human choices, combining cognitive priors and achieving the strong predictive accuracy \citep{bourgin2019cognitive, peterson2021using}. More recently, LLMs have been evaluated as proxies for human participants in surveys, economic games, and social experiments~\citep{argyle2023out, horton2023large, aher2023simulating, park2024generative}, with mixed evidence on their fidelity to real human distributions~\citep{santurkar2023whose}. \citet{binz2025foundation} fine-tune a foundation model on hundreds of psychology experiments to predict trial-level human responses. These approaches have largely focused on constrained, single-turn settings—whether a survey response, an experimental trial, or an isolated decision. By contrast, our work engages with flexibly simulating verbal outputs of human users.
+\paragraph{Human behavior prediction.} Predicting human behaviors, such as people's choices, actions, and utterances, is a cornerstone task cognitive and social sciences. Classical approaches model human decision-making include symbolic cognitive architectures \cite{newell1994unified, anderson2013adaptive}, the framework of bounded rationality \citep{simon1955behavioral}, and prospect theory that explains heuristics and biases \citep{kahneman2013prospect}. Bayesian cognitive science has become a successful paradigm in predicting human behaviors in controlled experimental settings through building structured models that perform probabilistic inference \cite{griffiths2024bayesian}, which has been applied to studying how people simulate the minds of other people \cite{baker2009action, baker2017rational}, the ability known as Theory of Mind \cite{frith2005theory}. A complementary, data-driven approach trains neural networks on large datasets of human choices, combining cognitive priors and achieving the strong predictive accuracy \citep{bourgin2019cognitive, peterson2021using}. More recently, LLMs have been evaluated as proxies for human participants in surveys, economic games, and social experiments~\citep{argyle2023out, horton2023large, aher2023simulating, park2024generative}. \citet{binz2025foundation} fine-tune a foundation model on hundreds of psychology experiments to predict trial-level human responses. These approaches have largely focused on constrained, single-turn settings, such as a survey response, an experimental trial, or a single decision. By contrast, our work engages with flexibly simulating verbal outputs of human users.
+% trial-level human responses
+% , with mixed evidence on their fidelity to real human distributions~\citep{santurkar2023whose}
 
 \section{Conclusion}
 
-We have proposed training LLM-based user simulators with a discriminative Turing reward, which scores a generated response by how indistinguishable it is from the real user's, conditioned on that user's prior behavior. Across two substantially different domains, this signal consistently produces more human-like responses than either log-probability maximization or response-similarity rewards, on both LLM and human judgments, without reducing content alignment with the ground truth. Our work suggests a promising recipe for building accurate and generalizable user simulators, which may be applied to a range of downstream applications. We conclude with a few directions for future work: (1) our datasets concern conversations and  
+We have proposed training LLM-based user simulators with a discriminative Turing reward, which scores a generated response by how indistinguishable it is from the real user's response, conditioned on the user's prior history. Across two substantially different domains, this signal consistently produces more human-like responses than either log-probability maximization or response-similarity rewards under both LLM- and human-based Turing evaluations, without reducing content alignment with the ground truth. 
+
+Our work suggests a promising recipe for building accurate and generalizable user simulators, with potential applications across a range of downstream settings. We conclude with several directions for future work. First, it would be valuable to study whether user simulators can help LLM assistants become more personalized and better aligned with users' goals and intentions, for example in multi-agent systems. Second, while this work focuses on training LLMs to produce \textit{outputs} that are indistinguishable from human-written text, it remains an open question whether the models' reasoning \textit{processes} align with those of humans. One possible direction is to compare model-generated reasoning traces with verbalized thought traces from humans~\citep{wurgaft2025scaling}. Third, reliable user simulators could enable experiments that elicit group and collective behaviors from populations of simulated agents in open-ended settings, providing a new tool for replicating and extending research in computational social science.
 
 % We have proposed a discriminative Turing reward for training LLM-based user simulators, where a model is optimized via reinforcement learning to produce responses that an LLM judge cannot distinguish from those of the real user. Across two substantially different domains, our approach consistently outperforms both response-similarity rewards and log-probability maximization on LLM and human evaluation metrics. Our work 
 
@@ -485,11 +494,14 @@ We have proposed training LLM-based user simulators with a discriminative Turing
 
 % Simulate how people perform tasks. Large scale social simulations with more humanlike agents.
 
-\clearpage
+% \clearpage
 \section*{Limitations}
 % We identify several limitations of our study. The first is the range of domains for which we train user simulators. The second is that we have only trained a small model, and it would be interesting to study how well our receipe generalize to frontier size models. 
 
-We identify several limitations of our study. First, while we evaluate on two structurally different domains (forum discussion and open-ended chat), it remains to be seen how well the Turing reward generalizes to other interaction types such as task-oriented dialogue, negotiation, or collaborative problem-solving, as well as to multilingual settings. Second, our experiments use Qwen3-8B as the base model. While this is sufficient to demonstrate the effectiveness of the Turing reward relative to alternative training signals, it would be valuable to study how our recipe scales to frontier-sized models, where the gap between training signals may narrow or widen in ways we cannot predict from small-model experiments alone. Finally, our discriminative Turing reward relies on a powerful LLM judge (Qwen3.5-397B-A17B) at training time, which introduces both computational cost and a dependence on the judge's own biases. If the judge has systematic blind spots, the trained simulator may learn to exploit those blind spots rather than achieve genuine human-likeness. Our human evaluation partially addresses this concern by showing that improvements transfer to real human judges, but a more thorough analysis of judge–human disagreement patterns would be valuable for future work.
+We acknowledge the following limitations of our study. First, while we evaluate on two structurally different domains (forum discussion and open-ended chat), there are more extended experiments to systematically test the generalization of  our Turing reward across other interaction types such as task-oriented dialogue, negotiation, or collaborative problem-solving. Second, our experiments use Qwen3-8B as the base model. While this is sufficient to demonstrate the effectiveness of the Turing reward relative to alternative training signals, it would be valuable to study how our recipe scales to frontier-sized models, where the gap between training signals may narrow or widen in ways we cannot predict from small-model experiments alone. Finally, our discriminative Turing reward relies on a powerful LLM judge (Qwen3.5-397B-A17B) at training time, which introduces both computational cost and a dependence on the judge's own biases. If the judge has systematic blind spots, the trained simulator may learn to exploit those blind spots rather than achieve genuine human-likeness. Our human evaluation partially addresses this concern by showing that improvements transfer to real human judges, but a more thorough analysis of judge–human disagreement patterns would be valuable for future work.
+
+\section*{Ethical Considerations}
+The data used in this paper comes from public research datasets that are widely used in the community and released under their original licenses. We manually inspected the data used in our experiments so that no presence of harmful, toxic, or harassing content is shown to models or annotators. The goal of this work is to improve LLM-based user simulators for research on interactive systems, evaluation, and human-centered modeling. Our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. As with any user-simulation technology, we argue that downstream applications should be evaluated in the context of their specific deployment setting and applicable institutional policies to avoid malicious usage.
 
 %\section*{Acknowledgments}
 
@@ -502,7 +514,7 @@ We identify several limitations of our study. First, while we evaluate on two st
 \section{Dataset Details}
 \label{app:dataset-stats}
 
-Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground-truth response $y_{\star}$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
+Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground truth response $y_{\star}$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
 
 \subsection{Dataset Preprocessing}
 
@@ -622,8 +634,8 @@ PPO clip ratio & 0.2 \\
 \subsection{Length Penalty}
 \label{app:length_penalty}
 
-Our GRPO training incorporates a length penalty for responses that fall outside a tolerance band around the ground-truth length.
-Let $\ell$ be the generated response length, $\ell_{\mathrm{gt}}$ the ground-truth response length, and $r = \ell / \ell_{\mathrm{gt}}$ the length ratio. We define an acceptable length-ratio range $[r_{\min}, r_{\max}]$ within which no penalty is applied. Outside this range, the penalty increases linearly with the relative violation, assigning a larger weight to short responses:
+Our GRPO training incorporates a length penalty for responses that fall outside a tolerance band around the ground truth length.
+Let $\ell$ be the generated response length, $\ell_{\mathrm{gt}}$ the ground truth response length, and $r = \ell / \ell_{\mathrm{gt}}$ the length ratio. We define an acceptable length-ratio range $[r_{\min}, r_{\max}]$ within which no penalty is applied. Outside this range, the penalty increases linearly with the relative violation, assigning a larger weight to short responses:
 \begin{align}
 p &= \min\{\lambda_{\mathrm{short}} v_{\mathrm{short}}
         + \lambda_{\mathrm{long}} v_{\mathrm{long}},\; p_{\mathrm{cap}}\},
@@ -652,7 +664,7 @@ Penalty cap $p_{\mathrm{cap}}$ & 0.25 & 0.40 \\
 \section{Human Evaluation Details}
 \label{app:human-eval}
 
-We conduct a forced-choice Turing test on Prolific. Each participant views a target user's history and then judges 10 response pairs: one ground-truth response and one model-generated response, presented in randomized order. The participant selects which response they believe was written by the real user. Figures~\ref{fig:ui_reddit} and~\ref{fig:ui_chat} show the annotation interfaces for the Reddit and Chat domains, respectively.
+We conduct a forced-choice Turing test on Prolific. Each participant views a target user's history and then judges 10 response pairs: one ground truth response and one model-generated response, presented in randomized order. The participant selects which response they believe was written by the real user. Figures~\ref{fig:ui_reddit} and~\ref{fig:ui_chat} show the annotation interfaces for the Reddit and Chat domains, respectively.
 
 \paragraph{Design.}
 We evaluate three model variants: SFT-Init, GRPO-Sim, and GRPO-Turing, on two datasets: Reddit (ConvoKit) and Chat (PRISM). For each dataset, we select 50 target users and split them into 5 groups of 10. Each participant is assigned to one dataset--model variant--group cell and evaluates the 10 targets in that group. We recruit 6 annotators per cell, yielding 30 participants and 300 binary judgments for each dataset--model variant pair.
@@ -666,7 +678,7 @@ After excluding incomplete submissions, defined as submissions with fewer than 1
 % Three dataset, model variant, and user group combinations required trimming one extra participant each: PRISM/Sim group~2, PRISM/Turing group~1, and PRISM/Turing group~4.
 
 \paragraph{Metric.}
-We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground-truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
+We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
 
 \begin{figure*}[t]
 \centering
@@ -690,7 +702,7 @@ We report the model win rate (WR): the fraction of judgments in which the annota
 \subsection{Thinking-Trace Elicitation Prompt}
 \label{app:thinking-trace-prompt}
 
-Given the context and ground-truth response, we ask the model, using the prompt in Figure~\ref{fig:thinking_trace_prompt}, to explain what could have led the user to write that response. The elicited reasoning traces are then used for supervised fine-tuning of the base Qwen3-8B model.
+Given the context and ground truth response, we ask the model, using the prompt in Figure~\ref{fig:thinking_trace_prompt}, to explain what could have led the user to write that response. The elicited reasoning traces are then used for supervised fine-tuning of the base Qwen3-8B model.
 
 \input{prompts/thinking_trace_prompt}
 
@@ -703,7 +715,7 @@ At inference time, the model receives the task instruction, optionally the user'
 \subsection{Judge Prompts}
 \label{app:judge-prompts}
 
-We use three judge prompts. The Turing distinguishability judge scores how indistinguishable a generated response is from the real user's response (Figure~\ref{fig:turing_prompt}). The similarity judge scores content overlap with the ground-truth response (Figure~\ref{fig:sim_prompt}). The specificity judge scores whether the response is grounded in the interaction context and compatible with the target user (Figure~\ref{fig:specificity_prompt}).
+We use three judge prompts. The Turing distinguishability judge scores how indistinguishable a generated response is from the real user's response (Figure~\ref{fig:turing_prompt}). The similarity judge scores content overlap with the ground truth response (Figure~\ref{fig:sim_prompt}). The specificity judge scores whether the response is grounded in the interaction context and compatible with the target user (Figure~\ref{fig:specificity_prompt}).
 
 
 \input{prompts/turing_prompt}
@@ -716,7 +728,7 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/qualitative_examples.pdf}
-\caption{Qualitative examples from ConvoKit (Reddit) and PRISM (Chat). Each column shows the conversation context, the ground-truth user response, and generations from five models. GPT-5 and Qwen3-8B produce verbose or off-target responses, while \textbf{GRPO-Turing generates replies closest in tone and style to the real user}.}
+\caption{Qualitative examples from ConvoKit (Reddit) and PRISM (Chat). Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5 and Qwen3-8B produce verbose or off-target responses, while \textbf{GRPO-Turing generates replies closest in tone and style to the real user}.}
 \label{fig:qualitative_examples}
 \end{figure*}
 
