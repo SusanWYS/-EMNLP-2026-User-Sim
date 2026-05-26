@@ -44,6 +44,7 @@
 
 \newcommand{\llq}[1]{{\color{cyan}[linlu: #1]}}
 \newcommand{\yoon}[1]{{\color{blue}[yoon: #1]}}
+\newcommand{\susan}[1]{{\color{purple}[susan: #1]}}
 
 % =========================================================
 % Packages
@@ -108,11 +109,11 @@
 \maketitle
 
 \begin{abstract}
-Learning to simulate human users in interactive settings could advance the training of human-centered agents, the evaluation of interactive systems, and research in the social sciences.  Existing approaches generally do so through training an LLM to match a single ground-truth response, by maximizing the log-probability or using a similarity-based reward. We instead propose a Turing test-based approach for learning user simulator models, where a model is be trained via reinforcement learning to produce responses indistinguishable from what the user could have said, following the criterion of the Turing test. Our discriminative Turing reward uses an LM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two substantially different domains---multi-turn chat and Reddit forum discussion---we find that the Turing reward consistently outperforms baseline methods on LLM and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an  effective route to learning LLM-based user simulators.
+Learning to simulate human users in interactive settings could advance the training of human-centered agents, the evaluation of interactive systems, and research in the social sciences.  Existing approaches generally do so through training a large language model (LLM) to match a single ground-truth response, by maximizing the log-probability or using a similarity-based reward. We instead propose a Turing test-based approach for learning user simulator models, where a model is be trained via reinforcement learning to produce responses indistinguishable from what the user could have said, following the criterion of the Turing test. Our discriminative Turing reward uses an LLM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two substantially different domains---multi-turn chat and Reddit forum discussion---we find that the Turing reward consistently outperforms baseline methods on LLM and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an  effective route to learning LLM-based user simulators.
 \end{abstract}
 
 \section{Introduction}
-The currently dominant use cases of LLMs involves having them act as helpful assistants to human users. However, a growing range of applications would benefit  from their playing  the opposite role, i.e.,  not the assistant, but the user.
+The currently dominant use cases of large language models (LLMs) involves having them act as helpful assistants to human users. However, a growing range of applications would benefit  from their playing  the opposite role, i.e.,  not the assistant, but the user.
 % Such user simulators could serve as testbeds for conversational agents~\citep{naous2025flipping}, training environments for interactive systems~\citep{abdulhai2025consistently, mehri2025goal}, and proxies for studying human responses at scale~\citep{park2023generative, aher2023simulating, lu2025multiturn}.
 Such user simulators could serve as fundamental building blocks for social world models in AI agents \cite{rabinowitz2018machine, collins2024building}, training environments and testbeds for interactive systems~\citep{abdulhai2025consistently, mehri2025goal}, and proxies for studying human responses at scale~\citep{park2023generative, aher2023simulating, lu2025multiturn}.\footnote{User simulators could also have harmful applications, such as in enabling fraud and distribution of misinformation at scale. See our discussion in \S\ref{sec:discussion}.}
 
@@ -344,7 +345,9 @@ GRPO-Turing & $.52$ \subtle{$\pm .06$} & $.55$ \subtle{$\pm .07$} \\
 
 User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM.   We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
 
-Table~\ref{tab:ablation_combined} shows the results. For the Turing/Specificity scores, we find that there is little difference in using the full user representation $(h, \rho)$ versus just using $\rho$ or $h$ alone. However, the similarity score benefits significantly from including the persona $\rho$. Our persona induction approach is quite basic---given the rich line of work on inducing personas and personality traits \citep{delucia2024using,zhang2024can,peters2024large,wu2025aligning}, it is possible that such techniques could further enhance performance.
+Table~\ref{tab:ablation_combined} shows the results. For the Turing/Specificity scores, we find that there is little difference in using the full user representation $(h, \rho)$ versus just using $\rho$ or $h$ alone. \susan{add more!!!!!}
+
+citations about persona induction \citep{delucia2024using,zhang2024can,peters2024large,wu2025aligning}
 
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
@@ -359,7 +362,6 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \subsection{Qualitative Examples}
 \begin{table}[t]
 \centering
-\small
 \setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{@{}llccc@{}}
 \toprule
