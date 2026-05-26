@@ -374,7 +374,9 @@ $u = \rho$       & $.52 \pm .010$ & $-.0020$ \\
 
 \section{Discussion}
 \label{sec:discussion}
+A recurring finding across our experiments is that content matching and human-likeness come apart. Training with the similarity reward improves how well a response covers the ground-truth content, but does not make the response harder to distinguish from the real user, and GPT-5 attains high similarity on Reddit while remaining easy to identify as assistant-generated. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form---length, hedging, register, formatting---rather than in content, and that a discriminative signal is better suited than a matching signal to removing these tells. It also helps explain why imitation alone is insufficient: SFT-Init is reliably caught by human annotators on Reddit, despite being trained directly on user responses.
 
+User simulators that are faithful to specific people also raise misuse concerns, as noted in footnote~1. A model that produces responses indistinguishable from a target user, conditioned on that user's history, is well suited to impersonation, and could be used to fabricate messages attributed to real people or to manufacture the appearance of grassroots opinion. We train and evaluate only on public or consented research data, and our interest is in modeling users in aggregate rather than reproducing identifiable individuals. We also note that the discriminator we train against is itself a starting point for detection: the same signal that exposes machine-generated tells during training could be used to flag synthetic responses at deployment.
 \section{Related Work}
 
 \paragraph{LM-based user simulation.}
