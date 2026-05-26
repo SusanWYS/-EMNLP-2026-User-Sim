@@ -37,6 +37,9 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
+\newcommand{\subtle}[1]{{\scriptsize\color[gray]{0.4}[1]}}
+\newcommand{\M}[1]{\qty{#1}{\million}}
+
 \newcommand{\llq}[1]{{\color{cyan}[linlu: #1]}}
 \newcommand{\yoon}[1]{{\color{blue}[yoon: #1]}}
 
@@ -303,7 +306,7 @@ We test whether each condition's win rate differs from chance using one-sided te
 \toprule
  & \textbf{Reddit} & \textbf{Chat} \\
 \midrule
-SFT-Init    & $.42$ \, $\scriptstyle \pm .06$ & $.50 \pm .09$ \\
+SFT-Init    & $.42$ \, \subtle{$ \pm .06$} & $.50 \pm .09$ \\
 GRPO-Sim    & $.50 \pm .07$ & $.50 \pm .08$ \\
 GRPO-Turing & $.52 \pm .06$ & $.55 \pm .07$ \\
 \bottomrule
@@ -323,7 +326,7 @@ GRPO-Turing & $.52 \pm .06$ & $.55 \pm .07$ \\
 
 \subsection{User Representations}
 
-User represenion is the core asect of 
+An important part of user simulaionhere we study represetions 
 
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
