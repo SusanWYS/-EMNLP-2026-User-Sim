@@ -205,29 +205,25 @@ We recruit crowd workers via Prolific for a forced-choice Turing test: given a t
 \label{fig:turing_dot}
 \end{figure}
 
-user modeling is still very hard. assistant-trained models (GPT-5) produce verbose and naturally  involuted??? responses. refer to qualitative examples. 
+Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. GRPO-Turing substantially outperforms all other models, including GRPO-Sim and SFT-Init, in both Reddit and Chat. The gap is especially large on Chat, where GRPO-Turing exceeds the next-best model by a wide margin. Notably, user simulation remains a difficult task overall: even GPT-5, a much larger assistant-trained model, scores only slightly above SFT-Init. Qualitative inspection reveals that GPT-5 tends to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples} in the appendix). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground-truth response does not translate to human-like indistinguishability.
 
-Using similarity as signal did not significantly improve the turing score from the sft-init checkpoint.
-
-\paragraph{Response Similarity to Ground Truth}
+\paragraph{Response Similarity to Ground Truth.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
-\caption{Sim reward judge scores across Reddit and Chat domains. The dashed line and shaded band show the Base model mean and 95\% CI.}
+\caption{Response similarity scores across Reddit and Chat domains. The dashed line and shaded band show the Qwen3-8B baseline mean and 95\% CI.}
 \label{fig:sim_dot}
-\end{figure} 
-why is gpt-5 significantly more similar to gt? what is response similarity rewarding? 
+\end{figure}
+Figure~\ref{fig:sim_dot} reports similarity to the ground-truth response. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground-truth key points, even though this verbosity hurts its Turing score. Among the trained models, GRPO-Sim and GRPO-Turing perform comparably, both improving over the base model. This confirms that training with the Turing reward does not sacrifice content alignment: GRPO-Turing produces responses that are both hard to distinguish from the real user \emph{and} similar in content to what the user actually said.
 
-\paragraph{Response Specificity}
+\paragraph{Response Specificity.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
-\caption{Response specificity scores across Reddit (top) and Chat (bottom). The dashed line and shaded band show the untrained baseline mean and 95\% CI.}
+\caption{Response specificity scores across Reddit (top) and Chat (bottom). The dashed line and shaded band show the Qwen3-8B baseline mean and 95\% CI.}
 \label{fig:specificity}
 \end{figure}
-why do we need to measure response specificity?
-what is it rewarding based on qualitative exs?
-response specificity is caveated since real humans often pivot in real-time conversations. see gt in chat, which 
+Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim produce the most contextually specific responses in both domains, substantially outperforming the base model and SFT-Init. On Reddit, the ground truth (GT) scores highest, confirming that real users produce highly specific responses. On Chat, however, GT specificity is comparable to the base model, reflecting that real users in open-ended dialogue often pivot to new topics rather than tightly engaging with prior context (see Figure~\ref{fig:qualitative_examples}).
 
 \subsection{Human Evaluation}
 Table~\ref{tab:human_eval_winrate} reports mean win rates across conditions. Each condition covers 50 target users, with 5--7 independent annotators per target after filtering, yielding roughly 300 binary judgments per condition. GRPO-Turing achieves the highest win rate in both domains, reaching $.55$ on Chat and $.52$ on Reddit. GRPO-Sim sits near chance at $.50$ in both domains, while SFT-Init drops to $.43$ on Reddit but remains at $.50$ on Chat. This ranking mirrors the Claude Sonnet 4.6 Turing judge scores in Figure~\ref{fig:turing_dot}, where GRPO-Turing also leads by a wide margin, suggesting that the LLM judge is a reasonable proxy for human distinguishability.
