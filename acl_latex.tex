@@ -332,7 +332,7 @@ User representation is a core aspect of user simulation. Here, we study three di
 
 \subsection{LLM Judge vs. Human Judges}
 
-To further validate the LLM judge, we binarize the Sonnet~4.6 Turing score per evaluation thread (score ${<}\,4 \to$ GT, ${\geq}\,4 \to$ model) and take the majority vote per target user, mirroring the human forced-choice setup. Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across conditions. Both evaluators agree on the model ranking---GRPO-Turing is hardest to detect---though Sonnet~4.6 is more sensitive than humans on Reddit and more easily fooled on Chat/GRPO-Turing.
+To further validate the LLM judge, we binarize the Sonnet~4.6 Turing score per evaluation thread (score ${<}\,4 \to$ GT, ${\geq}\,4 \to$ model) and take the majority vote per target user, mirroring the human forced-choice setup. Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across conditions. Both evaluators agree on the model ranking: GRPO-Turing is the hardest to detect. However, the two evaluators diverge in sensitivity. Sonnet~4.6 is more sensitive than humans on Reddit, correctly identifying ground truth at a higher rate for SFT and GRPO-Sim, while on Chat it is more easily fooled by GRPO-Turing than human annotators are.
 
 
 \subsection{Qualitative Examples}
