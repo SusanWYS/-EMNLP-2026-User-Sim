@@ -476,6 +476,8 @@ It is a common practice to use a natural language description of personality, de
 
 \section{Conclusion}
 
+We have proposed training LLM-based user simulators with a discriminative Turing reward, which scores a generated response by how indistinguishable it is from the real user's, conditioned on that user's prior behavior. Across two domains that differ substantially in structure---multi-turn chat and Reddit forum discussion---this signal consistently produces more human-like responses than either log-probability maximization or response-similarity rewards, on both LLM and human judgments, without sacrificing content alignment with the ground truth.
+
 We have proposed a discriminative Turing reward for training LLM-based user simulators, where a model is optimized via reinforcement learning to produce responses that an LLM judge cannot distinguish from those of the real user. Across two substantially different domains, our approach consistently outperforms both response-similarity rewards and log-probability maximization on LLM and human evaluation metrics. Our work 
 
 Beyond CoT in modeling thought processes.
