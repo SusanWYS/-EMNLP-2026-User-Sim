@@ -1,0 +1,22 @@
+\begin{figure*}[t]
+\centering
+
+\begin{promptbox}[Response Specificity Judge]
+Evaluates whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply.
+
+Inputs: Target user evidence, interaction context, and one candidate response.
+
+Dimensions (each scored 0--1):
+  1. Context specificity (weight 0.5): How specifically the candidate engages with the exact local interaction. High scores require tight ties to the exact claim, question, event, or disagreement at issue. Low scores indicate broadly reusable responses.
+  2. User evidence compatibility (weight 0.5): How compatible the candidate is with the target user's observed behavior without unnaturally exposing or inventing evidence. High scores require natural compatibility; low scores indicate contradiction or persona-caricature.
+
+Caps: If the response contradicts the context or uses the wrong speaker perspective, overall (*@$\leq$@*) 0.20. If it invents personal facts or unnaturally imports user-history details, overall (*@$\leq$@*) 0.40.
+
+Overall: 0.5 (*@$\times$@*) context_specificity + 0.5 (*@$\times$@*) user_evidence_compatibility, subject to the caps above.
+\end{promptbox}
+
+\vspace{-6pt}
+
+\caption{Response specificity judge prompt. The judge scores context specificity and user evidence compatibility, each in $[0, 1]$, and combines them with caps for contradictions and invented facts.}
+\label{fig:specificity_prompt}
+\end{figure*}
