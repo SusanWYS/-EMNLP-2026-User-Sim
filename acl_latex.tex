@@ -39,7 +39,7 @@
 
 \usepackage{adjustbox}
 
-\newcommand{\subtle}[1]{{\scriptsize\color[gray]{0.4}#1}}
+\newcommand{\subtle}[1]{{\tiny\color[gray]{0.4}#1}}
 \newcommand{\M}[1]{\qty{#1}{\million}}
 
 \newcommand{\llq}[1]{{\color{cyan}[linlu: #1]}}
@@ -314,7 +314,7 @@ On Reddit, the ground truth (GT) scores highest, confirming that real users prod
 \subsection{Human Evaluation}
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth. The Turing reward is the only training signal that consistently improves win rate above chance in both domains, confirming that optimizing for indistinguishability transfers to real human judges. While the confidence intervals are somewhat high,\footnote{As is usually the case in human evaluation of LLM outputs.} the ranking across models closely mirrors the LLM judge Turing scores in Figure~\ref{fig:turing_dot}, validating the LLM judge as a reasonable proxy for human distinguishability. Notably, SFT-Init is reliably detected on Reddit (WR $= .42$), suggesting that SFT produces surface patterns that humans can identify.
 
-We test whether each condition's win rate differs from chance. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as model generated. Because the same 50 target users are shared across all conditions within each dataset, we can also run paired comparisons. Paired $t$ tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size of ${\sim}30$ annotators per condition.\footnote{The small sample size was necessary given our budgetary constraints.}
+We test whether each condition's win rate differs from chance. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as model generated. Because the same 50 target users are shared across all conditions within each dataset, we also run paired comparisons. Paired $t$ tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size of annotators per condition.\footnote{The small sample size of ${\sim}30$ annotator was necessary given our budgetary constraints.}
 
 
 \begin{table}[t]
@@ -324,9 +324,9 @@ We test whether each condition's win rate differs from chance. On Chat, GRPO-Tur
 \toprule
  & \textbf{Reddit} & \textbf{Chat} \\
 \midrule
-SFT-Init    & $.42$  \subtle{$ \pm .06$} & $.50$ \subtle{$\pm .09$} \\
-GRPO-Sim    & $.50$ \subtle{$\pm .07$} & $.50$ \subtle{$\pm .08$} \\
-GRPO-Turing & $.52$ \subtle{$\pm .06$} & $.55$ \subtle{$\pm .07$} \\
+SFT-Init    & .42  \subtle{$ \pm .06$} & .50 \subtle{$\pm .09$} \\
+GRPO-Sim    & .50 \subtle{$\pm .07$} & .50 \subtle{$\pm .08$} \\
+GRPO-Turing & \textbf{.52} \subtle{$\pm .06$} & \textbf{.55} \subtle{$\pm .07$} \\
 \bottomrule
 \end{tabular}
 \caption{Human Eval Turing test: forced-choice win rate (WR) of each model against the ground-truth response ($\pm$ 95\% CI), averaged over 50 target users with ${\sim}6$ annotators each. WR ${>}\,0.5$ means annotators chose the model response more often than the real user's. \textbf{GRPO-Turing is the only model that consistently fools human judges above chance in both domains.}}
@@ -348,7 +348,6 @@ User representation is a core aspect of user simulation. As discussed in \S\ref{
 
 Table~\ref{tab:ablation_combined} shows the results. For the Turing/Specificity scores, we find that there is little difference in using the full user representation $(h, \rho)$ versus just using $\rho$ or $h$ alone. \susan{add more!!!!!}
 
-citations about persona induction \citep{delucia2024using,zhang2024can,peters2024large,wu2025aligning}
 
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
@@ -369,13 +368,13 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \toprule
 Domain & Input & Turing & Sim & Spec. \\
 \midrule
-\multirow{3}{*}{Chat} & $u = (h, \rho)$ & $4.31$ \subtle{$\pm .08$} & $.053$ \subtle{$\pm .0084$} & $.522$ \subtle{$\pm .009$} \\
- & $u = h$         & $4.26$ \subtle{$\pm .08$} & $.047$ \subtle{$\pm .0075$} & $.508$ \subtle{$\pm .010$} \\
- & $u = \rho$      & $4.23$ \subtle{$\pm .08$} & $.041$ \subtle{$\pm .0065$} & $.520$ \subtle{$\pm .010$} \\
+\multirow{3}{*}{Chat} & $u = (h, \rho)$ & 4.31 \subtle{$\pm .08$} & .053 \subtle{$\pm .0084$} & .522 \subtle{$\pm .009$} \\
+ & $u = h$         & 4.26 \subtle{$\pm .08$} & .047 \subtle{$\pm .0075$} & .508 \subtle{$\pm .010$} \\
+ & $u = \rho$      & 4.23 \subtle{$\pm .08$} & .041 \subtle{$\pm .0065$} & .520 \subtle{$\pm .010$} \\
 \midrule
-\multirow{3}{*}{Reddit} & $u = (h, \rho)$ & $3.68$ \subtle{$\pm .18$} & $.030$ \subtle{$\pm .0089$} & $.380$ \subtle{$\pm .018$} \\
- & $u = h$         & $3.78$ \subtle{$\pm .18$} & $.033$ \subtle{$\pm .0101$} & $.377$ \subtle{$\pm .020$} \\
- & $u = \rho$      & $3.84$ \subtle{$\pm .19$} & $.027$ \subtle{$\pm .0071$} & $.350$ \subtle{$\pm .019$} \\
+\multirow{3}{*}{Reddit} & $u = (h, \rho)$ & 3.68 \subtle{$\pm .18$} & .030 \subtle{$\pm .0089$} & .380 \subtle{$\pm .018$} \\
+ & $u = h$         & 3.78 \subtle{$\pm .18$} & .033 \subtle{$\pm .0101$} & .377 \subtle{$\pm .020$} \\
+ & $u = \rho$      & 3.84 \subtle{$\pm .19$} & .027 \subtle{$\pm .0071$} & .350 \subtle{$\pm .019$} \\
 \bottomrule
 \end{tabular}
 }
@@ -449,10 +448,10 @@ LMs have been used to evaluate dialogue systems~\citep{davidson2023user, sekulic
 %\paragraph{Training objectives for human simulation.}
 Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo} for user simulation, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. We show this signal generalizes across evaluation metrics and interaction formats.
 
-\paragraph{Individual user representation.}
+\paragraph{Persona and user representation.}
 Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo}. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. We combine raw history with an induced persona, providing both behavioral evidence and a compressed trait summary.
 
-\paragraph{Human behavior prediction} Predicting human behaviors, such as people's choices, actions, and utterances, is a cornerstone task cognitive and social sciences. Classical approaches model human decision-making include symbolic cognitive architectures [cites], the framework of bounded rationality \citep{simon1955behavioral, cite}, and prospect theory that explains heuristics and biases \citep{kahneman1979prospect}. Bayesian cognitive science has become a successful paradigm in predicting human behaviors in controlled experimental settings through building structured models that perform probabilistic inference [cites], which has been applied to studying how people simulate the minds of other people [cites], the ability known as Theory of Mind [cites]. A complementary, data-driven approach trains neural networks on large datasets of human choices, combining cognitive priors and achieving the strong predictive accuracy \citep{bourgin2019cognitive, peterson2021using}. More recently, LLMs have been evaluated as proxies for human participants in surveys, economic games, and social experiments~\citep{argyle2023out, horton2023large, aher2023simulating, park2024generative}, with mixed evidence on their fidelity to real human distributions~\citep{santurkar2023whose}. \citet{binz2025centaur} fine-tune a foundation model on hundreds of psychology experiments to predict trial-level human responses. These approaches have largely focused on constrained, single-turn settings—whether a survey response, an experimental trial, or an isolated decision, whereas our work engages with flexibly simulating verbal outputs of human users.
+\paragraph{Human behavior prediction} Predicting human behaviors, such as people's choices, actions, and utterances, is a cornerstone task cognitive and social sciences. Classical approaches model human decision-making include symbolic cognitive architectures \cite{newell1994unified, anderson2013adaptive}, the framework of bounded rationality \citep{simon1955behavioral}, and prospect theory that explains heuristics and biases \citep{kahneman1979prospect}. Bayesian cognitive science has become a successful paradigm in predicting human behaviors in controlled experimental settings through building structured models that perform probabilistic inference \cite{griffiths2024bayesian}, which has been applied to studying how people simulate the minds of other people \cite{baker2009action, baker2017rational}, the ability known as Theory of Mind [cites]. A complementary, data-driven approach trains neural networks on large datasets of human choices, combining cognitive priors and achieving the strong predictive accuracy \citep{bourgin2019cognitive, peterson2021using}. More recently, LLMs have been evaluated as proxies for human participants in surveys, economic games, and social experiments~\citep{argyle2023out, horton2023large, aher2023simulating, park2024generative}, with mixed evidence on their fidelity to real human distributions~\citep{santurkar2023whose}. \citet{binz2025centaur} fine-tune a foundation model on hundreds of psychology experiments to predict trial-level human responses. These approaches have largely focused on constrained, single-turn settings—whether a survey response, an experimental trial, or an isolated decision, whereas our work engages with flexibly simulating verbal outputs of human users.
 
 \section{Conclusion}
 
@@ -481,16 +480,18 @@ Each training example is a tuple $(u, x, y)$ where the user representation $u = 
 
 \subsection{Dataset Preprocessing}
 
+We show the dataset statistics after preprocessing in Table~\ref{tab:preprocessing_stats}.
+
 \paragraph{(Reddit) ConvoKit.}
-We reconstruct Reddit threads from comment identifiers and parent pointers. 
+We reconstruct Reddit threads from comment identifiers and parent pointers.
 % Deleted, removed, and non-user comments (e.g., bot comments) cannot serve as targets or enter $h$.
-We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training. 
-We use the remaining subdreddit for for sft and grpo training, includign AmItheAsshole, AskMen, AskWomen, business, changemyview, Economics, Frugal, MaliciousCompliance, news, relationship\_advice, relationships, TrueReddit 
+We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training.
+We use the remaining subreddits for SFT and GRPO training. These include \texttt{r/AmItheAsshole}, \texttt{r/AskMen}, \texttt{r/AskWomen}, \texttt{r/business}, \texttt{r/changemyview}, \texttt{r/Economics}, \texttt{r/Frugal}, \texttt{r/MaliciousCompliance}, \texttt{r/news}, \texttt{r/relationship\_advice}, \texttt{r/relationships}, and \texttt{r/TrueReddit}.
 
-The users are split deterministically into disjoint SFT and GRPO set using a 40/60 ratio. 
+Users are deterministically split into disjoint SFT and GRPO sets at a 40/60 ratio.
+For each user, 2--6 threads are reserved as $h$, and users with insufficient threads are discarded. Each target thread yields one example: $y_{\star}$ is the user's final comment, and $x$ is the original post plus the ancestor reply chain leading to that comment.
 
-
-For eahc user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
+% This avoids highly correlated examples from the same thread.
 
 % GRPO training and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. 
 % This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO training/validation sets. 
@@ -498,7 +499,9 @@ For eahc user, 2--6 threads are reserved as $h$. Each target thread yields one e
 
 
 \paragraph{(Chat) PRISM.}
-We retain PRISM participants with at least six conversations, yielding 1,288 qualified users. We randomly hold out 10\% of qualified users with a fixed seed, giving 128 held-out test users and 880 test examples. The remaining 1,160 users are split with the same seed into disjoint GRPO and SFT pools using a 60/40 user ratio: 696 users for GRPO and 464 users for SFT. For each user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation is one example: $x$ is all preceding turns and $y$ is the user's utterance at that turn. GRPO train and validation examples are split within each GRPO user using a deterministic tail-split policy: for a user with $n$ target rows, $\lfloor 0.1n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation. Before applying this tail split, target rows are sorted by conversation id and target turn index, so validation rows come from later target turns and training does not use a later target from the same conversation than validation.
+We retain PRISM users with at least six conversations, yielding 1,288 qualified users. We randomly hold out 128 qualified users with a fixed seed, yielding 128 held-out test users and 880 test examples. The remaining 1,160 users are split with the same seed into disjoint GRPO and SFT sets using a 60/40 user ratio: 696 users for GRPO and 464 users for SFT. For each user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation yields one example: $x$ is all preceding turns, and $y$ is the user's utterance at that turn.
+
+% GRPO train and validation examples are split within each GRPO user using a deterministic tail-split policy: for a user with $n$ target rows, $\lfloor 0.1n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation. Before applying this tail split, target rows are sorted by conversation id and target turn index, so validation rows come from later target turns and training does not use a later target from the same conversation than validation.
 
 
 \subsection{Persona Induction}
@@ -526,8 +529,9 @@ Test & 880 & 267 \\
 \label{tab:preprocessing_stats}
 \end{table}
 
-\paragraph{Prompt format.}
-Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $\hat{y}$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
+
+\subsection{Prompt Formatting}
+Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $y$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
 \input{prompts/format}
 
 
@@ -573,9 +577,6 @@ p_{\mathrm{short}} &= \lambda_{\mathrm{short}} \cdot \max\!\bigl(r_{\min} - r,\;
 p_{\mathrm{long}} &= \lambda_{\mathrm{long}} \cdot \max\!\bigl(r - r_{\max},\; 0\bigr) / r_{\max} \nonumber\\
 p_{\mathrm{len}} &= \min(p_{\mathrm{short}} + p_{\mathrm{long}},\; p_{\mathrm{cap}})
 \end{align}
-
-\paragraph{Score clipping.}
-The raw Turing judge score (1--7) is clipped to a maximum of $s_{\mathrm{clip}}$ before canonicalization, reducing the influence of extreme ratings.
 
 Table~\ref{tab:reward-shaping} lists the parameter values for each dataset.
 
