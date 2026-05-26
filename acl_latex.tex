@@ -38,6 +38,7 @@
 \usepackage{algpseudocode}
 
 \newcommand{\llq}[1]{{\color{cyan}[linlu: #1]}}
+\newcommand{\yoon}[1]{{\color{blue}[yoon: #1]}}
 
 % \title{Training Language Models to Pass the User Turing Test}
 \title{Learning User Simulators with  Turing Rewards}
@@ -134,7 +135,7 @@ The final RL objective is then given by
 %   s^* = \begin{cases} 8 - s & \text{if the candidate is Response A} \\ s & \text{if the candidate is Response B} \end{cases}
 % \end{equation}
 % and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 1]$, where 0 means the candidate was identified as synthetic with maximum confidence, 0.5 means the judge could not distinguish the two, and 1 means the candidate was mistaken for the real user. 
-and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, after supervised finetuning (SFT) warm start on a disjoint subset of the trianing data.
+and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, after supervised finetuning (SFT) warm start on a disjoint subset of the training data.
 
 % sampling $G$ candidate responses per example and computing advantages via within-group normalization. We also perform supervised fine-tuning (SFT) first on a disjoint subset of the training data to warm-start our model, as is commonly done in post-training pipelines.
 
@@ -160,19 +161,18 @@ The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversati
 Before RL, we warm-start the policy with SFT on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untuned instruct model to generate a reasoning trace given the context and ground-truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \paragraph{RL training.}
-We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}. We sample 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. GRPO training uses a dataset disjoint from the SFT training set. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
-
-We apply an additional \emph{length penalty reward} that penalize responses falling outside a tolerance band around the ground-truth length We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default. \llq{Should we change this to one additional reward-shaping term (length penalty)? The reward clipping one seems to be included by default.}
+We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}. We sample 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. GRPO training uses a dataset disjoint from the SFT training set.
+We  additionally apply \emph{length penalty term} that penalize responses falling outside a tolerance band around the ground-truth length. We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default.  Full training hyperparameters are given in Appendix~\ref{app:hyperparams}. \llq{Should we change this to one additional reward-shaping term (length penalty)? The reward clipping one seems to be included by default.}
 
 \subsection{Baselines}
 
 % \paragraph{Training signal comparison.}
 We use Qwen3-8B with reasoning mode disabled as our base model.
 We compare our method with supervised fine-tuning (SFT) and other GRPO-based methods using different rewards. Specifically, we consider GRPO with response similarity reward~\citep{wu2026humanlm}, and GRPO with log-probability and latent thinking rewards~\citep{gandhi2026dialogue}. All GRPO-based methods are initialized from the SFT model. We also report the performance of the base Qwen3-8B model and OpenAI GPT-5 (minimal reasoning effort) as zero-shot references.
-
+\yoon{we should  describe the reward of the baselines in more detail, using math where possible}
 \subsection{Evaluation}
 \subsubsection{Automatic Evaluation}
-We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations.
+We automatically evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations.
 
 \paragraph{Turing distinguishability.}
 A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response was harder to distinguish from the real one. This metric mirrors our training signal but makes use of a more powerful judge than is used for training. See Appendix~\ref{app:turing-prompt} for the full judge prompt. 
@@ -183,7 +183,8 @@ A judge is presented with the user's behavioral history, the interaction context
 We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. For better calibration, we batch judge the specificity scores of multiple responses in one judge call. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
 
 \subsubsection{Human Evaluation}
-We recruit crowd workers via Prolific for a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate SFT-Init, GRPO-Sim, and GRPO-Turing on 50 target users per dataset, collecting ${\sim}300$ binary judgments per condition after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools humans above chance. Full annotation details are given in Appendix~\ref{app:human-eval}.
+
+In addition to automatic evaluation, we also recruit crowd workers via Prolific for a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate SFT-Init, GRPO-Sim, and GRPO-Turing on 50 target users per dataset, collecting ${\sim}300$ binary judgments per condition (6 judgements each target user) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools human annotators above chance. Full annotation details are given in Appendix~\ref{app:human-eval}.
 
 
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
@@ -198,7 +199,7 @@ We recruit crowd workers via Prolific for a forced-choice Turing test: given a t
 
 \section{Results}
 
-\subsection{Autmoatic Evaluation}
+\subsection{LLM-as-Judge Evaluation}
 \paragraph{Response Humanlikeness}
 \begin{figure}[t]
 \centering
