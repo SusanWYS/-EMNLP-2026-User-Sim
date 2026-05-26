@@ -152,20 +152,6 @@ The ConvoKit subreddit corpus~\citep{chang2020convokit} contains  discussions on
 \paragraph{(Chat) Multi-turn chat: PRISM.}
 The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between humans and LLM assistants, spanning 1,500 participants from 75 countries. We select users with at least 6 conversations (1,288 users) and hold out 128 users (880 examples) for evaluation. Each user turn in a target conversation yields one training example.
 
-\subsection{Evaluation}
-\subsubsection{Automatic Evaluation}
-We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations.
-
-\paragraph{Turing distinguishability.}
-A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response was harder to distinguish from the real one. This metric mirrors our training signal but makes use of a more powerful judge than is used for training. See Appendix~\ref{app:turing-prompt} for the full judge prompt. 
-
-\paragraph{Response similarity to ground truth.} We also measure similarity between the generated and ground truth responses, following \citet{wu2026humanlm}.  An LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
-
-\paragraph{Context and user specificity.}
-We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. For better calibration, we batch judge the specificity scores of multiple responses in one judge call. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
-
-\subsubsection{Human Evaluation}
-We recruit crowd workers via Prolific for a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate SFT-Init, GRPO-Sim, and GRPO-Turing on 50 target users per dataset, collecting ${\sim}300$ binary judgments per condition after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools humans above chance. Full annotation details are given in Appendix~\ref{app:human-eval}.
 
 \subsection{Training}
 \paragraph{SFT warm start.}
@@ -181,6 +167,22 @@ We apply two additional reward-shaping mechanisms: \emph{length penalties} that 
 % \paragraph{Training signal comparison.}
 We use Qwen3-8B with reasoning mode disabled as our base model.
 We compare our method with supervised fine-tuning (SFT) and other GRPO-based methods using different rewards. Specifically, we consider GRPO with response similarity reward~\citep{wu2026humanlm}, and GRPO with log-probability and latent thinking rewards~\citep{gandhi2026dialogue}. All GRPO-based methods are initialized from the SFT model. We also report the performance of the base Qwen3-8B model and OpenAI GPT-5 (minimal reasoning effort) as zero-shot references.
+
+\subsection{Evaluation}
+\subsubsection{Automatic Evaluation}
+We evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations.
+
+\paragraph{Turing distinguishability.}
+A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground-truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response was harder to distinguish from the real one. This metric mirrors our training signal but makes use of a more powerful judge than is used for training. See Appendix~\ref{app:turing-prompt} for the full judge prompt. 
+
+\paragraph{Response similarity to ground truth.} We also measure similarity between the generated and ground truth responses, following \citet{wu2026humanlm}.  An LLM judge scores how well a generated response captures the overall content of the ground-truth human response. The judge extracts key points from the ground truth, then scores semantic similarity and information completeness, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said. See Appendix~\ref{app:sim-prompt} for the full judge prompt.
+
+\paragraph{Context and user specificity.}
+We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. For better calibration, we batch judge the specificity scores of multiple responses in one judge call. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
+
+\subsubsection{Human Evaluation}
+We recruit crowd workers via Prolific for a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate SFT-Init, GRPO-Sim, and GRPO-Turing on 50 target users per dataset, collecting ${\sim}300$ binary judgments per condition after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools humans above chance. Full annotation details are given in Appendix~\ref{app:human-eval}.
+
 
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
 
