@@ -140,7 +140,7 @@ We study user simulation in an interactive setting, where we are given the curre
 
 The most straightforward way to represent a user is through their behavior history $h$ (e.g., prior utterances or posts that are not part of the current session). For each user, we reserve a fixed block of $k$ prior interactions at dataset construction time and reuse it as $h$ across all prediction targets for that user. We require $h$ to be disjoint from the current target context $x$ and ground-truth response $y$, ensuring that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining prediction targets.
 
-Additionally, we can also pair the raw behavior history with an induced persona $\rho$. We induce $\rho$ by prompting an auxiliary language model to summarize stable traits from the same user's history block $h$. See Appendix Figure~\ref{fig:persona_induction} for the prompt used for persona induction.
+Additionally, we can also pair the raw behavior history with an induced persona $\rho$. We induce $\rho$ by prompting an auxiliary language model to summarize stable traits from the same user's history block $h$. See  Figure~\ref{fig:persona_induction} of the appendix for the prompt used for persona induction.
 
 % Formally, given triples $(u, x, y)$, $x$ is the immediate interaction context (e.g., a dialogue history or a forum thread), and $u$ is user-specific information about the target individual beyond what appears in $x$. $y$ is one ground-truth response produced by that person.
 % We observe that $y$ is only a single sample from a broader distribution $p^\star(\cdot \mid x, u)$ of responses the user could authentically produce: the same person in the same context could say many different things, all genuinely their own. Our goal is therefore not to reproduce the specific $y$ in the training data, but to learn a simulator $p_\theta(\hat{y} \mid x, u)$, parameterized by $\theta$, that approximates $p^\star$ such that generated $\hat{y}$ are truly representative of the user utterance's goal, style, and perspective.
@@ -374,7 +374,7 @@ $u = \rho$       & $.52 \pm .010$ & $-.0020$ \\
 
 \section{Discussion}
 \label{sec:discussion}
-A recurring finding across our experiments is that content matching and human-likeness come apart. Training with the similarity reward improves how well a response covers the ground-truth content, but does not make the response harder to distinguish from the real user, and GPT-5 attains high similarity on Reddit while remaining easy to identify as assistant-generated. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form---length, hedging, register, formatting---rather than in content, and that a discriminative signal is better suited than a matching signal to removing these tells. It also helps explain why imitation alone is insufficient: SFT-Init is reliably caught by human annotators on Reddit, despite being trained directly on user responses.
+A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground-truth content, it does not make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form---length, hedging, register, formatting---rather than in content, and that a discriminative signal is better suited than a matching signal to removing these tells
 
 User simulators that are faithful to specific people also raise misuse concerns, as noted in footnote~1. A model that produces responses indistinguishable from a target user, conditioned on that user's history, is well suited to impersonation, and could be used to fabricate messages attributed to real people or to manufacture the appearance of grassroots opinion. We train and evaluate only on public or consented research data, and our interest is in modeling users in aggregate rather than reproducing identifiable individuals. We also note that the discriminator we train against is itself a starting point for detection: the same signal that exposes machine-generated tells during training could be used to flag synthetic responses at deployment.
 \section{Related Work}
@@ -399,6 +399,55 @@ Persona-conditioned generation was introduced by \citet{zhang2018personalizing} 
 \bibliography{custom}
 
 \appendix
+
+\section{Dataset Details}
+\label{app:dataset-stats}
+
+Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground-truth response $y$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
+
+\paragraph{PRISM.}
+We retain PRISM participants with at least six conversations, yielding 1,288 qualified users. We randomly hold out 10\% of qualified users with a fixed seed, giving 128 held-out test users and 880 test examples. The remaining 1,160 users are split with the same seed into disjoint GRPO and SFT pools using a 60/40 user ratio: 696 users for GRPO and 464 users for SFT. Per user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation is one example: $x$ is all preceding turns and $y$ is the user's utterance at that turn. GRPO train and validation examples are split within each GRPO user using a deterministic tail-split policy: for a user with $n$ target rows, $\lfloor 0.1n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation. Before applying this tail split, target rows are sorted by conversation id and target turn index, so validation rows come from later target turns and training does not use a later target from the same conversation than validation.
+
+\paragraph{ConvoKit.}
+We reconstruct Reddit threads from comment identifiers and parent pointers. Deleted, removed, and non-user comments cannot serve as targets or enter $h$, but non-root unusable comments may be kept as structural anchors so that descendant replies stay connected to the ancestor chain. We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training. The remaining users are split deterministically into disjoint SFT and GRPO pools using a 40/60 ratio. GRPO train and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO train/validation. Per user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
+
+\begin{quote}
+\small
+\textbf{SFT/GRPO pool:} AmItheAsshole, AskMen, AskWomen, business, changemyview, Economics, Frugal, MaliciousCompliance, news, relationship\_advice, relationships, TrueReddit \\
+\textbf{Held-out test:} tifu, worldnews
+\end{quote}
+
+\paragraph{Persona induction.}
+We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal features, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user. Figure~\ref{fig:persona_induction} shows the induction prompt.
+
+\input{prompts/persona_induction}
+
+\paragraph{OOD evaluation sets.}
+Two small out-of-distribution sets are reserved for evaluation only: Chatbot Arena (50 examples, 23 users, drawn from 94 candidates) and Humanual Opinion (50 examples, 17 users, drawn from 135 candidates). Selection covers every available user first, then fills remaining slots by deterministic round-robin.
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+ & PRISM & ConvoKit & Chatbot Arena (OOD) & Humanual Op. (OOD) \\
+\midrule
+Users & 1,288 & 1,282 & 23 & 17 \\
+History & 2--4 conv. & 2--6 threads & 2--4 conv. & 2--6 conv. \\
+SFT train & 3,272 & 4,264 & --- & --- \\
+GRPO train & 4,174 & 4,737 & --- & --- \\
+GRPO val & 705 & 1,661 & --- & --- \\
+Test & 880 & 267 & 50 & 50 \\
+\bottomrule
+\end{tabular}
+\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt{r/tifu} and \texttt{r/worldnews}. OOD sets are evaluation-only.}
+\label{tab:preprocessing_stats}
+\end{table*}
+
+\paragraph{Prompt format.}
+Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $\hat{y}$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
+
+\input{prompts/format}
 
 \section{Prompts}
 
@@ -493,174 +542,8 @@ Score clip max $s_{\mathrm{clip}}$ & \multicolumn{2}{c}{5.0} \\
 \label{tab:reward-shaping}
 \end{table}
 
-\subsection{Human Evaluation Details}
-\label{app:human-eval}
 
-We conduct a forced-choice Turing test on Prolific. Each participant views a target user's posting history and then judges 10 pairs of responses: one ground-truth response and one model-generated response, presented in randomized order. The participant selects which response they believe was written by the real user.
 
-\paragraph{Design.}
-We evaluate three training conditions---SFT-Init, GRPO-Sim, and GRPO-Turing---on two datasets (Reddit / ConvoKit and Chat / PRISM). For each dataset we select 50 target users, split into 5 groups of 10. Each participant is assigned to one (dataset, condition, group) cell and evaluates the 10 targets in that group. We recruit 6 annotators per cell, yielding 30 participants and 300 binary judgments per condition.
-
-\paragraph{Comprehension filtering.}
-Each trial includes comprehension checks that test whether the participant read the target user's history (e.g., identifying the user's most-discussed topic or their most recent interlocutor). We compute each participant's comprehension accuracy across all check questions and exclude participants scoring below 75\%. One participant was excluded under this criterion (PRISM/Turing, group~3; accuracy ${=} 0.65$).
-
-\paragraph{Balancing.}
-After excluding incomplete submissions (participants with fewer than 10 judgments) and those failing the comprehension filter, we retain the first 6 completions per (dataset, condition, group) cell, ordered by submission time. This ensures exactly 30 participants and 300 votes per condition. Three cells required trimming of one excess participant each (PRISM/Sim group~2, PRISM/Turing groups~1 and~4).
-
-\paragraph{Metric.}
-We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
-
-\subsection{Dataset Preprocessing and Statistics}
-\label{app:dataset-stats}
-
-Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground-truth response $y$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
-
-\paragraph{PRISM.}
-We retain PRISM participants with at least six conversations, yielding 1,288 qualified users. We randomly hold out 10\% of qualified users with a fixed seed, giving 128 held-out test users and 880 test examples. The remaining 1,160 users are split with the same seed into disjoint GRPO and SFT pools using a 60/40 user ratio: 696 users for GRPO and 464 users for SFT. Per user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation is one example: $x$ is all preceding turns and $y$ is the user's utterance at that turn. GRPO train and validation examples are split within each GRPO user using a deterministic tail-split policy: for a user with $n$ target rows, $\lfloor 0.1n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation. Before applying this tail split, target rows are sorted by conversation id and target turn index, so validation rows come from later target turns and training does not use a later target from the same conversation than validation.
-
-\paragraph{ConvoKit.}
-We reconstruct Reddit threads from comment identifiers and parent pointers. Deleted, removed, and non-user comments cannot serve as targets or enter $h$, but non-root unusable comments may be kept as structural anchors so that descendant replies stay connected to the ancestor chain. We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training. The remaining users are split deterministically into disjoint SFT and GRPO pools using a 40/60 ratio. GRPO train and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO train/validation. Per user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
-
-\begin{quote}
-\small
-\textbf{SFT/GRPO pool:} AmItheAsshole, AskMen, AskWomen, business, changemyview, Economics, Frugal, MaliciousCompliance, news, relationship\_advice, relationships, TrueReddit \\
-\textbf{Held-out test:} tifu, worldnews
-\end{quote}
-
-\paragraph{Persona induction.}
-We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal features, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user. Figure~\ref{fig:persona_induction} shows the induction prompt.
-
-\input{prompts/persona_induction}
-
-\paragraph{OOD evaluation sets.}
-Two small out-of-distribution sets are reserved for evaluation only: Chatbot Arena (50 examples, 23 users, drawn from 94 candidates) and Humanual Opinion (50 examples, 17 users, drawn from 135 candidates). Selection covers every available user first, then fills remaining slots by deterministic round-robin.
-
-\begin{table*}[t]
-\centering
-\small
-\begin{tabular}{lrrrr}
-\toprule
- & PRISM & ConvoKit & Chatbot Arena (OOD) & Humanual Op. (OOD) \\
-\midrule
-Users & 1,288 & 1,282 & 23 & 17 \\
-History & 2--4 conv. & 2--6 threads & 2--4 conv. & 2--6 conv. \\
-SFT train & 3,272 & 4,264 & --- & --- \\
-GRPO train & 4,174 & 4,737 & --- & --- \\
-GRPO val & 705 & 1,661 & --- & --- \\
-Test & 880 & 267 & 50 & 50 \\
-\bottomrule
-\end{tabular}
-\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt{r/tifu} and \texttt{r/worldnews}. OOD sets are evaluation-only.}
-\label{tab:preprocessing_stats}
-\end{table*}
-
-\paragraph{Prompt format.}
-Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $\hat{y}$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
-
-\begin{figure*}[t]
-\centering
-\small
-\hrule\vspace{4pt}
-\begin{algorithmic}[1]
-\Statex \textbf{System message (shared across all datasets)}
-\State \texttt{You are simulating a human labeled by [HUMAN]. Your job is to predict what [HUMAN] says as if you are that person.}
-\State
-\State \texttt{[PERSONA]}
-\State \texttt{<persona>}
-\State \quad \texttt{<values>}...\texttt{</values>}
-\State \quad \texttt{<verbal\_features>}...\texttt{</verbal\_features>}
-\State \quad \texttt{<expression\_style>}...\texttt{</expression\_style>}
-\State \quad \texttt{<length\_prior>}...\texttt{</length\_prior>}
-\State \quad \texttt{<background>}...\texttt{</background>}
-\State \texttt{</persona>}
-\State
-\State \texttt{[TASK]}
-\State \texttt{Your task is to predict [HUMAN]'s next message, matching [HUMAN]'s writing intentions, style, vocabulary, and tone.}
-\State \texttt{Use all provided information about [HUMAN] and the current context to predict the next message.}
-\State \texttt{Target your message to [OTHER] or [OTHER - OP], not to people who are described in the context but are not participants}
-\State \texttt{in the thread or conversation. Do not answer as an assistant, analyst, or narrator.}
-\State
-\State \texttt{Before outputting the final answer, briefly reason about what [HUMAN] would say and think step by step.}
-\State \texttt{The generated response should naturally follow from your reasoning.}
-\State \texttt{Format your output exactly like this:}
-\State \texttt{<reasoning>...</reasoning>}
-\State \texttt{[HUMAN]: your response}
-\State \texttt{Write any reasoning before `[HUMAN]:` enclosed by the reasoning tags, and write only the final response after `[HUMAN]:`.}
-\State \texttt{Do not include reasoning after `[HUMAN]:`.}
-\end{algorithmic}
-\vspace{2pt}\hrule
-\caption{System message shared across all prompt configurations. The \texttt{[PERSONA]} block is included only in persona-conditioned settings; the \texttt{[TASK]} block specifies the prediction objective and output format.}
-\label{fig:system_prompt}
-\end{figure*}
-
-\begin{figure*}[t]
-\centering
-\small
-\hrule\vspace{4pt}
-\begin{algorithmic}[1]
-\Statex \textbf{User message (PRISM)}
-\State \texttt{[USER HISTORY]}
-\State \texttt{Below are previous conversations involving [HUMAN]. Use them to infer [HUMAN]'s style, values, preferences, and likely responses.}
-\State
-\State \texttt{<Conversation 1>}
-\State \texttt{[MESSAGES]}
-\State \texttt{[HUMAN]:} \textit{user turn}
-\State \texttt{[OTHER]:} \textit{assistant turn}
-\State \texttt{[HUMAN]:} \textit{user turn}
-\State \texttt{[OTHER]:} \textit{assistant turn}
-\State \texttt{</Conversation 1>}
-\State
-\State \texttt{[CURRENT CONTEXT]}
-\State \texttt{[MESSAGES SO FAR]}
-\State \texttt{[HUMAN]:} \textit{turn 0}
-\State \texttt{[OTHER]:} \textit{turn 0}
-\State \texttt{[HUMAN]:} \textit{turn 1}
-\State \texttt{[OTHER]:} \textit{turn 1}
-\Statex \hrulefill
-\Statex \textbf{Model output}
-\State \texttt{<reasoning>}...\texttt{</reasoning>}
-\State \texttt{[HUMAN]:} $\hat{y}$
-\end{algorithmic}
-\vspace{2pt}\hrule
-\caption{User message layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt{<Conversation>} tags; the current context lists turns up to the prediction point.}
-\label{fig:prism_format}
-\end{figure*}
-
-\begin{figure*}[t]
-\centering
-\small
-\hrule\vspace{4pt}
-\begin{algorithmic}[1]
-\Statex \textbf{User message (ConvoKit)}
-\State \texttt{[USER HISTORY]}
-\State \texttt{Below are [HUMAN]'s previous messages.}
-\State
-\State \texttt{<Post 1>}
-\State \texttt{[OTHER - OP]}
-\State \textit{original post text}
-\State
-\State \texttt{[OTHER]:} \textit{reply}
-\State \texttt{[HUMAN]:} \textit{reply}
-\State \texttt{[OTHER]:} \textit{reply}
-\State \texttt{</Post 1>}
-\State
-\State \texttt{[CURRENT CONTEXT]}
-\State \texttt{[OTHER - OP]}
-\State \textit{original post text}
-\State
-\State \texttt{[OTHER]:} \textit{ancestor reply}
-\State \texttt{[HUMAN]:} \textit{earlier comment}
-\State \texttt{[OTHER]:} \textit{ancestor reply}
-\State \texttt{[HUMAN]:}
-\Statex \hrulefill
-\Statex \textbf{Model output}
-\State \texttt{<reasoning>}...\texttt{</reasoning>}
-\State \texttt{[HUMAN]:} $\hat{y}$
-\end{algorithmic}
-\vspace{2pt}\hrule
-\caption{Prompt layout for ConvoKit (Reddit forum). History threads are wrapped in numbered \texttt{<Post>} tags; the original poster is marked \texttt{[OTHER - OP]}. The current context shows the OP and ancestor reply chain up to the prediction point.}
-\label{fig:convokit_format}
-\end{figure*}
 
 \subsection{Qualitative Examples}
 
