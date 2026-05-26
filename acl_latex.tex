@@ -344,11 +344,11 @@ GRPO-Turing & \textbf{.52} \subtle{$\pm .06$} & \textbf{.55} \subtle{$\pm .07$} 
 
 \subsection{User Representations}
 
-User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM.   We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
+User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM. We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
 
-Table~\ref{tab:ablation_combined} shows the results. On both domains, Turing and specificity scores are largely robust to the choice of user representation: all three conditions fall within each other's confidence intervals, and no single representation consistently dominates. On Chat, the full representation $(h, \rho)$ achieves the highest Turing score ($4.31$), but the margin over history alone ($4.26$) and persona alone ($4.23$) is small. On Reddit, the ordering is reversed: persona alone scores highest on Turing ($3.84$) and history alone is close behind ($3.78$), both slightly above the combined representation ($3.68$), though again within CIs.
+Table~\ref{tab:ablation_combined} shows the results. On both domains, Turing and specificity scores are largely robust to the choice of user representation: all three conditions fall within each other's confidence intervals, and no single representation consistently dominates.
 
-The clearest effect of representation choice appears in the similarity metric. On both domains, history alone matches or exceeds the combined representation ($.047$ vs. $.053$ on Chat, $.033$ vs. $.030$ on Reddit), while persona alone consistently scores lowest ($.041$ on Chat, $.027$ on Reddit). This suggests that raw behavioral history provides the most direct signal for predicting the content of what a user will say, whereas the induced persona, which summarizes stable traits rather than specific utterances, contributes less to content matching. The fact that persona alone still achieves comparable Turing and specificity scores indicates that the persona captures stylistic and behavioral patterns sufficient for humanlikeness, even when it does not help reproduce the exact content of the ground truth.
+The fact that persona alone still achieves comparable Turing and specificity scores indicates that the persona captures stylistic and behavioral patterns sufficient for humanlikeness, even when it does not help reproduce the exact content of the ground truth.
 
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
@@ -576,9 +576,7 @@ p &= \min\{\lambda_{\mathrm{short}} v_{\mathrm{short}}
         + \lambda_{\mathrm{long}} v_{\mathrm{long}},\; p_{\mathrm{cap}}\},
 \end{align}
 
-where $v_{\mathrm{short}} = \max((r_{\min} - r) / r_{\min},\; 0)$ and $v_{\mathrm{long}} = \max((r - r_{\max}) / r_{\max},\; 0)$
-
-Table~\ref{tab:reward-shaping} lists the parameter values for each dataset.
+where $v_{\mathrm{short}} = \max((r_{\min} - r) / r_{\min},\; 0)$ and $v_{\mathrm{long}} = \max((r - r_{\max}) / r_{\max},\; 0)$. Table~\ref{tab:reward-shaping} lists the parameter values for each dataset, which are esiamted using genrated responses from the SFT model. 
 
 \begin{table}[h]
 \centering
@@ -593,7 +591,7 @@ $\lambda_{\mathrm{long}}$ & 0.15 & 0.20 \\
 Penalty cap $p_{\mathrm{cap}}$ & 0.25 & 0.40 \\
 \bottomrule
 \end{tabular}
-\caption{Turing reward length penalty parameters by dataset.}
+\caption{Turing reward length penalty parameters.}
 \label{tab:reward-shaping}
 \end{table}
 
