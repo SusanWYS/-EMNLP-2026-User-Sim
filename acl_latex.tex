@@ -264,7 +264,7 @@ In addition to LLM-as-judge evaluation, we also recruit crowd workers via Prolif
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
-\caption{Turing judge scores across Reddit and Chat domains. The dashed line and shaded band show the Qwen3-8B base model mean and 95\% CI. Hollow markers denote non-RL baselines (GPT-5, SFT-Init); filled markers denote GRPO-trained models.}
+\caption{Mean Turing judge scores (1--7 Likert scale) for each model on Reddit and Chat, with 95\% CIs. The dashed line and shaded band show the Qwen3-8B base model mean and 95\% CI. Hollow markers denote non-RL baselines (GPT-5, SFT-Init); filled markers denote GRPO-trained models. \textbf{GRPO-Turing substantially outperforms all other models in both domains}, with a particularly large gap on Chat.}
 \label{fig:turing_dot}
 \end{figure}
 
@@ -276,7 +276,7 @@ Notably, user simulation remains a difficult task overall. Even GPT-5, a much la
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
-\caption{Response similarity scores across Reddit and Chat domains. The dashed line and shaded band show the Qwen3-8B baseline mean and 95\% CI.}
+\caption{Mean response similarity scores ($[0,1]$) measuring content overlap with the ground truth for each model on Reddit and Chat, with 95\% CIs. The dashed line and shaded band show the Qwen3-8B base model mean and 95\% CI. \textbf{GRPO-Turing matches GRPO-Sim on similarity}, showing that training for indistinguishability does not sacrifice content alignment.}
 \label{fig:sim_dot}
 \end{figure}
 Figure~\ref{fig:sim_dot} reports similarity to the ground-truth response. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground-truth key points, even though this verbosity hurts its Turing score. Among the trained models, GRPO-Sim and GRPO-Turing perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: GRPO-Turing produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said.
@@ -285,15 +285,15 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground-truth response. GPT-5 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
-\caption{Response specificity scores across Reddit (top) and Chat (bottom). The dashed line and shaded band show the Qwen3-8B baseline mean and 95\% CI.}
+\caption{Mean response specificity scores ($[0,1]$) measuring context grounding and user compatibility for each model on Reddit and Chat, with 95\% CIs. The dashed line and shaded band show the Qwen3-8B base model mean and 95\% CI. \textbf{GRPO-Turing and GRPO-Sim produce the most contextually specific responses} in both domains, substantially outperforming the base model and SFT-Init.}
 \label{fig:specificity}
 \end{figure}
 Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim produce the most contextually specific responses in both domains, substantially outperforming the base model and SFT-Init. On Reddit, the ground truth (GT) scores highest, confirming that real users produce highly specific responses. On Chat, however, GT specificity is comparable to the base model, reflecting that real users in open-ended dialogue often pivot to new topics rather than tightly engaging with prior context (see Figure~\ref{fig:qualitative_examples}).
 
 \subsection{Human Evaluation}
-Table~\ref{tab:human_eval_winrate} reports mean win rates over ground-truth. The Turing reward is the only training signal that consistently improves win rate above chance in both domains, confirming that optimizing for indistinguishability transfers to real human judges. The ranking across models closely mirrors the automatic Turing scores in Figure~\ref{fig:turing_dot}, validating the LLM judge as a reasonable proxy for human distinguishability. Notably, SFT-Init is reliably detected on Reddit (WR $= .42$), suggesting that imitation learning alone produces surface-level patterns that humans can identify.
+Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth. The Turing reward is the only training signal that consistently improves win rate above chance in both domains, confirming that optimizing for indistinguishability transfers to real human judges. The ranking across models closely mirrors the automatic Turing scores in Figure~\ref{fig:turing_dot}, validating the LLM judge as a reasonable proxy for human distinguishability. Notably, SFT-Init is reliably detected on Reddit (WR $= .42$), suggesting that imitation learning alone produces surface patterns that humans can identify.
 
-We test whether each condition's win rate differs from chance using one-sided tests. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as machine-generated. Because the same 50 target users are shared across all conditions within each dataset, we can also run paired comparisons. Paired $t$-tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size of ${\sim}30$ annotators per condition.
+We test whether each condition's win rate differs from chance using one-sided tests. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as machine generated. Because the same 50 target users are shared across all conditions within each dataset, we can also run paired comparisons. Paired $t$-tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size of ${\sim}30$ annotators per condition.
 
 \subsection{Correlating Human and LM Judge Scores}
 To further validate the LLM judge, we binarize the Sonnet~4.6 Turing score per evaluation thread (score ${<}\,4 \to$ GT, ${\geq}\,4 \to$ model) and take the majority vote per target user, mirroring the human forced-choice setup. Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across conditions. Both evaluators agree on the model ranking---GRPO-Turing is hardest to detect---though Sonnet~4.6 is more sensitive than humans on Reddit and more easily fooled on Chat/GRPO-Turing.
@@ -317,7 +317,7 @@ GRPO-Turing & $.52 \pm .06$ & $.55 \pm .07$ \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
-\caption{Binary ground-truth accuracy: fraction of 50 target users for which the evaluator's majority vote correctly identifies the real user's response. Solid bars show human annotators; hatched bars show the Sonnet~4.6 Turing judge (score ${<}\,4$ mapped to GT). Both evaluators agree on the ranking: GRPO-Turing is hardest to detect.}
+\caption{Binary ground truth accuracy per model: fraction of 50 target users for which the evaluator's majority vote correctly identifies the real user's response. Solid bars show human annotators; hatched bars show the Sonnet~4.6 Turing judge (score ${<}\,4$ mapped to GT). \textbf{Both human and LLM evaluators agree on the ranking: GRPO-Turing is hardest to detect.}}
 \label{fig:binary_gt_accuracy}
 \end{figure}
 
@@ -435,25 +435,22 @@ We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each u
 
 \input{prompts/persona_induction}
 
-\paragraph{OOD evaluation sets.}
-Two small out-of-distribution sets are reserved for evaluation only: Chatbot Arena (50 examples, 23 users, drawn from 94 candidates) and Humanual Opinion (50 examples, 17 users, drawn from 135 candidates). Selection covers every available user first, then fills remaining slots by deterministic round-robin.
-
 \begin{table*}[t]
 \centering
 \small
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrr}
 \toprule
- & PRISM & ConvoKit & Chatbot Arena (OOD) & Humanual Op. (OOD) \\
+ & PRISM & ConvoKit \\
 \midrule
-Users & 1,288 & 1,282 & 23 & 17 \\
-History & 2--4 conv. & 2--6 threads & 2--4 conv. & 2--6 conv. \\
-SFT train & 3,272 & 4,264 & --- & --- \\
-GRPO train & 4,174 & 4,737 & --- & --- \\
-GRPO val & 705 & 1,661 & --- & --- \\
-Test & 880 & 267 & 50 & 50 \\
+Users & 1,288 & 1,282 \\
+History & 2--4 conv. & 2--6 threads \\
+SFT train & 3,272 & 4,264 \\
+GRPO train & 4,174 & 4,737 \\
+GRPO val & 705 & 1,661 \\
+Test & 880 & 267 \\
 \bottomrule
 \end{tabular}
-\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt{r/tifu} and \texttt{r/worldnews}. OOD sets are evaluation-only.}
+\caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt{r/tifu} and \texttt{r/worldnews}.}
 \label{tab:preprocessing_stats}
 \end{table*}
 
