@@ -134,7 +134,9 @@ The final RL objective is then given by
 %   s^* = \begin{cases} 8 - s & \text{if the candidate is Response A} \\ s & \text{if the candidate is Response B} \end{cases}
 % \end{equation}
 % and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 1]$, where 0 means the candidate was identified as synthetic with maximum confidence, 0.5 means the judge could not distinguish the two, and 1 means the candidate was mistaken for the real user. 
-and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, sampling $G$ candidate responses per example and computing advantages via within-group normalization. We also perform supervised fine-tuning (SFT) first on a disjoint subset of the training data to warm-start our model, as is commonly done in post-training pipelines.
+and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, after supervised finetuning (SFT) warm start on a disjoint subset of the trianing data.
+
+% sampling $G$ candidate responses per example and computing advantages via within-group normalization. We also perform supervised fine-tuning (SFT) first on a disjoint subset of the training data to warm-start our model, as is commonly done in post-training pipelines.
 
 
 \section{Experimental Setup}
@@ -157,10 +159,10 @@ The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversati
 \paragraph{SFT warm start.}
 Before RL, we warm-start the policy with SFT on ground-truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use the untuned instruct model to generate a reasoning trace given the context and ground-truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
-\paragraph{GRPO training.}
-We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}, which samples 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. GRPO training uses a dataset disjoint from the SFT training set. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
+\paragraph{RL training.}
+We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}. We sample 4 candidate responses per training example and computes advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($r{=}64$, $\alpha{=}32$) for 3 epochs. GRPO training uses a dataset disjoint from the SFT training set. Full training hyperparameters are given in Appendix~\ref{app:hyperparams}.
 
-We apply two additional reward-shaping mechanisms: \emph{length penalties} that penalize responses falling outside a tolerance band around the ground-truth length, and \emph{reward clipping} that caps the raw judge score to mitigate outlier influence. The penalty parameters and clipping thresholds are given in Appendix~\ref{app:reward-shaping}. We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default. \llq{Should we change this to one additional reward-shaping term (length penalty)? The reward clipping one seems to be included by default.}
+We apply an additional \emph{length penalty reward} that penalize responses falling outside a tolerance band around the ground-truth length We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the reward model by default. \llq{Should we change this to one additional reward-shaping term (length penalty)? The reward clipping one seems to be included by default.}
 
 \subsection{Baselines}
 
