@@ -165,6 +165,7 @@ A judge is presented with the user's behavioral history, the interaction context
 We evaluate whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply. The judge scores two dimensions: \emph{context specificity} (how tightly the response engages with the exact local interaction) and \emph{user evidence compatibility} (how compatible the response is with the target user's observed behavior without unnaturally exposing or inventing evidence), each weighted $0.5$. This yields a single score in $[0, 1]$. For better calibration, we batch judge the specificity scores of multiple responses in one judge call. See Appendix~\ref{app:specificity-prompt} for the full judge prompt.
 
 \subsubsection{Human Evaluation}
+We recruit crowd workers via Prolific for a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate SFT-Init, GRPO-Sim, and GRPO-Turing on 50 target users per dataset, collecting ${\sim}300$ binary judgments per condition after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools humans above chance. Full annotation details are given in Appendix~\ref{app:human-eval}.
 
 \subsection{Training}
 \paragraph{SFT warm start.}
@@ -213,6 +214,7 @@ Using similarity as signal did not significantly improve the turing score from t
 \caption{Sim reward judge scores across Reddit and Chat domains. The dashed line and shaded band show the Base model mean and 95\% CI.}
 \label{fig:sim_dot}
 \end{figure} 
+why is gpt-5 significantly more similar to gt? what is response similarity rewarding? 
 
 \paragraph{Response Specificity}
 \begin{figure}[t]
@@ -221,18 +223,16 @@ Using similarity as signal did not significantly improve the turing score from t
 \caption{Response specificity scores across Reddit (top) and Chat (bottom). The dashed line and shaded band show the untrained baseline mean and 95\% CI.}
 \label{fig:specificity}
 \end{figure}
-why do we need to measure response specificity
+why do we need to measure response specificity?
+what is it rewarding based on qualitative exs?
 response specificity is caveated since real humans often pivot in real-time conversations. see gt in chat, which 
 
 \subsection{Human Evaluation}
-
-\paragraph{Setup.}
-We recruit crowd workers via Prolific for a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate SFT-Init, GRPO-Sim, and GRPO-Turing on 50 target users per dataset, collecting ${\sim}300$ binary judgments per condition after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools humans above chance. Full annotation details are given in Appendix~\ref{app:human-eval}.
-
-\paragraph{Results.}
 Table~\ref{tab:human_eval_winrate} reports mean win rates across conditions. Each condition covers 50 target users, with 5--7 independent annotators per target after filtering, yielding roughly 300 binary judgments per condition. GRPO-Turing achieves the highest win rate in both domains, reaching $.55$ on Chat and $.52$ on Reddit. GRPO-Sim sits near chance at $.50$ in both domains, while SFT-Init drops to $.43$ on Reddit but remains at $.50$ on Chat. This ranking mirrors the Claude Sonnet 4.6 Turing judge scores in Figure~\ref{fig:turing_dot}, where GRPO-Turing also leads by a wide margin, suggesting that the LLM judge is a reasonable proxy for human distinguishability.
 
-We test whether each condition's win rate differs from chance using one-sided tests. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as machine-generated. Because the same 50 target users are shared across all conditions within each dataset, we can also run paired comparisons. Paired $t$-tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance.
+We test whether each condition's win rate differs from chance using one-sided tests. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as machine-generated. 
+
+Because the same 50 target users are shared across all conditions within each dataset, we can also run paired comparisons. Paired $t$-tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance.
 
 \begin{table}[t]
 \centering
