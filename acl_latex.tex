@@ -103,7 +103,7 @@
 \maketitle
 
 \begin{abstract}
-Learning to simulating human users could advance the training of human-centered agents, the evaluation of interactive systems, and research in the social sciences.  Existing approaches generally do so through training an LLM to match a single ground-truth response, by maximizing the log-probability or using a similarity-based reward. We instead propose a Turing test-based approach for learning user simulator models, where a model is be trained via RL to produce responses indistinguishable from what the user could have said, following the criterion of the Turing test. Our discriminative Turing reward uses an LM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two domains that differ in structure---multi-turn chat and Reddit forum discussion---we find that the Turing reward consistently outperforms baseline methods on automatic and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an  effective route to learning LM-based user simulators.
+Learning to simulate human users in interactive settings could advance the training of human-centered agents, the evaluation of interactive systems, and research in the social sciences.  Existing approaches generally do so through training an LLM to match a single ground-truth response, by maximizing the log-probability or using a similarity-based reward. We instead propose a Turing test-based approach for learning user simulator models, where a model is be trained via RL to produce responses indistinguishable from what the user could have said, following the criterion of the Turing test. Our discriminative Turing reward uses an LM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two substantially different domains---multi-turn chat and Reddit forum discussion---we find that the Turing reward consistently outperforms baseline methods on automatic and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an  effective route to learning LLM-based user simulators.
 \end{abstract}
 
 \section{Introduction}
@@ -377,7 +377,8 @@ $u = \rho$       & $.52 \pm .010$ & $-.0020$ \\
 A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground-truth content, it does not make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form, and that a discriminative signal is better suited than a matching signal for user simulation.
 
 
-The same capability that makes a simulator useful, however, also makes it dangerous. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation: it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals. We believe the research value of  user simulation is substantial, but it should be pursued alongside safeguards such as restricting access to per-user models, watermarking generated content, and developing detectors of the very kind our Turing judge approximates.
+The same capability that makes a simulator useful, however, also makes it dangerous. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation; it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals. While we believe the research value of  user simulation is substantial and outweigh the risks,  but it should be pursued alongside safeguards such as  watermarking generated content and developing AI generation detectors.
+
 
 \section{Related Work}
 
@@ -395,7 +396,7 @@ Persona-conditioned generation was introduced by \citet{zhang2018personalizing} 
 
 
 \section*{Limitations}
-
+1.domians
 \section*{Acknowledgments}
 
 \bibliography{custom}
