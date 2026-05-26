@@ -287,7 +287,7 @@ In addition to LLM-as-judge evaluation, we also recruit human participants from 
 \label{fig:turing_dot}
 \end{figure}
 
-Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. GRPO-Turing substantially outperforms all other models, including GRPO-Sim and SFT-Init, in both Reddit and Chat. The gap is especially large on Chat, where GRPO-Turing exceeds the next-best model by a wide margin. 
+Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. GRPO-Turing substantially outperforms all other models, including GRPO-Sim and SFT-Init, in both Reddit and Chat. The gap is especially large on Chat, where GRPO-Turing exceeds the next-best model by a wide margin.
 
 Notably, user simulation remains a difficult task overall. Even GPT-5, a much larger model, scores only slightly above SFT-Init. Qualitative inspection reveals that GPT-5 tends to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples} in the appendix). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground-truth response does not translate to human-like indistinguishability.
 
@@ -307,7 +307,7 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground-truth response. GPT-5 
 \caption{Response specificity ($[0,1]$; higher = more grounded in the interaction context and compatible with the target user) from Sonnet~4.6, with 95\% CIs. GT is the ground-truth human response. \textbf{GRPO-Turing and GRPO-Sim produce the most contextually specific responses}, substantially outperforming SFT-Init and the base model in both domains.}
 \label{fig:specificity}
 \end{figure}
-Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim produce the most contextually specific responses in both domains, substantially outperforming the base model and SFT-Init. 
+Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim produce the most contextually specific responses in both domains, substantially outperforming the base model and SFT-Init.
 
 On Reddit, the ground truth (GT) scores highest, confirming that real users produce highly specific responses. On Chat, however, GT specificity is comparable to the base model, reflecting that real users in open-ended dialogue often pivot to new topics rather than tightly engaging with prior context (see Figure~\ref{fig:qualitative_examples}).
 
@@ -346,8 +346,9 @@ GRPO-Turing & \textbf{.52} \subtle{$\pm .06$} & \textbf{.55} \subtle{$\pm .07$} 
 
 User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM.   We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
 
-Table~\ref{tab:ablation_combined} shows the results. For the Turing/Specificity scores, we find that there is little difference in using the full user representation $(h, \rho)$ versus just using $\rho$ or $h$ alone. \susan{add more!!!!!}
+Table~\ref{tab:ablation_combined} shows the results. On both domains, Turing and specificity scores are largely robust to the choice of user representation: all three conditions fall within each other's confidence intervals, and no single representation consistently dominates. On Chat, the full representation $(h, \rho)$ achieves the highest Turing score ($4.31$), but the margin over history alone ($4.26$) and persona alone ($4.23$) is small. On Reddit, the ordering is reversed: persona alone scores highest on Turing ($3.84$) and history alone is close behind ($3.78$), both slightly above the combined representation ($3.68$), though again within CIs.
 
+The clearest effect of representation choice appears in the similarity metric. On both domains, history alone matches or exceeds the combined representation ($.047$ vs. $.053$ on Chat, $.033$ vs. $.030$ on Reddit), while persona alone consistently scores lowest ($.041$ on Chat, $.027$ on Reddit). This suggests that raw behavioral history provides the most direct signal for predicting the content of what a user will say, whereas the induced persona, which summarizes stable traits rather than specific utterances, contributes less to content matching. The fact that persona alone still achieves comparable Turing and specificity scores indicates that the persona captures stylistic and behavioral patterns sufficient for humanlikeness, even when it does not help reproduce the exact content of the ground truth.
 
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
@@ -591,7 +592,6 @@ Deadband $[r_{\min}, r_{\max}]$ & $[0.8, 1.1]$ & $[0.6, 1.4]$ \\
 $\lambda_{\mathrm{short}}$ & 0.45 & 0.40 \\
 $\lambda_{\mathrm{long}}$ & 0.15 & 0.20 \\
 Penalty cap $p_{\mathrm{cap}}$ & 0.25 & 0.40 \\
-Score clip max $s_{\mathrm{clip}}$ & \multicolumn{2}{c}{5.0} \\
 \bottomrule
 \end{tabular}
 \caption{Turing reward shaping parameters by dataset.}
@@ -652,14 +652,17 @@ At inference time, the model receives a system message containing the task instr
 
 \subsubsection{Turing Distinguishability Judge}
 \label{app:turing-prompt}
+The Turing judge scores how indistinguishable a generated response is from the real user's. The full prompt is shown in Figure~\ref{fig:turing_prompt}.
 \input{prompts/turing_prompt}
+
 \subsubsection{Response Similarity Judge}
 \label{app:sim-prompt}
+The similarity judge measures content overlap with the ground truth response. The full prompt is shown in Figure~\ref{fig:sim_prompt}.
 \input{prompts/sim_prompt}
 
 \subsubsection{Response Specificity Judge}
 \label{app:specificity-prompt}
-
+The specificity judge evaluates whether a response is grounded in the interaction context and compatible with the target user. The full prompt is shown in Figure~\ref{fig:specificity_prompt}.
 \input{prompts/specificity_prompt}
 
 
