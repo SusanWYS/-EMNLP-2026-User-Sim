@@ -540,7 +540,33 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \subsection{Training Hyperparameters}
 \label{app:hyperparams}
 
-Table~\ref{tab:hyperparams} lists the main training hyperparameters. All three GRPO variants share the same base configuration; differences are noted where applicable.
+Tables~\ref{tab:sft_hyperparams} and~\ref{tab:hyperparams} list the hyperparameters for SFT and GRPO training respectively.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Base model & Qwen3-8B \\
+LoRA rank / alpha & 64 / 128 \\
+LoRA dropout & 0.05 \\
+Learning rate & $2 \times 10^{-4}$ \\
+LR scheduler & cosine \\
+Max sequence length & 8192 tokens \\
+Per-device batch size & 1 \\
+Gradient accumulation steps & 16 \\
+Number of GPUs & 8 \\
+Effective batch size & 128 \\
+Total epochs & 3 \\
+Loss & completion-only \\
+Precision & bfloat16 \\
+\bottomrule
+\end{tabular}
+\caption{SFT training hyperparameters.}
+\label{tab:sft_hyperparams}
+\end{table}
 
 \begin{table}[h]
 \centering
