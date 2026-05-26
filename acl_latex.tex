@@ -228,7 +228,7 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground-truth response. GPT-5 
 Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim produce the most contextually specific responses in both domains, substantially outperforming the base model and SFT-Init. On Reddit, the ground truth (GT) scores highest, confirming that real users produce highly specific responses. On Chat, however, GT specificity is comparable to the base model, reflecting that real users in open-ended dialogue often pivot to new topics rather than tightly engaging with prior context (see Figure~\ref{fig:qualitative_examples}).
 
 \subsection{Human Evaluation}
-Table~\ref{tab:human_eval_winrate} reports mean win rates across conditions. Each condition covers 50 target users, with 5--7 independent annotators per target after filtering, yielding roughly 300 binary judgments per condition. GRPO-Turing achieves the highest win rate in both domains, reaching $.55$ on Chat and $.52$ on Reddit. GRPO-Sim sits near chance at $.50$ in both domains, while SFT-Init drops to $.43$ on Reddit but remains at $.50$ on Chat. This ranking mirrors the Claude Sonnet 4.6 Turing judge scores in Figure~\ref{fig:turing_dot}, where GRPO-Turing also leads by a wide margin, suggesting that the LLM judge is a reasonable proxy for human distinguishability.
+Table~\ref{tab:human_eval_winrate} reports mean win rates. The Turing reward is the only training signal that consistently pushes win rate above chance in both domains, confirming that optimizing for indistinguishability transfers to real human judges. The ranking across models closely mirrors the automatic Turing scores in Figure~\ref{fig:turing_dot}, validating the LLM judge as a reasonable proxy for human distinguishability. Notably, SFT-Init is reliably detected on Reddit (WR $= .43$), suggesting that imitation learning alone produces surface-level patterns that humans can identify.
 
 We test whether each condition's win rate differs from chance using one-sided tests. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as machine-generated. Because the same 50 target users are shared across all conditions within each dataset, we can also run paired comparisons. Paired $t$-tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size of ${\sim}30$ annotators per condition.
 
@@ -408,13 +408,17 @@ The Turing judge receives the user's behavioral history, the current interaction
 \textbf{Scoring:} $\text{base} = \text{target} + \text{goal} + \text{style}$; $\text{penalty} = \frac{\sum \text{penalties}}{4} \times 3$; $\text{final} = \max(0, \text{base} - \text{penalty})$. The score gap between Response B and Response A is mapped to a 1--7 Likert rating (1 = definitely A is human, 7 = definitely B is human).
 \end{quote}
 
+\begin{figure*}[t]
+\centering
+\small
+\begin{minipage}[t]{0.48\textwidth}
+\hrule\vspace{4pt}
 \subsubsection{Response Similarity Judge}
 \label{app:sim-prompt}
 
-The response similarity judge evaluates how well a generated response captures the content of the ground-truth human response. It operates in batched mode, scoring multiple generations against a single ground truth.
+Evaluates how well a generated response captures the content of the ground-truth human response. Operates in batched mode, scoring multiple generations against a single ground truth.
 
-\begin{quote}
-\small
+\vspace{4pt}
 \textbf{Inputs:} User history, current context, ground-truth response, and one or more generated responses.
 
 \textbf{Scores (each in $[0, 1]$):}
@@ -425,15 +429,17 @@ The response similarity judge evaluates how well a generated response captures t
 \end{enumerate}
 
 \textbf{Hard rules:} If the generated response speaks from the wrong perspective (e.g., as an assistant rather than as the user), all scores are set to $0.0$.
-\end{quote}
-
+\vspace{2pt}\hrule
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\hrule\vspace{4pt}
 \subsubsection{Response Specificity Judge}
 \label{app:specificity-prompt}
 
-The specificity judge evaluates whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply.
+Evaluates whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply.
 
-\begin{quote}
-\small
+\vspace{4pt}
 \textbf{Inputs:} Target user evidence, interaction context, and one candidate response.
 
 \textbf{Dimensions (each scored 0--1):}
@@ -445,7 +451,11 @@ The specificity judge evaluates whether a generated response is specifically gro
 \textbf{Caps:} If the response contradicts the context or uses the wrong speaker perspective, overall $\leq 0.20$. If it invents personal facts or unnaturally imports user-history details, overall $\leq 0.40$.
 
 \textbf{Overall:} $0.5 \times \text{context\_specificity} + 0.5 \times \text{user\_evidence\_compatibility}$, subject to the caps above.
-\end{quote}
+\vspace{2pt}\hrule
+\end{minipage}
+\caption{Judge prompt summaries for response similarity (left) and response specificity (right). Both judges score on a $[0, 1]$ scale.}
+\label{fig:sim_specificity_judges}
+\end{figure*}
 
 \subsection{Training Hyperparameters}
 \label{app:hyperparams}
