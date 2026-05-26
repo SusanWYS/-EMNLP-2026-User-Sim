@@ -1,0 +1,36 @@
+\begin{figure*}[t]
+\centering
+
+\begin{promptbox}[User Message (ConvoKit)]
+[USER HISTORY]
+Below are [HUMAN]'s previous messages.
+
+<Post 1>
+[OTHER - OP]
+(original post text)
+
+[OTHER]: (reply)
+[HUMAN]: (reply)
+[OTHER]: (reply)
+</Post 1>
+
+[CURRENT CONTEXT]
+[OTHER - OP]
+(original post text)
+
+[OTHER]: (ancestor reply)
+[HUMAN]: (earlier comment)
+[OTHER]: (ancestor reply)
+[HUMAN]:
+\end{promptbox}
+
+\begin{promptbox}[Model Output]
+<reasoning>...</reasoning>
+[HUMAN]: (*@$\hat{y}$@*)
+\end{promptbox}
+
+\vspace{-6pt}
+
+\caption{Prompt layout for ConvoKit (Reddit forum). History threads are wrapped in numbered \texttt{<Post>} tags; the original poster is marked \texttt{[OTHER - OP]}. The current context shows the OP and ancestor reply chain up to the prediction point.}
+\label{fig:convokit_format}
+\end{figure*}
