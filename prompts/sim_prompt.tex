@@ -1,0 +1,21 @@
+\begin{figure*}[t]
+\centering
+
+\begin{promptbox}[Response Similarity Judge]
+Evaluates how well a generated response captures the content of the ground-truth human response. Operates in batched mode, scoring multiple generations against a single ground truth.
+
+Inputs: User history, current context, ground-truth response, and one or more generated responses.
+
+Scores (each in [0, 1]):
+  1. Semantic similarity: How similar the generated response is to the ground truth in core meaning and information (1.0 = identical meaning; 0.0 = completely different topic).
+  2. Information completeness: How completely the generated response preserves information from the ground truth (1.0 = all information preserved; 0.0 = almost no information preserved).
+  3. Overall score: A strict final alignment score penalizing unsupported extra content, wrong perspective, source copying, sycophantic/generic agreement, and generic compromise responses that dilute specific positions.
+
+Hard rules: If the generated response speaks from the wrong perspective (e.g., as an assistant rather than as the user), all scores are set to 0.0.
+\end{promptbox}
+
+\vspace{-6pt}
+
+\caption{Response similarity judge prompt. The judge scores semantic similarity, information completeness, and overall alignment between a generated response and the ground-truth human response, each in $[0, 1]$.}
+\label{fig:sim_prompt}
+\end{figure*}

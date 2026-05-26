@@ -134,16 +134,23 @@ We evaluate our Turing reward-trained LLMs across two settings that differ subst
 
 \subsection{Problem Formulation}\label{sec:problem}
 
-We study user simulation in an interactive setting, where we are given the current session context $x$ (i.e., prior interactions in the  current conversation session or thread) and {user history} $h$ (e.g., prior utterances or posts that are not part of the current session),  and need to generate a response $y$ that could have been plausibly produced by the user. 
+% We study user simulation in an interactive setting, where we are given the current session context $x$ (i.e., prior interactions in the  current conversation session or thread) and {user history} $h$ (e.g., prior utterances or posts that are not part of the current session),  and need to generate a response $y$ that could have been plausibly produced by the user. 
+
+We study user simulation in an interactive setting, where we are given the current session context $x$ (i.e., prior interactions in the current conversation session or thread) and a user representation $u$, and need to generate a response $y$ that could have been plausibly produced by the user.
+
+The most straightforward way to represent a user is through their behavior history $h$ (e.g., prior utterances or posts that are not part of the current session). For each user, we reserve a fixed block of $k$ prior interactions at dataset construction time and reuse it as $h$ across all prediction targets for that user. We require $h$ to be disjoint from the current target context $x$ and ground-truth response $y$, ensuring that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining prediction targets.
+
+Additionally, we can also pair the raw behavior history with an induced persona $\rho$. We induce $\rho$ by prompting an auxiliary language model to summarize stable traits from the same user's history block $h$. See Appendix Figure~\ref{fig:persona_induction} for the prompt used for persona induction.
 
 % Formally, given triples $(u, x, y)$, $x$ is the immediate interaction context (e.g., a dialogue history or a forum thread), and $u$ is user-specific information about the target individual beyond what appears in $x$. $y$ is one ground-truth response produced by that person.
 % We observe that $y$ is only a single sample from a broader distribution $p^\star(\cdot \mid x, u)$ of responses the user could authentically produce: the same person in the same context could say many different things, all genuinely their own. Our goal is therefore not to reproduce the specific $y$ in the training data, but to learn a simulator $p_\theta(\hat{y} \mid x, u)$, parameterized by $\theta$, that approximates $p^\star$ such that generated $\hat{y}$ are truly representative of the user utterance's goal, style, and perspective.
 % The simulator generates a joint sequence $(z, \hat{y}) \sim p_\theta(\cdot \mid x, u)$, where $z$ is a chain-of-thought reasoning trace produced before the response. The trace is masked from reward computation and evaluation; only $\hat{y}$ is scored.
 
-\subsection{User Representation}
-We hypothesize that pairing raw behavioral history with an induced persona $\rho$ would yield a more stable user representation than just the raw history $h$ for producing $y$. We induce $\rho$ with via prompting an auxiliary language model to summarize stable traits from the user's  history  $h$, yielding the persona $\rho$. See the appendix for the prompt to the persona-induction LLM. 
+% \subsection{User Representation}
+% We hypothesize that pairing raw behavioral history with an induced persona $\rho$ would yield a more stable user representation than just the raw history $h$ for producing $y$. 
 
-For each user, we reserve a fixed block of $k$ prior interactions  once at dataset construction and reuse it as $h$ across every prediction target for that user. The same history block is the sole input to persona induction. We require $h$ to be disjoint from the current target context $x$ and ground-truth response $y$, so that the user representation is never contaminated by the example being predicted. The size $k$ is sampled per user from a small range, trading off the strength of the identity prior against the number of remaining targets.
+
+% The same history block is the sole input to persona induction. 
 
 % Formally, $\rho = f_{\text{LM}}(h)$, where $f_{\text{LM}}$ is a fixed inducer model. Note that
 
@@ -173,7 +180,7 @@ The reward cap on $4$ mitigates against reward hacking: since we would like to p
 
 The final RL objective is then given by
 \begin{align*}
-    \max_\theta \mathbb{E}_{y \sim p_\theta(\cdot | x, h, \rho), y_\star \sim p_\star(\cdot | x, h)}\left[ r_{\text{turing}} (y, y_\star) \right],
+    \max_\theta \, \mathbb{E}_{y \sim p_\theta(\cdot | x, h, \rho), y_\star \sim p_\star(\cdot | x, h)}\left[ r_{\text{turing}} (y, y_\star) \right],
 \end{align*}
 % We canonicalize the rating into a score $s^*$ reflecting the judge's confidence that the \emph{candidate} is the real human response:
 % \begin{equation}
@@ -281,7 +288,7 @@ Table~\ref{tab:human_eval_winrate} reports mean win rates over ground-truth. The
 
 We test whether each condition's win rate differs from chance using one-sided tests. On Chat, GRPO-Turing approaches significance in a binomial test of whether WR ${>} 0.5$ over all 300 pooled judgments at $p = .053$. On Reddit, SFT-Init falls significantly \emph{below} chance at $p < .05$, meaning human annotators can reliably identify its outputs as machine-generated. Because the same 50 target users are shared across all conditions within each dataset, we can also run paired comparisons. Paired $t$-tests show that GRPO-Turing significantly outperforms SFT-Init on Reddit at $p = .024$. The same trend holds on Chat at $p = .133$, though it does not reach significance. The difference between GRPO-Turing and GRPO-Sim is positive in both domains but does not reach significance, which we attribute to the relatively small sample size of ${\sim}30$ annotators per condition.
 
-\subsection{Correlating Human And LM Judge Scores}
+
 \begin{table}[t]
 \centering
 \small
@@ -300,10 +307,14 @@ GRPO-Turing & $.52 \pm .06$ & $.55 \pm .07$ \\
 
 
 \section{Ablations and Analysis}
-\paragraph{User representation ablation.}
+
+\subsection{User Representations}
 We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
-\paragraph{Qualitative examples.}
+\subsection{LLM Judge vs. Human Judges}
+
+
+\subsection{Qualitative Examples}
 
 \begin{table}[t]
 \centering
@@ -378,14 +389,12 @@ Persona-conditioned generation was introduced by \citet{zhang2018personalizing} 
 
 \appendix
 
-
 \section{Prompts}
 
 \subsection{Thinking Trace Elicitation}
 \label{app:thinking-trace-prompt}
 
 \input{prompts/thinking_trace_prompt}
-
 
 \subsection{Inference Prompt}
 \label{app:inference-prompt}
@@ -397,77 +406,15 @@ At inference time, the model receives a system message containing the task instr
 
 \subsubsection{Turing Distinguishability Judge}
 \label{app:turing-prompt}
-
-The Turing judge receives the user's behavioral history, the current interaction context, and two candidate responses (one real, one generated) with positions randomized. It scores each response on three criteria and four penalty dimensions, then converts the score gap to a 1--7 rating.
-
-\begin{quote}
-\small
-\textbf{Criteria (each scored 0--1):}
-\begin{enumerate}
-\item \textbf{Immediate target}: Does the response address the correct part of the context, from \texttt{[HUMAN]}'s perspective, directed at the appropriate speaker?
-\item \textbf{Human goal}: Given the immediate target, is the response's communicative goal plausible for \texttt{[HUMAN]} in this context?
-\item \textbf{Communication style}: Does the wording, tone, length, grammar, punctuation, and level of detail match \texttt{[HUMAN]}'s past responses?
-\end{enumerate}
-
-\textbf{Penalty checks (each scored 0--1):}
-\begin{enumerate}
-\item \textbf{Source copy}: Unnatural copying from user history (natural quoting/uptake exempt).
-\item \textbf{Wrong target or role}: Speaking from the wrong role or addressing the wrong speaker.
-\item \textbf{Unsupported adversarial reframing}: Attacking a claim the other speaker did not make.
-\item \textbf{Assistant-like}: Chatbot-style formatting, template phrases, or artifact-like surface form.
-\end{enumerate}
-
-\textbf{Scoring:} $\text{base} = \text{target} + \text{goal} + \text{style}$; $\text{penalty} = \frac{\sum \text{penalties}}{4} \times 3$; $\text{final} = \max(0, \text{base} - \text{penalty})$. The score gap between Response B and Response A is mapped to a 1--7 Likert rating (1 = definitely A is human, 7 = definitely B is human).
-\end{quote}
-
-\begin{figure*}[t]
-\centering
-\small
-\begin{minipage}[t]{0.48\textwidth}
-\hrule\vspace{4pt}
+\input{prompts/turing_prompt}
 \subsubsection{Response Similarity Judge}
 \label{app:sim-prompt}
+\input{prompts/sim_prompt}
 
-Evaluates how well a generated response captures the content of the ground-truth human response. Operates in batched mode, scoring multiple generations against a single ground truth.
-
-\vspace{4pt}
-\textbf{Inputs:} User history, current context, ground-truth response, and one or more generated responses.
-
-\textbf{Scores (each in $[0, 1]$):}
-\begin{enumerate}
-\item \textbf{Semantic similarity}: How similar the generated response is to the ground truth in core meaning and information ($1.0$ = identical meaning; $0.0$ = completely different topic).
-\item \textbf{Information completeness}: How completely the generated response preserves information from the ground truth ($1.0$ = all information preserved; $0.0$ = almost no information preserved).
-\item \textbf{Overall score}: A strict final alignment score penalizing unsupported extra content, wrong perspective, source copying, sycophantic/generic agreement, and generic compromise responses that dilute specific positions.
-\end{enumerate}
-
-\textbf{Hard rules:} If the generated response speaks from the wrong perspective (e.g., as an assistant rather than as the user), all scores are set to $0.0$.
-\vspace{2pt}\hrule
-\end{minipage}%
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-\hrule\vspace{4pt}
 \subsubsection{Response Specificity Judge}
 \label{app:specificity-prompt}
 
-Evaluates whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply.
-
-\vspace{4pt}
-\textbf{Inputs:} Target user evidence, interaction context, and one candidate response.
-
-\textbf{Dimensions (each scored 0--1):}
-\begin{enumerate}
-\item \textbf{Context specificity} (weight $0.5$): How specifically the candidate engages with the exact local interaction. High scores require tight ties to the exact claim, question, event, or disagreement at issue. Low scores indicate broadly reusable responses.
-\item \textbf{User evidence compatibility} (weight $0.5$): How compatible the candidate is with the target user's observed behavior without unnaturally exposing or inventing evidence. High scores require natural compatibility; low scores indicate contradiction or persona-caricature.
-\end{enumerate}
-
-\textbf{Caps:} If the response contradicts the context or uses the wrong speaker perspective, overall $\leq 0.20$. If it invents personal facts or unnaturally imports user-history details, overall $\leq 0.40$.
-
-\textbf{Overall:} $0.5 \times \text{context\_specificity} + 0.5 \times \text{user\_evidence\_compatibility}$, subject to the caps above.
-\vspace{2pt}\hrule
-\end{minipage}
-\caption{Judge prompt summaries for response similarity (left) and response specificity (right). Both judges score on a $[0, 1]$ scale.}
-\label{fig:sim_specificity_judges}
-\end{figure*}
+\input{prompts/specificity_prompt}
 
 \subsection{Training Hyperparameters}
 \label{app:hyperparams}
@@ -558,111 +505,7 @@ We reconstruct Reddit threads from comment identifiers and parent pointers. Dele
 \paragraph{Persona induction.}
 We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal features, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user. Figure~\ref{fig:persona_induction} shows the induction prompt.
 
-\begin{figure*}[t]
-\centering
-\small
-\hrule\vspace{4pt}
-\begin{algorithmic}[1]
-\Statex \textbf{System message}
-\State \texttt{You write compressed first-person persona notes as if the target user}
-\Statex \texttt{\quad wrote them about their own habits.}
-\State \texttt{Sound like the user, not like an analyst, therapist, teacher, or policy brief.}
-\State \texttt{Output only the requested strict JSON object and nothing else.}
-\Statex \hrulefill
-\Statex \textbf{User message}
-\State \texttt{<target\_speaker>[HUMAN]</target\_speaker>}
-\State \texttt{<selected\_history>} \textit{(reserved history block $h$, with [HUMAN]/[OTHER] speaker labels}
-\Statex \textit{\quad and bold-delimited target-user responses)} \texttt{</selected\_history>}
-\State
-\State \texttt{<task>}
-\State \texttt{Write a compact persona for [HUMAN] in [HUMAN]'s own voice.}
-\State
-\State \texttt{Rules:}
-\State \texttt{- Write each field in first person, as if [HUMAN] is}
-\Statex \texttt{\quad describing their own habits.}
-\State \texttt{- Keep it casual and compressed, not polished or formal.}
-\State \texttt{- Use only [HUMAN]'s own messages as evidence.}
-\State \texttt{- Capture only stable traits that are useful for predicting}
-\Statex \texttt{\quad future messages across contexts.}
-\State \texttt{- Prefer concrete wording habits over abstract summaries.}
-\State \texttt{- Do not sound like an analyst describing a person from the outside.}
-\State \texttt{- Do not use therapist/assistant/policy-brief language.}
-\State \texttt{- Avoid abstract labels such as fairness, accountability, autonomy,}
-\Statex \texttt{\quad respect, boundaries, power dynamics, empathy, nuance, skepticism,}
-\Statex \texttt{\quad advocacy, procedural correctness, or similar summary words}
-\Statex \texttt{\quad unless those exact words are frequent in the history.}
-\State \texttt{- Do not infer demographics or sensitive attributes.}
-\State \texttt{- Do not infer motives, worldview, morals, personality traits,}
-\Statex \texttt{\quad or values unless they are explicitly and repeatedly stated.}
-\State \texttt{- Do not include one-off topical stances, transient emotions,}
-\Statex \texttt{\quad or local interaction goals.}
-\State \texttt{- If evidence is weak, write `unknown`.}
-\State \texttt{- Keep each field concise.}
-\end{algorithmic}
-\vspace{2pt}\hrule
-\caption{Persona induction prompt (part 1 of 2). The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho$.}
-\label{fig:persona_induction}
-\end{figure*}
-
-\begin{figure*}[t]
-\centering
-\small
-\hrule\vspace{4pt}
-\begin{algorithmic}[1]
-\setcounter{ALG@line}{20}
-\Statex \texttt{Rules (continued):}
-\State \texttt{- Write each field as short fragments or very short sentences,}
-\Statex \texttt{\quad not polished mini-paragraphs.}
-\State \texttt{- Do not quote or reproduce complete sentences from the}
-\Statex \texttt{\quad selected history.}
-\State \texttt{- Do not quote or reuse exact words or phrases from the selected}
-\Statex \texttt{\quad history, including verdict labels, slang, catchphrases, or short}
-\Statex \texttt{\quad text fragments.}
-\State \texttt{- Do not include literal examples from [HUMAN]'s messages, even}
-\Statex \texttt{\quad single-word examples.}
-\State \texttt{- Describe lexical habits generically rather than by repeating}
-\Statex \texttt{\quad exact tokens.}
-\State \texttt{- Non-text segments such as punctuation styles may be described,}
-\Statex \texttt{\quad but do not quote surrounding text.}
-\State \texttt{- Do not include parenthetical example lists, `e.g.`}
-\Statex \texttt{\quad scaffolding, or full sample sentences from [HUMAN]'s messages.}
-\State
-\State \texttt{Field descriptions:}
-\State \texttt{- values: only concrete recurring preferences, irritations,}
-\Statex \texttt{\quad or things I keep siding with; avoid abstract moral language}
-\Statex \texttt{\quad unless it is explicit in the history}
-\State \texttt{- verbal\_features: my observable surface-form habits only,}
-\Statex \texttt{\quad such as how I use interjections, punctuation, grammar}
-\Statex \texttt{\quad looseness, discourse markers, formatting quirks, or short}
-\Statex \texttt{\quad repeated lexical patterns. Do not include exact verdict}
-\Statex \texttt{\quad labels or quoted wording from the history.}
-\State \texttt{- expression\_style: how I usually come across at the sentence}
-\Statex \texttt{\quad level; keep this concrete and plain, not psychological,}
-\Statex \texttt{\quad evaluative, or therapist-like}
-\State \texttt{- length\_prior: my usual reply length in plain language,}
-\Statex \texttt{\quad mainly sentence count and rough brevity}
-\State \texttt{- background: concrete background cues not already captured}
-\Statex \texttt{\quad above, especially repeated personal experiences,}
-\Statex \texttt{\quad self-disclosed roles, responsibilities, constraints,}
-\Statex \texttt{\quad routines, domain familiarity, sources of information,}
-\Statex \texttt{\quad or recurring points of reference that likely shape}
-\Statex \texttt{\quad future responses; do not restate general values, tone,}
-\Statex \texttt{\quad or reasoning style; use `unknown` if nothing strong}
-\Statex \texttt{\quad remains}
-\State
-\State \texttt{Output only this JSON object shape:}
-\State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...",}
-\Statex \texttt{\quad "length\_prior": "...", "background": "..."\}}
-\State \texttt{</task>}
-\Statex \hrulefill
-\Statex \textbf{Model output}
-\State \texttt{\{"values": "...", "verbal\_features": "...", "expression\_style": "...",}
-\Statex \texttt{\quad "length\_prior": "...", "background": "..."\}}
-\end{algorithmic}
-\vspace{2pt}\hrule
-\caption{Persona induction prompt (part 2 of 2). Continuation of rules and field descriptions.}
-\label{fig:persona_induction_2}
-\end{figure*}
+\input{prompts/persona_induction}
 
 \paragraph{OOD evaluation sets.}
 Two small out-of-distribution sets are reserved for evaluation only: Chatbot Arena (50 examples, 23 users, drawn from 94 candidates) and Humanual Opinion (50 examples, 17 users, drawn from 135 candidates). Selection covers every available user first, then fills remaining slots by deterministic round-robin.

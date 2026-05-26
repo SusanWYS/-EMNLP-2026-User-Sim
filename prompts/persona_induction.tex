@@ -1,0 +1,74 @@
+\begin{figure*}[t]
+\centering
+
+\begin{promptbox}[System Message]
+You write compressed first-person persona notes as if the target user wrote them about their own habits.
+Sound like the user, not like an analyst, therapist, teacher, or policy brief.
+Output only the requested strict JSON object and nothing else.
+\end{promptbox}
+
+\begin{promptbox}[User Message]
+<target_speaker>[HUMAN]</target_speaker>
+<selected_history>
+(reserved history block (*@$h$@*), with [HUMAN]/[OTHER] speaker labels and bold-delimited target-user responses)
+</selected_history>
+
+<task>
+Write a compact persona for [HUMAN] in [HUMAN]'s own voice.
+
+Rules:
+- Write each field in first person, as if [HUMAN] is describing their own habits.
+- Keep it casual and compressed, not polished or formal.
+- Use only [HUMAN]'s own messages as evidence.
+- Capture only stable traits that are useful for predicting future messages across contexts.
+- Prefer concrete wording habits over abstract summaries.
+- Do not sound like an analyst describing a person from the outside.
+- Do not use therapist/assistant/policy-brief language.
+- Avoid abstract labels such as fairness, accountability, autonomy, respect, boundaries, power dynamics, empathy, nuance, skepticism, advocacy, procedural correctness, or similar summary words unless those exact words are frequent in the history.
+- Do not infer demographics or sensitive attributes.
+- Do not infer motives, worldview, morals, personality traits, or values unless they are explicitly and repeatedly stated.
+- Do not include one-off topical stances, transient emotions, or local interaction goals.
+- If evidence is weak, write `unknown`.
+- Keep each field concise.
+\end{promptbox}
+
+\vspace{-6pt}
+
+\caption{Persona induction prompt (part 1 of 2). The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho$.}
+\label{fig:persona_induction}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+
+\begin{promptbox}[User Message (continued)]
+Rules (continued):
+- Write each field as short fragments or very short sentences, not polished mini-paragraphs.
+- Do not quote or reproduce complete sentences from the selected history.
+- Do not quote or reuse exact words or phrases from the selected history, including verdict labels, slang, catchphrases, or short text fragments.
+- Do not include literal examples from [HUMAN]'s messages, even single-word examples.
+- Describe lexical habits generically rather than by repeating exact tokens.
+- Non-text segments such as punctuation styles may be described, but do not quote surrounding text.
+- Do not include parenthetical example lists, `e.g.` scaffolding, or full sample sentences from [HUMAN]'s messages.
+
+Field descriptions:
+- values: only concrete recurring preferences, irritations, or things I keep siding with; avoid abstract moral language unless it is explicit in the history
+- verbal_features: my observable surface-form habits only, such as how I use interjections, punctuation, grammar looseness, discourse markers, formatting quirks, or short repeated lexical patterns. Do not include exact verdict labels or quoted wording from the history.
+- expression_style: how I usually come across at the sentence level; keep this concrete and plain, not psychological, evaluative, or therapist-like
+- length_prior: my usual reply length in plain language, mainly sentence count and rough brevity
+- background: concrete background cues not already captured above, especially repeated personal experiences, self-disclosed roles, responsibilities, constraints, routines, domain familiarity, sources of information, or recurring points of reference that likely shape future responses; do not restate general values, tone, or reasoning style; use `unknown` if nothing strong remains
+
+Output only this JSON object shape:
+{"values": "...", "verbal_features": "...", "expression_style": "...", "length_prior": "...", "background": "..."}
+</task>
+\end{promptbox}
+
+\begin{promptbox}[Model Output]
+{"values": "...", "verbal_features": "...", "expression_style": "...", "length_prior": "...", "background": "..."}
+\end{promptbox}
+
+\vspace{-6pt}
+
+\caption{Persona induction prompt (part 2 of 2). Continuation of rules and field descriptions, followed by the expected model output schema.}
+\label{fig:persona_induction_2}
+\end{figure*}

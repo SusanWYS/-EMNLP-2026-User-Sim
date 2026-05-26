@@ -1,0 +1,30 @@
+\begin{figure*}[t]
+\centering
+
+\begin{promptbox}[Turing Distinguishability Judge]
+The Turing judge receives the user's behavioral history, the current interaction context, and two candidate responses (one real, one generated) with positions randomized. It scores each response on three criteria and four penalty dimensions, then converts the score gap to a 1--7 rating.
+
+Criteria (each scored 0--1):
+  1. Immediate target: Does the response address the correct part of the context, from [HUMAN]'s perspective, directed at the appropriate speaker?
+  2. Human goal: Given the immediate target, is the response's communicative goal plausible for [HUMAN] in this context?
+  3. Communication style: Does the wording, tone, length, grammar, punctuation, and level of detail match [HUMAN]'s past responses?
+
+Penalty checks (each scored 0--1):
+  1. Source copy: Unnatural copying from user history (natural quoting/uptake exempt).
+  2. Wrong target or role: Speaking from the wrong role or addressing the wrong speaker.
+  3. Unsupported adversarial reframing: Attacking a claim the other speaker did not make.
+  4. Assistant-like: Chatbot-style formatting, template phrases, or artifact-like surface form.
+
+Scoring:
+  base    = target + goal + style
+  penalty = (sum penalties / 4) (*@$\times$@*) 3
+  final   = max(0, base (*@$-$@*) penalty)
+
+The score gap between Response B and Response A is mapped to a 1--7 Likert rating (1 = definitely A is human, 7 = definitely B is human).
+\end{promptbox}
+
+\vspace{-6pt}
+
+\caption{Turing distinguishability judge prompt. The judge receives the user's history, the interaction context, and two candidate responses, scores each response on three criteria and four penalty checks, and maps the score gap to a 1--7 Likert rating.}
+\label{fig:turing_prompt}
+\end{figure*}
