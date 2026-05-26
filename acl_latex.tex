@@ -106,7 +106,7 @@
 \maketitle
 
 \begin{abstract}
-Learning to simulate human users in interactive settings could advance the training of human-centered agents, the evaluation of interactive systems, and research in the social sciences.  Existing approaches generally do so through training an LLM to match a single ground-truth response, by maximizing the log-probability or using a similarity-based reward. We instead propose a Turing test-based approach for learning user simulator models, where a model is be trained via RL to produce responses indistinguishable from what the user could have said, following the criterion of the Turing test. Our discriminative Turing reward uses an LM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two substantially different domains---multi-turn chat and Reddit forum discussion---we find that the Turing reward consistently outperforms baseline methods on LLM and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an  effective route to learning LLM-based user simulators.
+Learning to simulate human users in interactive settings could advance the training of human-centered agents, the evaluation of interactive systems, and research in the social sciences.  Existing approaches generally do so through training an LLM to match a single ground-truth response, by maximizing the log-probability or using a similarity-based reward. We instead propose a Turing test-based approach for learning user simulator models, where a model is be trained via reinforcement learning to produce responses indistinguishable from what the user could have said, following the criterion of the Turing test. Our discriminative Turing reward uses an LM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two substantially different domains---multi-turn chat and Reddit forum discussion---we find that the Turing reward consistently outperforms baseline methods on LLM and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an  effective route to learning LLM-based user simulators.
 \end{abstract}
 
 \section{Introduction}
@@ -545,8 +545,8 @@ PPO clip ratio & 0.2 \\
 % \paragraph{Length penalty}
 Let $\ell$ be the generated response length and $\ell_{\mathrm{gt}}$ the ground-truth length. Responses within the deadband $[\ell_{\min} \cdot \ell_{\mathrm{gt}},\; \ell_{\max} \cdot \ell_{\mathrm{gt}}]$ incur no penalty \llq{is this lmin or ratio?}. Outside the band, the penalty is proportional to the relative violation with asymmetric lambdas (stronger for short responses), and capped:
 \begin{align}
-p_{\mathrm{short}} &= \lambda_{\mathrm{short}} \cdot \max\!\bigl(\ell_{\min} - \ell/\ell_{\mathrm{gt}},\; 0\bigr) / \ell_{\min} \nonumber\\
-p_{\mathrm{long}} &= \lambda_{\mathrm{long}} \cdot \max\!\bigl(\ell/\ell_{\mathrm{gt}} - \ell_{\max},\; 0\bigr) / \ell_{\max} \nonumber\\
+p_{\mathrm{short}} &= \lambda_{\mathrm{short}} \cdot \max~\!\bigl(\ell_{\min} - \ell/\ell_{\mathrm{gt}},\; 0\bigr) / \ell_{\min} \nonumber\\
+p_{\mathrm{long}} &= \lambda_{\mathrm{long}} \cdot \max~\!\bigl(\ell/\ell_{\mathrm{gt}} - \ell_{\max},\; 0\bigr) / \ell_{\max} \nonumber\\
 p_{\mathrm{len}} &= \min(p_{\mathrm{short}} + p_{\mathrm{long}},\; p_{\mathrm{cap}})
 \end{align}
 
