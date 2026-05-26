@@ -329,7 +329,7 @@ GRPO-Sim    & $.50$ \subtle{$\pm .07$} & $.50$ \subtle{$\pm .08$} \\
 GRPO-Turing & $.52$ \subtle{$\pm .06$} & $.55$ \subtle{$\pm .07$} \\
 \bottomrule
 \end{tabular}
-\caption{Human Turing test: forced-choice win rate (WR) of each model against the ground-truth response ($\pm$ 95\% CI), averaged over 50 target users with ${\sim}6$ annotators each. WR ${>}\,0.5$ means annotators chose the model response more often than the real user's. \textbf{GRPO-Turing is the only model that consistently fools human judges above chance in both domains.} SFT-Init is reliably detected on Reddit (WR $= .42$, $p < .05$).}
+\caption{Human Eval Turing test: forced-choice win rate (WR) of each model against the ground-truth response ($\pm$ 95\% CI), averaged over 50 target users with ${\sim}6$ annotators each. WR ${>}\,0.5$ means annotators chose the model response more often than the real user's. \textbf{GRPO-Turing is the only model that consistently fools human judges above chance in both domains.}}
 \label{tab:human_eval_winrate}
 \end{table}
 
@@ -452,10 +452,17 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo} for user 
 \paragraph{Individual user representation.}
 Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo}. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. We combine raw history with an induced persona, providing both behavioral evidence and a compressed trait summary.
 
-\paragraph{Human behavior prediction} Predicting human behaviors, such as people's choices, actions, and utterances, is a cornerstone task cognitive and social sciences. 
+\paragraph{Human behavior prediction} Predicting human behaviors, such as people's choices, actions, and utterances, is a cornerstone task cognitive and social sciences. Classical approaches model human decision-making include symbolic cognitive architectures [cites], the framework of bounded rationality \citep{simon1955behavioral, cite}, and prospect theory that explains heuristics and biases \citep{kahneman1979prospect}. Bayesian cognitive science has become a successful paradigm in predicting human behaviors in controlled experimental settings through building structured models that perform probabilistic inference [cites], which has been applied to studying how people simulate the minds of other people [cites], the ability known as Theory of Mind [cites]. A complementary, data-driven approach trains neural networks on large datasets of human choices, combining cognitive priors and achieving the strong predictive accuracy \citep{bourgin2019cognitive, peterson2021using}. More recently, LLMs have been evaluated as proxies for human participants in surveys, economic games, and social experiments~\citep{argyle2023out, horton2023large, aher2023simulating, park2024generative}, with mixed evidence on their fidelity to real human distributions~\citep{santurkar2023whose}. \citet{binz2025centaur} fine-tune a foundation model on hundreds of psychology experiments to predict trial-level human responses. These approaches have largely focused on constrained, single-turn settings—whether a survey response, an experimental trial, or an isolated decision, whereas our work engages with flexibly simulating verbal outputs of human users.
 
 \section{Conclusion}
 
+Beyond CoT in modeling thought processes.
+
+Use the simulator as part of the chatbot.
+
+Simulate how people perform tasks. Large scale social simulations with more humanlike agents.
+
+\clearpage
 \section*{Limitations}
 We identify several limitations of our study. The first is the range of domains for which we train user simulators. The second is that we have only trained a small model, and it would be interesting to study how well our receipe generalize to frontier size models. 
 
@@ -472,21 +479,31 @@ We identify several limitations of our study. The first is the range of domains 
 
 Each training example is a tuple $(u, x, y)$ where the user representation $u = (h, \rho)$ is fixed per user and disjoint from both the current context $x$ and the ground-truth response $y_{\star}$. The behavioral history $h$ is selected once per user from a deterministic seed; the persona $\rho$ is induced from $h$ alone. This separation guarantees that neither $h$ nor $\rho$ leaks information about the target.
 
+\subsection{Dataset Preprocessing}
+
 \paragraph{(Reddit) ConvoKit.}
-We reconstruct Reddit threads from comment identifiers and parent pointers. Deleted, removed, and non-user comments cannot serve as targets or enter $h$, but non-root unusable comments may be kept as structural anchors so that descendant replies stay connected to the ancestor chain. We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training. The remaining users are split deterministically into disjoint SFT and GRPO pools using a 40/60 ratio. GRPO training and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO training/validation sets. For eahc user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
+We reconstruct Reddit threads from comment identifiers and parent pointers. 
+% Deleted, removed, and non-user comments (e.g., bot comments) cannot serve as targets or enter $h$.
+We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training. 
+We use the remaining subdreddit for for sft and grpo training, includign AmItheAsshole, AskMen, AskWomen, business, changemyview, Economics, Frugal, MaliciousCompliance, news, relationship\_advice, relationships, TrueReddit 
+
+The users are split deterministically into disjoint SFT and GRPO set using a 40/60 ratio. 
+
+
+For eahc user, 2--6 threads are reserved as $h$. Each target thread yields one example: $y$ is the user's final comment and $x$ is the original post plus the ancestor reply chain leading to it, avoiding highly correlated examples from the same thread.
+
+% GRPO training and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. 
+% This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO training/validation sets. 
+
 
 
 \paragraph{(Chat) PRISM.}
 We retain PRISM participants with at least six conversations, yielding 1,288 qualified users. We randomly hold out 10\% of qualified users with a fixed seed, giving 128 held-out test users and 880 test examples. The remaining 1,160 users are split with the same seed into disjoint GRPO and SFT pools using a 60/40 user ratio: 696 users for GRPO and 464 users for SFT. For each user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation is one example: $x$ is all preceding turns and $y$ is the user's utterance at that turn. GRPO train and validation examples are split within each GRPO user using a deterministic tail-split policy: for a user with $n$ target rows, $\lfloor 0.1n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation. Before applying this tail split, target rows are sorted by conversation id and target turn index, so validation rows come from later target turns and training does not use a later target from the same conversation than validation.
 
-\begin{quote}
-\small
-\textbf{SFT/GRPO pool:} AmItheAsshole, AskMen, AskWomen, business, changemyview, Economics, Frugal, MaliciousCompliance, news, relationship\_advice, relationships, TrueReddit \\
-\textbf{Held-out test:} tifu, worldnews
-\end{quote}
 
-\paragraph{Persona induction.}
-We prompt GPT-5.4-nano (temperature 0.2, max 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal features, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user. Figure~\ref{fig:persona_induction} shows the induction prompt.
+\subsection{Persona Induction}
+
+Our default user representation pairs the user's behavioral history with an induced persona. To induce a persona, we prompt GPT-5.4 nano (temperature 0.2, max output length 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal features, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user. Figure~\ref{fig:persona_induction} shows the induction prompt.
 
 \input{prompts/persona_induction}
 
@@ -602,11 +619,20 @@ We report the model win rate (WR): the fraction of judgments in which the annota
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.5\textwidth]{figures/ui_chat1.png}
-\includegraphics[width=0.7\textwidth]{figures/ui_chat2.png}
-\caption{User interface for human annotation for the Chat domain.}
+\includegraphics[width=0.75\textwidth]{figures/ui_reddit1.png}
+\includegraphics[width=\textwidth]{figures/ui_reddit2.png}
+\caption{User interface used for human annotation in the Reddit domain.}
+\label{fig:ui_reddit}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/ui_chat1.png}
+\includegraphics[width=\textwidth]{figures/ui_chat2.png}
+\caption{User interface used for human annotation in the Chat domain.}
 \label{fig:ui_chat}
 \end{figure*}
+
 
 \section{Prompts}
 
