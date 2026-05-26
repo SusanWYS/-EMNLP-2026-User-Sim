@@ -446,36 +446,10 @@ Test & 880 & 267 & 50 & 50 \\
 
 \paragraph{Prompt format.}
 Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $\hat{y}$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
-
 \input{prompts/format}
 
-\section{Prompts}
 
-\subsection{Thinking Trace Elicitation}
-\label{app:thinking-trace-prompt}
-
-\input{prompts/thinking_trace_prompt}
-
-\subsection{Inference Prompt}
-\label{app:inference-prompt}
-
-At inference time, the model receives a system message containing the task instruction and (optionally) the user's persona, followed by a user message with the behavioral history and current context. The task instruction asks the model to predict \texttt{[HUMAN]}'s next message, matching writing intentions, style, vocabulary, and tone. Before outputting the final answer, the model is instructed to reason step by step, producing output in the format: \texttt{<reasoning>...</reasoning> [HUMAN]:} response.
-
-\subsection{Judge Prompts}
-\label{app:judge-prompts}
-
-\subsubsection{Turing Distinguishability Judge}
-\label{app:turing-prompt}
-\input{prompts/turing_prompt}
-\subsubsection{Response Similarity Judge}
-\label{app:sim-prompt}
-\input{prompts/sim_prompt}
-
-\subsubsection{Response Specificity Judge}
-\label{app:specificity-prompt}
-
-\input{prompts/specificity_prompt}
-
+\section{Training Details}
 \subsection{Training Hyperparameters}
 \label{app:hyperparams}
 
@@ -542,6 +516,53 @@ Score clip max $s_{\mathrm{clip}}$ & \multicolumn{2}{c}{5.0} \\
 \label{tab:reward-shaping}
 \end{table}
 
+
+
+
+\section{Human Evaluation Details}
+\label{app:human-eval}
+
+We conduct a forced-choice Turing test on Prolific. Each participant views a target user's posting history and then judges 10 pairs of responses: one ground-truth response and one model-generated response, presented in randomized order. The participant selects which response they believe was written by the real user.
+
+\paragraph{Design.}
+We evaluate three training conditions---SFT-Init, GRPO-Sim, and GRPO-Turing---on two datasets (Reddit / ConvoKit and Chat / PRISM). For each dataset we select 50 target users, split into 5 groups of 10. Each participant is assigned to one (dataset, condition, group) cell and evaluates the 10 targets in that group. We recruit 6 annotators per cell, yielding 30 participants and 300 binary judgments per condition.
+
+\paragraph{Comprehension filtering.}
+Each trial includes comprehension checks that test whether the participant read the target user's history (e.g., identifying the user's most-discussed topic or their most recent interlocutor). We compute each participant's comprehension accuracy across all check questions and exclude participants scoring below 75\%. One participant was excluded under this criterion (PRISM/Turing, group~3; accuracy ${=} 0.65$).
+
+\paragraph{Balancing.}
+After excluding incomplete submissions (participants with fewer than 10 judgments) and those failing the comprehension filter, we retain the first 6 completions per (dataset, condition, group) cell, ordered by submission time. This ensures exactly 30 participants and 300 votes per condition. Three cells required trimming of one excess participant each (PRISM/Sim group~2, PRISM/Turing groups~1 and~4).
+
+\paragraph{Metric.}
+We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
+
+
+\section{Prompts}
+
+\subsection{Thinking Trace Elicitation}
+\label{app:thinking-trace-prompt}
+
+\input{prompts/thinking_trace_prompt}
+
+\subsection{Inference Prompt}
+\label{app:inference-prompt}
+
+At inference time, the model receives a system message containing the task instruction and (optionally) the user's persona, followed by a user message with the behavioral history and current context. The task instruction asks the model to predict \texttt{[HUMAN]}'s next message, matching writing intentions, style, vocabulary, and tone. Before outputting the final answer, the model is instructed to reason step by step, producing output in the format: \texttt{<reasoning>...</reasoning> [HUMAN]:} response.
+
+\subsection{Judge Prompts}
+\label{app:judge-prompts}
+
+\subsubsection{Turing Distinguishability Judge}
+\label{app:turing-prompt}
+\input{prompts/turing_prompt}
+\subsubsection{Response Similarity Judge}
+\label{app:sim-prompt}
+\input{prompts/sim_prompt}
+
+\subsubsection{Response Specificity Judge}
+\label{app:specificity-prompt}
+
+\input{prompts/specificity_prompt}
 
 
 
