@@ -340,7 +340,7 @@ GRPO-Turing & $.52$ \subtle{$\pm .06$} & $.55$ \subtle{$\pm .07$} \\
 
 \subsection{User Representations}
 
-User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM.   We ablate on the user representation and study three different user representations in the Chat domain: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
+User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM.   We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
 
 Table~\ref{tab:ablation_combined} shows the results. For the Turing/Specificity scores, we find that there is little difference in using the full user representation $(h, \rho)$ versus just using $\rho$ or $h$ alone. However, the similarity score benefits significantly from including the persona $\rho$. Our persona induction approach is quite basic---given the rich line of work on inducing personas and personality traits \citep{delucia2024using,zhang2024can,peters2024large,wu2025aligning}, it is possible that such techniques could further enhance performance.
 
@@ -357,17 +357,22 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \subsection{Qualitative Examples}
 \begin{table}[t]
 \centering
-\small
-\begin{tabular}{lccc}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}llccc@{}}
 \toprule
-\textbf{User Rep.} & \textbf{Turing Score} & \textbf{Sim Score} & \textbf{Specificity} \\
+Domain & Input & Turing & Sim & Spec. \\
 \midrule
-$u = (h, \rho)$ & $4.3$ \subtle{$\pm .08$} & $.054$ \subtle{$\pm .0088$} & $.52$ \subtle{$\pm .010$} \\
-$u = h$         & $4.3$ \subtle{$\pm .08$} & $.047$ \subtle{$\pm .0076$} & $.51$ \subtle{$\pm .010$} \\
-$u = \rho$      & $4.2$ \subtle{$\pm .08$} & $.041$ \subtle{$\pm .0065$} & $.52$ \subtle{$\pm .010$} \\
+Chat & $u = (h, \rho)$ & $4.31$ \subtle{$\pm .08$} & $.053$ \subtle{$\pm .0084$} & $.522$ \subtle{$\pm .009$} \\
+Chat & $u = h$         & $4.26$ \subtle{$\pm .08$} & $.047$ \subtle{$\pm .0075$} & $.508$ \subtle{$\pm .010$} \\
+Chat & $u = \rho$      & $4.23$ \subtle{$\pm .08$} & $.041$ \subtle{$\pm .0065$} & $.520$ \subtle{$\pm .010$} \\
+\midrule
+Reddit & $u = (h, \rho)$ & $3.68$ \subtle{$\pm .18$} & $.030$ \subtle{$\pm .0089$} & $.380$ \subtle{$\pm .018$} \\
+Reddit & $u = h$         & $3.78$ \subtle{$\pm .18$} & $.033$ \subtle{$\pm .0101$} & $.377$ \subtle{$\pm .020$} \\
+Reddit & $u = \rho$      & $3.84$ \subtle{$\pm .19$} & $.027$ \subtle{$\pm .0071$} & $.350$ \subtle{$\pm .019$} \\
 \bottomrule
 \end{tabular}
-\caption{Chat results for GRPO-Turing under three input ablations. Values are mean $\pm$ 95\% CI half-width.}
+\caption{GRPO-Turing results under three input ablations on Chat and Reddit. Values are mean $\pm$ 95\% CI half-width.}
 \label{tab:ablation_combined}
 \end{table}
 
