@@ -2,7 +2,7 @@
 \centering
 
 \begin{promptbox}[Response Similarity Judge (Part 1/3)]
-Rate how similar and complete each generated response is compared with the ground truth response.
+You are a helpful and meticulous evaluator. Your task is to score how well the generated response(s) align with the ground truth user response. Description of response: [HUMAN]'s actual written comment or reply text.
 
 You will be given past messages for [HUMAN], the current context, the ground truth response, and generated response(s) that you should evaluate.
 
@@ -15,37 +15,39 @@ Provided Information:
 
 {generations_text}
 
-For each generated response, assign three scores in [0.0, 1.0]:
+Scoring Criteria:
+For each generated response, assign a score in [0, 1] based on how accurately it reflects the ground truth response.
 
-1. "semantic_similarity": how similar the generated response is to the ground truth response in core meaning and information.
-Scoring guidelines:
-1.0 = Identical meaning, all key information preserved
-0.75-0.95 = Same core meaning with minor semantic differences
-0.55-0.75 = Similar meaning but some information changes
-0.35-0.55 = Related topics but different focus or emphasis
-0.15-0.35 = Some semantic overlap but different main message
-0.0-0.15 = Completely different meaning or topic
+Guidelines:
+1. Extract 1-3 key points:
+  - Extract K key points from the ground truth response along the response dimension (e.g., if evaluating a "stance", pick key points related to the stance like "clearly disagrees with X", if evaluating a "response", pick key points about the response like "offers a solution to Y").
+  - Because you are evaluating the full response, consider all major content, style, and intent cues expressed in the ground truth response.
+  - Each key point should be specific and distinct.
 
-2. "information_completeness": how completely the generated response preserves and covers the information from the ground truth response.
-Scoring guidelines:
-1.0 = All information fully preserved
-0.75-0.95 = Minor details missing but all key info present
-0.55-0.75 = Some important information missing
-0.35-0.55 = Significant information gaps
-0.15-0.35 = Major information missing, only basics preserved
-0.0-0.15 = Almost no information preserved
+2. Score how well the generated response matches each key point:
+  - For each key point i, compare it with the generated response and assign a match value m_i in range [0, 1]:
+  - 1.0: The key point is precisely and perfectly reflected.
+  - [0.7, 0.9]: Mostly reflected with small imperfections.
+  - [0.4, 0.6]: Partially reflected or vague, but still leaning in the correct direction.
+  - [0.1, 0.3]: Very weak reflection.
+  - 0.0: Missed, contradicted, or reversed.
 
-3. "score": a strict final overall alignment score based on semantic similarity and information completeness. The final score should not be high unless both semantic similarity and information completeness are high. Penalize unsupported extra content, irrelevant speculation, excessive verbosity relative to the ground truth, wrong perspective, and source copying.
+3. Compute coverage C = (m_1 + m_2 + ... + m_K) / K, which measures how comprehensive the generated response reflects the ground truth response.
 
-Penalty guidance:
-- Hard-penalize sycophantic or generic agreement responses, especially formulaic openings such as "you're absolutely right", "totally", "completely agree", "100%", "that is right", or "yeah".
-- Hard-penalize generic compromise responses that soften, reframe, or dilute a specific ground-truth position into a broad, moderate, or generic takeaway, for example turning a concrete argument into "it's a good starting point, but not a silver bullet" or "the real issue is...".
-- Topical relevance is not enough: if the response mainly adds plausible-sounding background, generic commentary, or reusable high-level framing without matching the ground truth's goals, values, communication style, beliefs, and emotions, assign a penalty.
+4. Compute penalty P for extra or conflicting content:
+  - Examine additional content in the generated response beyond those key points:
+  - Does it introduce unsupported evidence and assumptions?
+  - Is it irrelevant to what ground truth response expresses?
+  - Is it only using generic commentary or high-level framing that misses the ground truth's goals, values, communication style, beliefs, and emotions specific to [HUMAN]?
+  - Set a penalty P in [0, 1]:
+  - 0.0: No problematic extra content; everything is perfectly matched.
+  - [0.1, 0.3]: Slightly unnecessary, mildly speculative, or generic detail; meaning essentially unchanged.
+  - [0.4, 0.6]: Moderate speculative, irrelevant, or vague content that somewhat shifts emphasis or adds unsupported ideas.
 \end{promptbox}
 
 \vspace{-6pt}
 
-\caption{Exact response similarity judge prompt used in the experiments, split across three parts for typesetting.}
+\caption{Exact HumanLM response-only similarity judge prompt used in sim evaluation, split across three parts for typesetting.}
 \label{fig:sim_prompt}
 \end{figure*}
 
@@ -53,39 +55,28 @@ Penalty guidance:
 \centering
 
 \begin{promptbox}[Response Similarity Judge (Part 2/3)]
-Examples for semantic similarity:
+  - [0.7, 0.9]: Significant speculative, misleading, or conflicting content that clearly changes the meaning.
+  - 1.0: Mostly off-topic, contradictory, or dominated by incorrect/hallucinated content.
+  - Penalize sycophantic openings, especially formulaic phrases such as "you're absolutely right", "totally", "completely agree", "100%", "that is right", "yeah", or "it's a good starting point", unless [HUMAN]'s prior messages show that this kind of agreement-first opener is genuinely characteristic of their voice.
 
-Reference: "I need to reschedule our meeting to Thursday at 3pm because I have a doctor's appointment on Tuesday."
-Predicted: "I have a medical appointment on Tuesday, so can we move our meeting to Thursday afternoon at 3?"
-Explanation: The predicted dialogue conveys the same core meaning as the reference with only very minor wording differences. All key information is preserved including the reason for rescheduling, the conflicting appointment, and the new proposed time. The slight paraphrasing does not change the semantic content.
-<score>0.95</score>
+5. Response-specific checks:
+  - The generated response may or may not reuse phrases from the context; however, if the generated response just directly copies previous context, without quoting it, treat that as off-task behavior and give a score of 0.
+  - Wrong-perspective hard zero: if the generated response treats another user's perspective, identity, or experience in the thread as [HUMAN]'s own, or speaks from another participant's first-person perspective, give a score of 0.
+  - Assistant-like hard zero: if the ground truth is [HUMAN]'s next question, follow-up, or short request, but the generated response behaves like an assistant reply instead by directly answering the earlier prompt, giving a polished explanation, or presenting a structured helpful breakdown, treat that as wrong perspective and give a score of 0.
 
-Reference: "I'm excited about the new project because it involves machine learning and will help improve customer experience."
-Predicted: "The new project is interesting and uses AI technology."
-Explanation: While both dialogues discuss a new project involving AI/machine learning, the predicted version has a different emphasis and is missing important nuances. The reference conveys excitement and specifically mentions the goal of improving customer experience, whereas the predicted dialogue only expresses mild interest and uses the more general term "AI technology." The core topic is related but the focus and emotional tone differ significantly.
-<score>0.50</score>
+6. Compute the final score = max(0, min(1, C - P))
 
-Reference: "I'm planning to visit Paris next summer to see the museums and try French cuisine."
-Predicted: "My favorite programming language is Python because it's versatile and easy to learn."
-Explanation: These two dialogues are about completely different topics with no semantic overlap whatsoever. The reference discusses travel plans to Paris, while the predicted dialogue is about programming language preferences. There is no connection in meaning or information between them.
-<score>0.0</score>
+Additional considerations:
+- Follow the instruction carefully.
+- Be strict and reserve scores above 0.8 for clearly outstanding matches.
+- Do not reward verbosity or generic topical plausibility; reward user-specific evidence.
 
-Examples for information completeness:
-
-Reference: "The patient should take 500mg of amoxicillin twice daily for 10 days. Avoid alcohol and dairy products within 2 hours of each dose."
-Predicted: "Take 500mg amoxicillin twice daily for 10 days. Avoid alcohol and dairy around the time you take it."
-Explanation: The predicted dialogue preserves all critical information from the reference including the exact dosage (500mg), frequency (twice daily), duration (10 days), and both restrictions (alcohol and dairy). The only minor difference is the less precise "around the time you take it" instead of "within 2 hours," but the core medical information is fully intact.
-<score>0.95</score>
-
-Reference: "Our company was founded in 1987 by Sarah Chen in Boston. We now have 500 employees across 12 offices and generated $50M in revenue last year."
-Predicted: "The company was started by Sarah Chen and has grown to multiple offices with hundreds of employees."
-Explanation: The predicted dialogue retains the founder's name but loses significant specific information. The founding year (1987) and location (Boston) are missing. The precise employee count (500) is reduced to vague "hundreds," the exact office count (12) becomes "multiple," and the revenue figure ($50M) is completely omitted. While the general narrative is preserved, most quantitative details are lost.
-<score>0.50</score>
-
-Reference: "The experiment showed a 23% increase in cell growth when exposed to 450nm blue light for 6 hours at 37°C, with p<0.001 significance."
-Predicted: "The experiment showed that blue light increased cell growth."
-Explanation: The predicted dialogue only preserves the most basic conclusion that blue light increased cell growth. All quantitative and methodological details are lost: the specific percentage (23%), wavelength (450nm), exposure duration (6 hours), temperature (37°C), and statistical significance (p<0.001). Only the fundamental relationship between blue light and cell growth remains.
-<score>0.25</score>
+Output format (JSON):
+{
+  "key_points": "<analysis of key points from ground truth along response dimension>",
+  "1": {"thought": "<how well the 1st generated response matches each key point and compute the final score>", "score": <score>},
+  "2": ...
+}
 \end{promptbox}
 \end{figure*}
 
@@ -93,28 +84,12 @@ Explanation: The predicted dialogue only preserves the most basic conclusion tha
 \centering
 
 \begin{promptbox}[Response Similarity Judge (Part 3/3)]
-Remember to judge each generated response against the ground truth response only. Do not compare generated responses to each other.
-
-Perspective rule:
-- Determine whether each generated response is written as [HUMAN].
-- If it speaks as another user in the context, or treats another user's first-person statements as if they were [HUMAN]'s own, set "wrong_perspective" to true and set all three scores to 0.0.
-- If the ground truth is [HUMAN]'s next question, follow-up, or short request, but the generated response instead behaves like an assistant reply by directly answering the earlier prompt, giving a polished explanatory answer, or providing a structured helpful breakdown, set "wrong_perspective" to true and set all three scores to 0.0.
-- Otherwise set "wrong_perspective" to false.
-
-Be strict and reserve scores above 0.8 for clearly outstanding matches.
-
-Output format (JSON):
-{
-  "key_points": "<brief single-line analysis of the key information and meaning in the ground truth response>",
-  "1": {"thought": "<single-line reasoning for the scores>", "semantic_similarity": <float in [0,1]>, "information_completeness": <float in [0,1]>, "score": <float in [0,1]>, "wrong_perspective": <true or false>, "source_copy": <true or false>},
-  "2": ...
-}
-
 Format Notes:
 - All text in "key_points" and "thought" fields MUST be on a single line with no line breaks or newlines.
 - Use standard JSON string format with double quotes. For any quotes needed inside strings, use single quotes (').
-- Ensure that all numbered items from 1 to {num_generations} are present.
-- Ensure that every item includes "thought", "semantic_similarity", "information_completeness", "score", "wrong_perspective", and "source_copy".
+- Double check the JSON array's format, especially the comma and quotation marks.
+- Ensure that ALL fields, especially "thought" and "score", are present for each item.
+- You must provide exactly {num_generations} scores for the generated response(s).
 
 Your output:
 \end{promptbox}
