@@ -1,22 +1,167 @@
-\begin{figure*}[t]
+\begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Response Specificity Judge]
-Evaluates whether a generated response is specifically grounded in the current interaction and compatible with the target user, rather than being a generic but plausible reply.
+\begin{promptbox}[Response Specificity Judge (Part 1/5)]
+## Task
 
-Inputs: Target user evidence, interaction context, and one candidate response.
+You are evaluating {num_candidates} candidate responses for grounded specificity.
 
-Dimensions (each scored 0--1):
-  1. Context specificity (weight 0.5): How specifically the candidate engages with the exact local interaction. High scores require tight ties to the exact claim, question, event, or disagreement at issue. Low scores indicate broadly reusable responses.
-  2. User evidence compatibility (weight 0.5): How compatible the candidate is with the target user's observed behavior without unnaturally exposing or inventing evidence. High scores require natural compatibility; low scores indicate contradiction or persona-caricature.
+A high score means the candidate response is specifically tied to this interaction and specifically compatible with the target user, rather than being a reusable plausible response from an average participant.
+A low score means the candidate response is broadly plausible but generic, reusable, contradictory, unsupported, or artifact-like.
 
-Caps: If the response contradicts the context or uses the wrong speaker perspective, overall (*@$\leq$@*) 0.20. If it invents personal facts or unnaturally imports user-history details, overall (*@$\leq$@*) 0.40.
+## Inputs
 
-Overall: 0.5 (*@$\times$@*) context_specificity + 0.5 (*@$\times$@*) user_evidence_compatibility, subject to the caps above.
+You will receive:
+1. Target user evidence
+2. The current interaction context
+3. {num_candidates} candidate responses
+
+<|Target User Evidence|>
+{user_history}
+<|End Target User Evidence|>
+
+<|Interaction Context|>
+{context}
+<|End Interaction Context|>
+
+<|Candidate Responses|>
+{candidates}
+<|End Candidate Responses|>
 \end{promptbox}
 
 \vspace{-6pt}
 
-\caption{Response specificity judge prompt. The judge scores context specificity and user evidence compatibility, each in $[0, 1]$, and combines them with caps for contradictions and invented facts.}
+\caption{Exact batched response specificity judge prompt used in the experiments, split across five parts for typesetting.}
 \label{fig:specificity_prompt}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+
+\begin{promptbox}[Response Specificity Judge (Part 2/5)]
+## Evaluation Criteria
+
+Score each candidate as an absolute judgment of grounded user-specificity.
+
+A high-scoring response should:
+- fit the exact current interaction
+- be compatible with the target user's observed behavior
+- contain a natural situated move, stance, framing, effort level, or expression pattern that makes it specific to this user/context
+
+A low-scoring response may be fluent, coherent, topical, or plausible, but it is weakly grounded, broadly reusable, incompatible with the user/context, or artifact-like.
+
+## Core Rules
+
+- Do not reward general quality, fluency, politeness, balance, helpfulness, verbosity, or topical plausibility by themselves.
+- Do not require explicit personal facts; user evidence is background for compatibility and distinctiveness.
+- Reward specificity only when it is natural, proportionate, and tied to this exact next response.
+- Penalize invented user traits, unsupported personal assumptions, wrong perspective, over-explaining, over-personalizing, persona-caricature, and assistant-like responses.
+- A response that is fully compatible with the user can still be generic. Do not treat compatibility alone as specificity.
+- A response that smoothly advances the interaction but could be written by many plausible participants should receive only moderate scores.
+- Treat the target user's own earlier turns inside the current interaction context as strong evidence for immediate stance, effort level, style, and local move.
+- Penalize uncalled-for imports of personal facts, profile details, or past behavior when the current interaction does not make them natural to say.
+- If the response contradicts the context, uses the wrong speaker perspective, or invents personal facts, the overall score should be low regardless of other strengths.
+
+Score each dimension from 0.0 to 1.0.
+Use the full continuous range when appropriate. The regions below define the scale.
+
+For batched judging, score each candidate independently using the same rubric. Do not assume any candidate is ground truth.
+\end{promptbox}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+
+\begin{promptbox}[Response Specificity Judge (Part 3/5)]
+## Dimensions
+
+### Dimension 1: Context Specificity
+
+How specifically does the candidate engage with the exact local interaction?
+
+**Scoring regions:**
+- 0.9-1.0: Tightly tied to the exact claim, question, event, decision point, constraint, disagreement, callback, or conversational detail at issue.
+- 0.7-0.9: Clearly grounded in the specific local context with only minor generic framing.
+- 0.5-0.7: Responds to the main local issue but misses important details, constraints, or conversational pressure.
+- 0.3-0.5: Related to the broad topic but weakly grounded in this exact context.
+- 0.1-0.3: Barely connected; could fit many similar interactions.
+- 0.0-0.1: Off-topic, responds to the wrong issue or speaker, or ignores the local context.
+
+**High context specificity:**
+- Addresses the actual local claim, request, constraint, preference, decision point, joke, disagreement, or reference.
+- Tracks who said what and what the candidate is responding to.
+- Uses or reacts to local details without merely copying them.
+- Can be implicit, terse, joking, fragmentary, or low-effort when the local function is recoverable.
+- Preserves the target user's current local trajectory when the target user has already established one in the interaction.
+
+**Low context specificity:**
+- Gives a generic response about the broad topic.
+- Responds to the wrong participant, wrong request, or wrong part of the interaction.
+- Misses the key disagreement, question, constraint, or situational detail.
+- Directly answers a public-context detail but replaces the target user's likely local move with a cleaner or more obvious continuation.
+\end{promptbox}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+
+\begin{promptbox}[Response Specificity Judge (Part 4/5)]
+### Dimension 2: User Evidence Compatibility
+
+How compatible is the candidate with the target user's evidence without unnaturally exposing, exaggerating, or inventing that evidence?
+
+**Scoring regions:**
+- 0.9-1.0: Strongly compatible with the target user's evidence and current-context behavior, with no contradiction or unnatural profile display.
+- 0.7-0.9: Clearly compatible with important user evidence, stance, effort level, interaction habit, or constraints.
+- 0.5-0.7: Compatible but broad, weakly distinctive, incomplete, or mildly over-explicit.
+- 0.3-0.5: Only weakly compatible; mostly generic, overly smooth, over-personalized, or based on a thin user signal.
+- 0.1-0.3: Little meaningful compatibility with the user evidence, or the response seems to perform a profile rather than act naturally.
+- 0.0-0.1: Contradicts the user evidence, invents unsupported personal facts, uses the wrong perspective, or relies on a wrong user model.
+
+**High compatibility:**
+- Does not contradict the user's known behavior, values, constraints, or current-context stance.
+- Uses only the amount of user-specific detail that would naturally appear in this moment.
+- Preserves the user's likely local move instead of replacing it with a profile-shaped explanation.
+- Can reflect distinctive user evidence through form, effort level, stance, humor, skepticism, brevity, or refusal to elaborate.
+
+**Low compatibility:**
+- Contradicts the user evidence or current-context behavior.
+- Invents personal facts, preferences, motives, or biography.
+- Pulls in user history or profile details when the interaction does not call for them.
+- Sounds like a persona sketch, averaged user model, or assistant summary of the user.
+- Is merely non-contradictory and locally sensible, but gives no meaningful evidence of this user.
+\end{promptbox}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+
+\begin{promptbox}[Response Specificity Judge (Part 5/5)]
+## Overall Score
+
+Compute the overall score with these weights:
+- context_specificity: 50%
+- user_evidence_compatibility: 50%
+
+Apply these caps after computing the weighted score:
+- If the response contradicts the context, uses the wrong speaker perspective, or cannot work as the next response, overall should be at most 0.20.
+- If the response invents personal facts or unnaturally imports user-history/profile details, overall should be at most 0.40.
+
+
+## Output Requirements
+
+- Return valid JSON only.
+- Do not include Markdown.
+- Each reason must be brief: one short sentence.
+- Each dimension score and overall score must be a number in [0.0, 1.0].
+- Use the full continuous range when appropriate; do not restrict yourself to the region boundaries.
+- The overall score must follow the weighted formula and caps above.
+- Return exactly one result for each label: {label_list}.
+
+Return this JSON structure:
+
+{output_schema_example}
+
+Your output:
+\end{promptbox}
 \end{figure*}
