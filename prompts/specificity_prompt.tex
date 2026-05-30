@@ -1,6 +1,8 @@
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Response Specificity Judge (Part 1/5)]
 ## Task
 
@@ -28,6 +30,8 @@ You will receive:
 {candidates}
 <|End Candidate Responses|>
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 
 \vspace{-6pt}
 
@@ -38,6 +42,8 @@ You will receive:
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Response Specificity Judge (Part 2/5)]
 ## Evaluation Criteria
 
@@ -67,11 +73,15 @@ Use the full continuous range when appropriate. The regions below define the sca
 
 For batched judging, score each candidate independently using the same rubric. Do not assume any candidate is ground truth.
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Response Specificity Judge (Part 3/5)]
 ## Dimensions
 
@@ -100,11 +110,15 @@ How specifically does the candidate engage with the exact local interaction?
 - Misses the key disagreement, question, constraint, or situational detail.
 - Directly answers a public-context detail but replaces the target user's likely local move with a cleaner or more obvious continuation.
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Response Specificity Judge (Part 4/5)]
 ### Dimension 2: User Evidence Compatibility
 
@@ -131,11 +145,15 @@ How compatible is the candidate with the target user's evidence without unnatura
 - Sounds like a persona sketch, averaged user model, or assistant summary of the user.
 - Is merely non-contradictory and locally sensible, but gives no meaningful evidence of this user.
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Response Specificity Judge (Part 5/5)]
 ## Overall Score
 
@@ -164,4 +182,6 @@ Return this JSON structure:
 
 Your output:
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}

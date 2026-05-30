@@ -1,6 +1,8 @@
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 1/9)]
 ## Task
 
@@ -59,6 +61,8 @@ Evaluate each response independently before comparing them. Reason backward from
 
 Score each response on three criteria from 0.0 to 1.0.
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 
 \vspace{-6pt}
 
@@ -69,6 +73,8 @@ Score each response on three criteria from 0.0 to 1.0.
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 2/9)]
 ## Criteria
 
@@ -93,11 +99,15 @@ immediate_target_score:
 - 0.6-0.8 = Good target. The response addresses a plausible part of the current context or makes a plausible topic pivot from [HUMAN]'s perspective, with only minor ambiguity.
 - 0.8-1.0 = Strong target. The response clearly addresses the most plausible current-context point, or makes a strongly human-plausible pivot, from [HUMAN]'s perspective and directed at [OTHER] or [OTHER - OP].
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 3/9)]
 ### 2. Human goal
 
@@ -118,11 +128,15 @@ human_goal_score:
 - 0.6-0.8 = Good goal. The response's goal, including a reasonable new-question or topic-pivot goal, is plausible for [HUMAN] in this context, with only minor uncertainty or drift.
 - 0.8-1.0 = Strong goal. The response's goal naturally follows from [HUMAN]'s current intent, history, or local topic-switching pattern, while preserving personal or context-sensitive intent.
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 4/9)]
 ### 3. Communication style and length
 
@@ -146,11 +160,15 @@ communication_style_score:
 - 0.6-0.8 = Good style match. The response mostly matches [HUMAN]'s characteristic wording, rhythm, tone, length, formatting, punctuation, specificity, and level of elaboration, with only minor mismatch; length should be in the same rough range as [HUMAN]'s likely response.
 - 0.8-1.0 = Strong style match. The response sounds specifically like [HUMAN], including distinctive phrasing, rhythm, roughness or polish, humor, profanity, hedging, formatting, punctuation, specificity, natural level of effort, and closely matched length.
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 5/9)]
 ## Penalty Checks
 
@@ -169,11 +187,15 @@ When the watchlist is triggered, first decide whether the overlap is local uptak
 
 If copied text is not a natural quote or local uptake (i.e., a direct copy from the user history), assign a high source_copy_penalty. If the response quotes text but the quotation logic is confusing or contradictory, assign a high source_copy_penalty.
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 6/9)]
 ### Wrong target or speaker role
 Assign wrong_target_or_role_penalty when a response speaks from the wrong role, addresses the wrong speaker, or assigns an unsupported stance, experience, motive, relationship, or conflict to the speaker it addresses.
@@ -199,11 +221,15 @@ Watch for:
 
 When a response is framed as a pushback, rebuttal, or challenge, check whether the objection responds to the claim actually made. If it attacks a premise the other speaker did not rely on, misstates a speaker's stance, role, or personal experience, or reframes the issue into a different dispute, assign a high unsupported_adversarial_reframing_penalty.
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 7/9)]
 ### Assistant-like response
 Assign assistant_like_penalty when a response clearly reads like chatbot output rather than an organic human comment based on surface form. Watch for numbered or bulleted action plans, section headers, step-by-step framing, summary or conclusion sections, repeated direct-address coaching, generic reassurance, overgenerated transition phrases such as "But wait" or "But wait—", template phrases such as "You're absolutely right", "You're absolutely correct", "here's what you need to do", "let's break this down", "next steps", or "set boundaries", overuse of dashes "-", semicolons ";", or emojis, especially multiple emojis in a short response when not justified by [HUMAN]'s history or the local context, unnatural colloquial apostrophe abbreviations such as "'em" when not supported by [HUMAN]'s history or the local context, and other AI-written template patterns. Do not treat "[...quoted text...]" as assistant-like by itself; it may appear in human-written responses.
@@ -239,11 +265,15 @@ Rating scale:
 - 6 = Very likely B
 - 7 = Definitely B is the real human response
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 8/9)]
 ## Output Format
 
@@ -267,11 +297,15 @@ Return exactly one valid JSON object with this schema:
   "response_b_score": <number from 0.0 to 3.0>,
   "score_gap": <response_b_score - response_a_score>,
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
+\begin{adjustbox}{max width=\linewidth, scale=0.85}
+\begin{minipage}{\linewidth}
 \begin{promptbox}[Turing Distinguishability Judge (Part 9/9)]
   "response_a_source_copy": "<If source-copy watchlist is on for Response A, explain whether the matched text is a generic frame, common template, pet phrase, sign-off, natural quote, local uptake, direct copy from user history, or confusing/contradictory quote. If the watchlist is off, write an empty string.>",
   "source_copy_penalty_a": <number from 0.0 to 1.0>,
@@ -308,4 +342,6 @@ Return exactly one valid JSON object with this schema:
 
 Your output:
 \end{promptbox}
+\end{minipage}
+\end{adjustbox}
 \end{figure*}
