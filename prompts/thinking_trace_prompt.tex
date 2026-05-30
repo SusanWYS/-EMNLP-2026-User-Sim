@@ -57,8 +57,6 @@
 
 \begin{figure*}[t]
 \centering
-\begin{adjustbox}{max width=\linewidth, scale=0.85}
-\begin{minipage}{\linewidth}
 \begin{promptbox}[System Message]
 You generate hidden reasoning traces for user-simulation SFT data.
 Given [HUMAN]'s history, [HUMAN]'s persona, the current
@@ -66,13 +64,9 @@ conversation context, and [HUMAN]'s actual next response,
 explain the reasoning process that could lead [HUMAN]
 to write that response.
 \end{promptbox}
-\end{minipage}
-\end{adjustbox}
 
 \vspace{15pt}
 
-\begin{adjustbox}{max width=\linewidth, scale=0.85}
-\begin{minipage}{\linewidth}
 \begin{promptbox}[User Message]
 <|Target User Evidence|>
 (reserved history block (*@$h$@*))
@@ -97,8 +91,6 @@ Bring in supporting evidence from [HUMAN]'s history messages or persona.
 Do not reproduce the given response. Do not copy, quote, closely paraphrase, or reveal its final wording. The trace may describe the response's intent, stance, target, and style, but must not restate the response itself.
 Output only the reasoning trace text, with no XML tags or headings.
 \end{promptbox}
-\end{minipage}
-\end{adjustbox}
 % \vspace{-6pt}
 \caption{
 Thinking trace elicitation prompt. A teacher model receives the user's history $h$, persona $\rho$,

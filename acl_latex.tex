@@ -53,6 +53,7 @@
 \usepackage[most]{tcolorbox}
 
 \lstdefinelanguage{none}{}
+\DeclareTextCommandDefault{\textquotedbl}{\char34}
 
 \newtcblisting{promptbox}[1][]{
   enhanced,
@@ -78,6 +79,7 @@
     showstringspaces=false,
     escapeinside={(*@}{@*)},
     literate=
+      {"}{{\char34}}1
       {’}{{'}}1
       {“}{{\char34}}1
       {”}{{\char34}}1

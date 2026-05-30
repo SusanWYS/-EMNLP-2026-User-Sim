@@ -1,8 +1,6 @@
 \begin{figure*}[p]
 \centering
 
-\begin{adjustbox}{max width=\linewidth, scale=0.85}
-\begin{minipage}{\linewidth}
 \begin{promptbox}[Response Similarity Judge (Part 1/3)]
 You are a helpful and meticulous evaluator. Your task is to score how well the generated response(s) align with the ground truth user response. Description of response: [HUMAN]'s actual written comment or reply text.
 
@@ -46,8 +44,6 @@ Guidelines:
   - [0.1, 0.3]: Slightly unnecessary, mildly speculative, or generic detail; meaning essentially unchanged.
   - [0.4, 0.6]: Moderate speculative, irrelevant, or vague content that somewhat shifts emphasis or adds unsupported ideas.
 \end{promptbox}
-\end{minipage}
-\end{adjustbox}
 
 \vspace{-6pt}
 
@@ -58,8 +54,6 @@ Guidelines:
 \begin{figure*}[p]
 \centering
 
-\begin{adjustbox}{max width=\linewidth, scale=0.85}
-\begin{minipage}{\linewidth}
 \begin{promptbox}[Response Similarity Judge (Part 2/3)]
   - [0.7, 0.9]: Significant speculative, misleading, or conflicting content that clearly changes the meaning.
   - 1.0: Mostly off-topic, contradictory, or dominated by incorrect/hallucinated content.
@@ -84,15 +78,11 @@ Output format (JSON):
   "2": ...
 }
 \end{promptbox}
-\end{minipage}
-\end{adjustbox}
 \end{figure*}
 
 \begin{figure*}[p]
 \centering
 
-\begin{adjustbox}{max width=\linewidth, scale=0.85}
-\begin{minipage}{\linewidth}
 \begin{promptbox}[Response Similarity Judge (Part 3/3)]
 Format Notes:
 - All text in "key_points" and "thought" fields MUST be on a single line with no line breaks or newlines.
@@ -103,6 +93,4 @@ Format Notes:
 
 Your output:
 \end{promptbox}
-\end{minipage}
-\end{adjustbox}
 \end{figure*}
