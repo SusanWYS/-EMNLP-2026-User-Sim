@@ -93,6 +93,10 @@
 % The toptitlebar has been raised to top-justify the first page
 
 \usepackage{fancyhdr}
+
+% First page
+\fancypagestyle{plain}{\lhead{}}
+
 \pagestyle{fancy}
 \renewcommand{\headrulewidth}{1.5pt}
 \fancyhead{}
@@ -111,7 +115,7 @@
     \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\@author\end{tabular}%
 \else\ifcolmpreprint
 % \lhead{Preprint. Under review.}
-\lhead{UTTER: Learning User Simulators with  Turing Rewards}
+\lhead{UTTER: Learning User Simulators with Turing Rewards}
 \def\And{\end{tabular}\hfil\linebreak[0]\hfil
         \begin{tabular}[t]{l}\bf\rule{\z@}{24pt}\ignorespaces}%
 \def\AND{\end{tabular}\hfil\linebreak[4]\hfil

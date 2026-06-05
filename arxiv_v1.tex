@@ -86,13 +86,15 @@
 \newcommand{\susan}[1]{{\color{purple}[susan: #1]}}
 
 
-\title{UTTER: Learning User Simulators with  Turing Rewards}
+\title{Learning User Simulators with Turing Rewards}
 
 % Authors must not appear in the submitted version. This should be be taken care of automatically as long as you are using the "submission" option for the colm2026_conference package. But it's on the authors to verify. Non-anonymous submissions will be rejected without review.
 
-\author{Yingshan Susan Wang$^1$, Cedegao E. Zhang$^1$, Linlu Qiu$^1$, Zexue He$^2$, \\
+\author{Yingshan Susan Wang$^{1*}$, Cedegao E. Zhang$^{1*}$, Linlu Qiu$^{1*}$, Zexue He$^{2}\thanks{Core contributors.}$\:\:, \\
+\vspace{2mm}
 \textbf{Pengyuan Li$^2$, Alex Pentland$^2$, Roger P. Levy$^1$, Yoon Kim$^1$} \\
-  $^1$MIT, $^2$Stanford University \\
+  $^1$Massachusetts Institute of Technology, $^2$Stanford University \\
+  \vspace{2mm}
   \texttt{\{susanw26, cedzhang, linluqiu\}@mit.edu}
 }
 
@@ -114,9 +116,10 @@
 \fi
 
 \maketitle
+\thispagestyle{plain}
 
 \begin{abstract}
-Learning to simulate human users in interactive settings could advance the training of agents that serve humans, the evaluation of personalization systems, and research in the social sciences. Existing approaches generally do so by training a large language model (LLM) to match a single ground truth response, either by maximizing the log probability or by using a similarity reward. We instead propose a Turing Test approach for learning user simulator models, where a model is trained via reinforcement learning to produce responses indistinguishable from what the user could have said. Our discriminative Turing reward uses an LLM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two substantially different domains, namely conversational chat and Reddit forum discussion, we find that the Turing reward consistently outperforms baseline methods on both LLM and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an effective route to learning user simulators.
+Learning to simulate human users in interactive settings could advance the training of agents that serve humans, the evaluation of personalization systems, and research in the social sciences. Existing approaches generally do so by training a large language model (LLM) to match a single ground truth response, either by maximizing the log probability or by using a similarity reward. We instead propose a Turing Test-based approach for learning user simulator models, where a model is trained via reinforcement learning to produce responses indistinguishable from what the user could have said. Our discriminative Turing reward uses an LLM judge to score how indistinguishable a generated response is from the real user's given the user's history. Across two  different domains---conversational chat and Reddit forum discussion---we find that the Turing reward consistently outperforms baseline methods on both LLM and human evaluation metrics. Our study suggests that optimizing for indistinguishability, rather than response matching, is an effective route for learning user simulators.
 \end{abstract}
 
 \section{Introduction}
@@ -299,7 +302,7 @@ In addition to LLM-as-judge evaluation, we also recruit human participants from 
 \paragraph{Response humanlikeness.}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
+\includegraphics[width=0.5\columnwidth]{figures/sonnet46_turing_dot.pdf}
 \caption{Turing judge scores (1--7 Likert; higher = harder to distinguish from a real user) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. The dashed line and shaded band mark the Qwen3-8B base model. \textbf{GRPO-Turing substantially outperforms all other training signals on humanlikeness in both domains.} Even GPT-5, a much larger model, does not match it.}
 \label{fig:turing_dot}
 \end{figure}
@@ -311,7 +314,7 @@ Notably, user simulation remains a difficult task overall. Even GPT-5, a much la
 \paragraph{Response similarity to ground truth.}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
+\includegraphics[width=0.5\columnwidth]{figures/sonnet46_sim_dot.pdf}
 \caption{Response similarity to ground truth ($[0,1]$; higher = more similar to what the user actually said) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. \textbf{GRPO-Turing matches GRPO-Sim}, the model explicitly trained to maximize similarity, showing that optimizing for indistinguishability does not sacrifice content alignment.}
 \label{fig:sim_dot}
 \end{figure}
@@ -320,7 +323,7 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. GPT-5 
 \paragraph{Response specificity.}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
+\includegraphics[width=0.5\columnwidth]{figures/sonnet46_specificity_dot.pdf}
 \vspace{-0.4cm}
 \caption{Response specificity ($[0,1]$; higher = more grounded in the interaction context and compatible with the target user) from Sonnet~4.6, with 95\% CIs. GT is the ground truth human response. \textbf{GRPO-Turing and GRPO-Sim produce the most contextually specific responses}, substantially outperforming SFT-Init and the base model in both domains.}
 \label{fig:specificity}
@@ -355,7 +358,7 @@ GRPO-Turing & \textbf{.52} \subtle{$\pm .06$} & \textbf{.55} \subtle{$\pm .07$} 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
+\includegraphics[width=0.5\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
 \caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that GRPO-Turing is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
 \label{fig:binary_gt_accuracy}
 \vspace{-0.4cm}
@@ -458,7 +461,7 @@ Figure~\ref{fig:qualitative_examples_2} shows representative examples from both 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/qualitative_examples_2.pdf}
+\includegraphics[width=0.5\columnwidth]{figures/qualitative_examples_2.pdf}
 \vspace{-2em}
 \caption{Qualitative comparison of SFT, GRPO-Sim, and GRPO-Turing on one Reddit and one Chat example. \textbf{GRPO-Turing produces responses closest in tone and brevity to the real user}, while SFT copies context and GRPO-Sim generates generic editorial replies.}
 \label{fig:qualitative_examples_2}
