@@ -589,10 +589,14 @@ Each example is rendered as a two-message chat sequence: a system message contai
 
 \section{Training Details}
 \label{app:training_details}
-\subsection{Training Hyperparameters}
+\subsection{SFT Training Details}
+\label{app:sft_training_details}
+\label{app:thinking-trace-prompt}
 \label{app:hyperparams}
 
-Tables~\ref{tab:sft_hyperparams} and~\ref{tab:hyperparams} list the hyperparameters for SFT and GRPO training respectively. We trained on local B200/B300 machines for about 960 GPU hours.
+Table~\ref{tab:sft_hyperparams} lists the hyperparameters for the SFT warm-start stage. SFT is trained on the disjoint SFT user split using ground-truth user responses paired with generated reasoning traces. To construct each trace, we run Qwen3-8B itself with thinking mode disabled and provide the user's reserved history $h$, induced persona $\rho$, current context $x$, and ground-truth response $y_{\star}$. The prompt asks the model to explain what could have led \texttt{[HUMAN]} to write the response, focusing on the local target, intent, stance, style, and plausible length, while explicitly prohibiting copying, quoting, closely paraphrasing, or revealing the response wording. The exact trace-elicitation prompt is shown in Figure~\ref{fig:thinking_trace_prompt}. The resulting trace is paired with the ground truth as \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y_{\star}$. The loss is applied only to this assistant completion target, while prompt, history, persona, and context tokens are masked out.
+
+\input{prompts/thinking_trace_prompt}
 
 \begin{table}[h]
 \centering
@@ -619,6 +623,11 @@ Precision & bfloat16 \\
 \caption{SFT training hyperparameters.}
 \label{tab:sft_hyperparams}
 \end{table}
+
+\subsection{GRPO Training Details}
+\label{app:grpo_training_details}
+
+Table~\ref{tab:hyperparams} lists the hyperparameters shared across GRPO variants. All GRPO runs are initialized from the SFT checkpoint and trained on a GRPO user split disjoint from the SFT data. We sample four candidate responses per example, compute group-relative advantages within each candidate group, and optimize the resulting policy objective with LoRA adapters. Across SFT and GRPO, we trained on local B200/B300 machines for about 960 GPU hours.
 
 \begin{table}[h]
 \centering
@@ -721,13 +730,6 @@ We report the model win rate (WR): the fraction of judgments in which the annota
 
 \section{Prompts}
 \label{app:prompts}
-
-\subsection{Thinking-Trace Elicitation Prompt}
-\label{app:thinking-trace-prompt}
-
-Given the context and ground truth response, we ask the model, using the prompt in Figure~\ref{fig:thinking_trace_prompt}, to explain what could have led the user to write that response. The elicited reasoning traces are then used for supervised fine-tuning of the base Qwen3-8B model.
-
-\input{prompts/thinking_trace_prompt}
 
 \subsection{Inference Prompt}
 \label{app:inference-prompt}
