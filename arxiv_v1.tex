@@ -408,18 +408,18 @@ $u = \rho$      & 4.23\subtle{$\pm .08$} & 4.1\subtle{$\pm .7$} & .509\subtle{$\
 \begin{table}[t]
 \centering
 \small
-\setlength{\tabcolsep}{1.2pt}
-\begin{tabular}{@{}l@{\hspace{4pt}}ccc@{\hspace{6pt}}ccc@{}}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccccc@{}}
 \toprule
 \multirow{2}{*}{Metric} & \multicolumn{3}{c}{Chat} & \multicolumn{3}{c}{Reddit} \\
 \cmidrule(lr){2-4}\cmidrule(l){5-7}
- & \shortstack{5.4-\\nano} & Qwen & Opus & \shortstack{5.4-\\nano} & Qwen & Opus \\
+ & 5.4-nano & Qwen & Opus & 5.4-nano & Qwen & Opus \\
 \midrule
 Turing & 4.31\subtle{$\pm .08$} & 4.24\subtle{$\pm .07$} & 4.19\subtle{$\pm .08$} & 3.68\subtle{$\pm .18$} & 3.47\subtle{$\pm .19$} & 3.89\subtle{$\pm .17$} \\
 Sim    & 5.3\subtle{$\pm .8$} & 4.8\subtle{$\pm .7$} & 4.8\subtle{$\pm .8$} & 3.0\subtle{$\pm .9$} & 2.9\subtle{$\pm 1.1$} & 3.2\subtle{$\pm 1.0$} \\
 Spec.  & .512\subtle{$\pm .009$} & .504\subtle{$\pm .009$} & .494\subtle{$\pm .010$} & .367\subtle{$\pm .020$} & .337\subtle{$\pm .020$} & .390\subtle{$\pm .020$} \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \caption{Ablation on the persona induction model for GRPO-Turing with history and persona $u = (h, \rho)$. We compare personas induced by GPT-5.4 nano (5.4-nano), Qwen3-8B with thinking enabled (Qwen), and Opus 4.8 (Opus). Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Spec. is in $[0,1]$. \textbf{Persona inductor choice has a limited effect relative to confidence intervals}, though Opus performs best on Reddit and 5.4-nano performs best on Chat.}
 \label{tab:persona_inductor_ablation}
 \vspace{-0.3cm}
