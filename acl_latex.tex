@@ -385,13 +385,13 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \cmidrule(l){3-5}
  & & Turing & Sim & Specificity \\
 \midrule
-\multirow{3}{*}{Reddit} & $u = (h, \rho)$ & 3.68 \subtle{$\pm .18$} & .030 \subtle{$\pm .0089$} & .380 \subtle{$\pm .018$} \\
+\multirow{3}{*}{Reddit} & $u = (h, \rho)$ & \textbf{3.68} \subtle{$\pm .18$} & .030 \subtle{$\pm .0089$} & .380 \subtle{$\pm .018$} \\
  & $u = h$         & 3.78 \subtle{$\pm .18$} & .033 \subtle{$\pm .0101$} & .377 \subtle{$\pm .020$} \\
- & $u = \rho$      & 3.84 \subtle{$\pm .19$} & .027 \subtle{$\pm .0071$} & .350 \subtle{$\pm .019$} \\
+ & $u = \rho$      & 3.84 \subtle{$\pm .19$} & \textbf{.027} \subtle{$\pm .0071$} & \textbf{.350} \subtle{$\pm .019$} \\
 \midrule
 \multirow{3}{*}{Chat} & $u = (h, \rho)$ & 4.31 \subtle{$\pm .08$} & .053 \subtle{$\pm .0084$} & .522 \subtle{$\pm .009$} \\
- & $u = h$         & 4.26 \subtle{$\pm .08$} & .047 \subtle{$\pm .0075$} & .508 \subtle{$\pm .010$} \\
- & $u = \rho$      & 4.23 \subtle{$\pm .08$} & .041 \subtle{$\pm .0065$} & .520 \subtle{$\pm .010$} \\
+ & $u = h$         & 4.26 \subtle{$\pm .08$} & .047 \subtle{$\pm .0075$} & \textbf{.508} \subtle{$\pm .010$} \\
+ & $u = \rho$      & \textbf{4.23} \subtle{$\pm .08$} & \textbf{.041} \subtle{$\pm .0065$} & .520 \subtle{$\pm .010$} \\
 \bottomrule
 \end{tabular*}
 \caption{Ablation on user representation for GRPO-Turing. We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$. Values are mean $\pm$ 95\% CI half-width. \textbf{Performance is robust across representations}: differences between conditions are small relative to confidence intervals in both domains.}

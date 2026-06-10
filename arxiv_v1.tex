@@ -390,15 +390,13 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \setlength{\tabcolsep}{2.0pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccccc@{}}
 \toprule
-\multirow{3}{*}{Input} & \multicolumn{6}{c}{Metric} \\
-\cmidrule(lr){2-7}
- & \multicolumn{3}{c}{Reddit} & \multicolumn{3}{c}{Chat} \\
+\multirow{2}{*}{Input} & \multicolumn{3}{c}{Reddit} & \multicolumn{3}{c}{Chat} \\
 \cmidrule(lr){2-4}\cmidrule(l){5-7}
- & Turing & Sim & Specificity & Turing & Sim & Specificity \\
+Metric & Turing & Sim & Specificity & Turing & Sim & Specificity \\
 \midrule
-$u = (h, \rho)$ & 3.68\subtle{$\pm .18$} & 3.0\subtle{$\pm .9$} & .367\subtle{$\pm .020$} & 4.31\subtle{$\pm .08$} & 5.3\subtle{$\pm .8$} & .512\subtle{$\pm .009$} \\
-$u = h$         & 3.78\subtle{$\pm .18$} & 3.3\subtle{$\pm 1.0$} & .364\subtle{$\pm .019$} & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$} & .497\subtle{$\pm .010$} \\
-$u = \rho$      & 3.84\subtle{$\pm .19$} & 2.7\subtle{$\pm .7$} & .329\subtle{$\pm .018$} & 4.23\subtle{$\pm .08$} & 4.1\subtle{$\pm .7$} & .509\subtle{$\pm .009$} \\
+$u = (h, \rho)$ & \textbf{3.68}\subtle{$\pm .18$} & 3.0\subtle{$\pm .9$} & .367\subtle{$\pm .020$} & 4.31\subtle{$\pm .08$} & 5.3\subtle{$\pm .8$} & .512\subtle{$\pm .009$} \\
+$u = h$         & 3.78\subtle{$\pm .18$} & 3.3\subtle{$\pm 1.0$} & .364\subtle{$\pm .019$} & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$} & \textbf{.497}\subtle{$\pm .010$} \\
+$u = \rho$      & 3.84\subtle{$\pm .19$} & \textbf{2.7}\subtle{$\pm .7$} & \textbf{.329}\subtle{$\pm .018$} & \textbf{4.23}\subtle{$\pm .08$} & \textbf{4.1}\subtle{$\pm .7$} & .509\subtle{$\pm .009$} \\
 \bottomrule
 \end{tabular*}
 \caption{Ablation on user representation for GRPO-Turing. We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$. Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf{Turing performance is robust across representations}; specificity remains close on Chat but favors history-conditioned inputs on Reddit.}
