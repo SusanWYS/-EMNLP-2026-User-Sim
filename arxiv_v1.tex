@@ -374,7 +374,7 @@ Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely r
 
 The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, indicates that the persona captures stylistic and behavioral patterns sufficient for humanlikeness, even when it does not help reproduce the exact content of the ground-truth response.
 
-We further test whether these results depend on the auxiliary model used to induce the persona $\rho$. Table~\ref{tab:persona_inductor_ablation} compares three persona inductors while keeping the downstream GRPO-Turing recipe fixed.
+We further test whether these results depend on the auxiliary model used to induce the persona $\rho$. Table~\ref{tab:persona_inductor_ablation} compares three persona inductors while keeping the downstream GRPO-Turing recipe fixed, and includes the history-only no-persona baseline for reference.
 
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
@@ -759,19 +759,20 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \begin{table}[t]
 \centering
 \small
-\setlength{\tabcolsep}{2.5pt}
+\setlength{\tabcolsep}{2.0pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccccc@{}}
 \toprule
-Metric & \multicolumn{3}{c}{Chat} & \multicolumn{3}{c}{Reddit} \\
+\multirow{2}{*}{Persona Source} & \multicolumn{3}{c}{Reddit} & \multicolumn{3}{c}{Chat} \\
 \cmidrule(lr){2-4}\cmidrule(l){5-7}
-Persona Model & GPT-5.4-nano & Qwen3-8B & Opus 4.8 & GPT-5.4-nano & Qwen3-8B & Opus 4.8 \\
+ & Turing & Sim & Specificity & Turing & Sim & Specificity \\
 \midrule
-Turing & 4.31\subtle{$\pm .08$} & 4.24\subtle{$\pm .07$} & 4.19\subtle{$\pm .08$} & 3.68\subtle{$\pm .18$} & 3.47\subtle{$\pm .19$} & 3.89\subtle{$\pm .17$} \\
-Sim    & 5.3\subtle{$\pm .8$} & 4.8\subtle{$\pm .7$} & 4.8\subtle{$\pm .8$} & 3.0\subtle{$\pm .9$} & 2.9\subtle{$\pm 1.1$} & 3.2\subtle{$\pm 1.0$} \\
-Specificity  & .512\subtle{$\pm .009$} & .504\subtle{$\pm .009$} & .494\subtle{$\pm .010$} & .367\subtle{$\pm .020$} & .337\subtle{$\pm .020$} & .390\subtle{$\pm .020$} \\
+No persona ($u=h$) & 3.78\subtle{$\pm .18$} & 3.3\subtle{$\pm 1.0$} & .364\subtle{$\pm .019$} & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$} & .497\subtle{$\pm .010$} \\
+GPT-5.4-nano & 3.68\subtle{$\pm .18$} & 3.0\subtle{$\pm .9$} & .367\subtle{$\pm .020$} & 4.31\subtle{$\pm .08$} & 5.3\subtle{$\pm .8$} & .512\subtle{$\pm .009$} \\
+Qwen3-8B & 3.47\subtle{$\pm .19$} & 2.9\subtle{$\pm 1.1$} & .337\subtle{$\pm .020$} & 4.24\subtle{$\pm .07$} & 4.8\subtle{$\pm .7$} & .504\subtle{$\pm .009$} \\
+Opus 4.8 & 3.89\subtle{$\pm .17$} & 3.2\subtle{$\pm 1.0$} & .390\subtle{$\pm .020$} & 4.19\subtle{$\pm .08$} & 4.8\subtle{$\pm .8$} & .494\subtle{$\pm .010$} \\
 \bottomrule
 \end{tabular*}
-\caption{Ablation on the persona induction model for GRPO-Turing with history and persona $u = (h, \rho)$. We compare personas induced by GPT-5.4 nano (5.4-nano), Qwen3-8B with thinking enabled (Qwen), and Opus 4.8 (Opus). Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Spec. is in $[0,1]$. \textbf{Persona inductor choice has a limited effect relative to confidence intervals}, though Opus performs best on Reddit and 5.4-nano performs best on Chat.}
+\caption{Ablation on the persona induction model for GRPO-Turing. We compare the history-only no-persona baseline $u=h$ with history-and-persona models $u=(h,\rho)$ using personas induced by GPT-5.4 nano, Qwen3-8B with thinking enabled, and Opus 4.8. Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf{Persona inductor choice has a limited effect relative to confidence intervals}, though Opus performs best on Reddit and GPT-5.4-nano performs best on Chat.}
 \label{tab:persona_inductor_ablation}
 \vspace{-0.3cm}
 \end{table}
