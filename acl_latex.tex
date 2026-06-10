@@ -332,7 +332,6 @@ Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth resp
 These estimates are computed from 100 target users per dataset with 6 selected annotators per target, yielding 600 binary judgments per dataset--model pair. Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering: the similarity reward yields the clearest human win-rate gain on Reddit, while the Turing reward yields the clearest gain on Chat.
 % which we attribute to the relatively small sample size of annotators per condition.\footnote{The small sample size of ${\sim}30$ annotator was necessary given our budgetary constraints.}
 
-
 \begin{table}[b]
 \centering
 \small
@@ -379,22 +378,20 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 
 \begin{table}[t]
 \centering
-\setlength{\tabcolsep}{2.5pt}
-\scalebox{0.92}{%
-\begin{tabular}{@{}llccc@{}}
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}llccc@{}}
 \toprule
-Domain & Input & Turing & Sim & Spec. \\
-\midrule
-\multirow{3}{*}{Chat} & $u = (h, \rho)$ & 4.31 \subtle{$\pm .08$} & .053 \subtle{$\pm .0084$} & .522 \subtle{$\pm .009$} \\
- & $u = h$         & 4.26 \subtle{$\pm .08$} & .047 \subtle{$\pm .0075$} & .508 \subtle{$\pm .010$} \\
- & $u = \rho$      & 4.23 \subtle{$\pm .08$} & .041 \subtle{$\pm .0065$} & .520 \subtle{$\pm .010$} \\
+Domain & Input & Turing & Sim & Specificity \\
 \midrule
 \multirow{3}{*}{Reddit} & $u = (h, \rho)$ & 3.68 \subtle{$\pm .18$} & .030 \subtle{$\pm .0089$} & .380 \subtle{$\pm .018$} \\
  & $u = h$         & 3.78 \subtle{$\pm .18$} & .033 \subtle{$\pm .0101$} & .377 \subtle{$\pm .020$} \\
  & $u = \rho$      & 3.84 \subtle{$\pm .19$} & .027 \subtle{$\pm .0071$} & .350 \subtle{$\pm .019$} \\
+\midrule
+\multirow{3}{*}{Chat} & $u = (h, \rho)$ & 4.31 \subtle{$\pm .08$} & .053 \subtle{$\pm .0084$} & .522 \subtle{$\pm .009$} \\
+ & $u = h$         & 4.26 \subtle{$\pm .08$} & .047 \subtle{$\pm .0075$} & .508 \subtle{$\pm .010$} \\
+ & $u = \rho$      & 4.23 \subtle{$\pm .08$} & .041 \subtle{$\pm .0065$} & .520 \subtle{$\pm .010$} \\
 \bottomrule
-\end{tabular}
-}
+\end{tabular*}
 \caption{Ablation on user representation for GRPO-Turing. We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$. Values are mean $\pm$ 95\% CI half-width. \textbf{Performance is robust across representations}: differences between conditions are small relative to confidence intervals in both domains.}
 \label{tab:ablation_combined}
 \vspace{-0.3cm}
