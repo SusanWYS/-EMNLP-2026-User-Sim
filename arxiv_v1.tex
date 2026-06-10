@@ -401,7 +401,7 @@ $u = h$         & 3.78\subtle{$\pm .18$} & 3.3\subtle{$\pm 1.0$} & .364\subtle{$
 $u = \rho$      & 3.84\subtle{$\pm .19$} & \textbf{2.7}\subtle{$\pm .7$} & \textbf{.329}\subtle{$\pm .018$} & \textbf{4.23}\subtle{$\pm .08$} & \textbf{4.1}\subtle{$\pm .7$} & .509\subtle{$\pm .009$} \\
 \bottomrule
 \end{tabular*}
-\caption{Ablation on user representation for GRPO-Turing. Bold indicate worst performance. We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$. Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf{Turing performance is robust across representations}; specificity remains close on Chat but favors history-conditioned inputs on Reddit.}
+\caption{Ablation on user representation for GRPO-Turing.We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$. \textbf{Bold indicate worst performance.} Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf{Although $u = \rho$ performs slightly worse across conditions, input space representation generally has minimal impacts on GRPO-Turing training outcomes.}}
 \label{tab:ablation_combined}
 \vspace{-0.3cm}
 \end{table}
