@@ -337,10 +337,10 @@ Beyond matching content, we measure whether generated responses are specifically
 On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and GRPO-Sim are close among trained Qwen3-8B models. On Chat, GRPO-Turing scores highest overall, exceeding both GT and GPT-5, while GRPO-Sim also improves over SFT-Init.
 
 \subsection{Human Evaluation}
-\begin{wraptable}[13]{r}{0.42\textwidth}
+\begin{wraptable}[8]{r}{0.42\textwidth}
 \vspace{-0.4cm}
 \centering
-\small
+\scriptsize
 \setlength{\tabcolsep}{3.0pt}
 \begin{tabular}{lcc}
 \toprule
@@ -352,7 +352,7 @@ GRPO-Turing & .497 \subtle{$\pm .051$} & \textbf{.567} \subtle{$\pm .050$} \\
 \bottomrule
 \end{tabular}
 \vspace{-0.2cm}
-\caption{Human Eval Turing test: model win rate (WR) against ground truth ($\pm$ 95\% CI). WR ${>}\,0.5$ means annotators chose the model response more often.}
+\caption{Human eval WR vs. GT.}
 \label{tab:human_eval_winrate}
 \vspace{-0.4cm}
 \end{wraptable}
