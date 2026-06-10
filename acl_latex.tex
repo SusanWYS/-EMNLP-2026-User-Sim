@@ -381,7 +381,9 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \setlength{\tabcolsep}{3.0pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}llccc@{}}
 \toprule
-Domain & Input & Turing & Sim & Specificity \\
+\multirow{2}{*}{Domain} & \multirow{2}{*}{Input} & \multicolumn{3}{c}{Metric} \\
+\cmidrule(l){3-5}
+ & & Turing & Sim & Specificity \\
 \midrule
 \multirow{3}{*}{Reddit} & $u = (h, \rho)$ & 3.68 \subtle{$\pm .18$} & .030 \subtle{$\pm .0089$} & .380 \subtle{$\pm .018$} \\
  & $u = h$         & 3.78 \subtle{$\pm .18$} & .033 \subtle{$\pm .0101$} & .377 \subtle{$\pm .020$} \\
