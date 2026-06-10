@@ -337,6 +337,17 @@ Beyond matching content, we measure whether generated responses are specifically
 On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and GRPO-Sim are close among trained Qwen3-8B models. On Chat, GRPO-Turing scores highest overall, exceeding both GT and GPT-5, while GRPO-Sim also improves over SFT-Init.
 
 \subsection{Human Evaluation}
+Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. Using the expanded groups 1--10 aggregation, the Reddit and Chat results show different model rankings. On Reddit, GRPO-Sim has the highest win rate (WR $= .515$), while GRPO-Turing is near chance (WR $= .497$) and SFT-Init is well below chance (WR $= .408$), suggesting that SFT produces surface patterns that humans can identify. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
+% \footnote{As is usually the case in human evaluation of LLM outputs.}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
+\caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that GRPO-Turing is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
+\label{fig:binary_gt_accuracy}
+\vspace{-0.4cm}
+\end{figure}
+
 \begin{wraptable}[8]{r}{0.42\textwidth}
 \vspace{-0.4cm}
 \centering
@@ -356,19 +367,7 @@ GRPO-Turing & .497 \subtle{$\pm .051$} & \textbf{.567} \subtle{$\pm .050$} \\
 \label{tab:human_eval_winrate}
 \vspace{-0.4cm}
 \end{wraptable}
-Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. Using the expanded groups 1--10 aggregation, the Reddit and Chat results show different model rankings. On Reddit, GRPO-Sim has the highest win rate (WR $= .515$), while GRPO-Turing is near chance (WR $= .497$) and SFT-Init is well below chance (WR $= .408$), suggesting that SFT produces surface patterns that humans can identify. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
-% \footnote{As is usually the case in human evaluation of LLM outputs.}
-
 These estimates are computed from 100 target users per dataset with 6 selected annotators per target, yielding 600 binary judgments per dataset--model pair. Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering.
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
-\caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that GRPO-Turing is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
-\label{fig:binary_gt_accuracy}
-\vspace{-0.4cm}
-\end{figure}
 
 \section{Ablations and Analysis}
 
