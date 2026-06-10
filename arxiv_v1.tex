@@ -52,15 +52,17 @@
   fonttitle=\bfseries\small,
   title={#1},
   listing only,
-  listing options={
-    language=none,
-    basicstyle=\ttfamily\small,
-    columns=fullflexible,
-    breaklines=true,
-    breakatwhitespace=true,
-    showstringspaces=false,
-    escapeinside={(*@}{@*)},
-    literate=
+	  listing options={
+	    language=none,
+	    basicstyle=\ttfamily\small,
+	    columns=fullflexible,
+	    breaklines=true,
+	    breakatwhitespace=false,
+	    breakautoindent=false,
+	    breakindent=0pt,
+	    showstringspaces=false,
+	    escapeinside={(*@}{@*)},
+	    literate=
       {"}{{\char34}}1
       {’}{{'}}1
       {“}{{\char34}}1
