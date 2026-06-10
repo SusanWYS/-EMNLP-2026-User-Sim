@@ -348,22 +348,24 @@ Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth resp
 \vspace{-0.4cm}
 \end{figure}
 
-\begin{wraptable}[8]{r}{0.42\textwidth}
-\vspace{-0.4cm}
+\begin{wraptable}[9]{r}{0.46\textwidth}
+\vspace{-0.1cm}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{3.0pt}
-\begin{tabular}{lcc}
+\setlength{\tabcolsep}{2.0pt}
+\begin{tabular}{lcccc}
 \toprule
- & \textbf{Reddit} & \textbf{Chat} \\
+ & \multicolumn{2}{c}{\textbf{Reddit}} & \multicolumn{2}{c}{\textbf{Chat}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ & WR & rel. $\Delta$ & WR & rel. $\Delta$ \\
 \midrule
-SFT-Init    & .408 \subtle{$\pm .045$} & .493 \subtle{$\pm .061$} \\
-GRPO-Sim    & \textbf{.515} \subtle{$\pm .049$} & .495 \subtle{$\pm .055$} \\
-GRPO-Turing & .497 \subtle{$\pm .051$} & \textbf{.567} \subtle{$\pm .050$} \\
+SFT-Init    & .41 & 0.0\% & .49 & 0.0\% \\
+GRPO-Sim    & \textbf{.52} & \textbf{+26\%} & .50 & +0.41\% \\
+GRPO-Turing & .50 & +22\% & \textbf{.57} & \textbf{+15\%} \\
 \bottomrule
 \end{tabular}
 \vspace{-0.2cm}
-\caption{Human eval WR vs. GT.}
+\caption{WR and rel. $\Delta$ vs. SFT.}
 \label{tab:human_eval_winrate}
 \vspace{-0.4cm}
 \end{wraptable}
