@@ -22,6 +22,7 @@
 % Additional packages
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{wrapfig}
 \usepackage{multirow}
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -329,9 +330,18 @@ Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. GRPO-
 Notably, user simulation remains a difficult task overall. Even GPT-5, presumably a much larger model, scores only slightly above SFT-Init. Qualitative inspection reveals that GPT-5 tends to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples} in the appendix). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground truth response does not translate to human-like indistinguishability.
 
 \paragraph{Response similarity to ground truth.}
-\begin{table}[t]
+Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground truth key points, even though this verbosity hurts its Turing score. Among the trained models, GRPO-Sim and GRPO-Turing perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: GRPO-Turing produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said.
+
+
+Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim  outperform SFT-Init and GRPO-LogProb in both domains.
+On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and GRPO-Sim are close among trained Qwen3-8B models. On Chat, GRPO-Turing scores highest overall, exceeding both GT and GPT-5, while GRPO-Sim also improves over SFT-Init.
+
+\subsection{Human Evaluation}
+\begin{wraptable}[13]{r}{0.42\textwidth}
+\vspace{-0.4cm}
 \centering
 \small
+\setlength{\tabcolsep}{3.0pt}
 \begin{tabular}{lcc}
 \toprule
  & \textbf{Reddit} & \textbf{Chat} \\
@@ -341,17 +351,11 @@ GRPO-Sim    & \textbf{.515} \subtle{$\pm .049$} & .495 \subtle{$\pm .055$} \\
 GRPO-Turing & .497 \subtle{$\pm .051$} & \textbf{.567} \subtle{$\pm .050$} \\
 \bottomrule
 \end{tabular}
-\caption{Human Eval Turing test: forced-choice win rate (WR) of each model against the ground truth response ($\pm$ 95\% CI), averaged over 100 target users with 6 annotators each. WR ${>}\,0.5$ means annotators chose the model response more often than the real user's. \textbf{GRPO-Sim has the highest win rate on Reddit, while GRPO-Turing has the highest win rate on Chat.}}
+\vspace{-0.2cm}
+\caption{Human Eval Turing test: model win rate (WR) against ground truth ($\pm$ 95\% CI). WR ${>}\,0.5$ means annotators chose the model response more often.}
 \label{tab:human_eval_winrate}
-\end{table}
-
-Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground truth key points, even though this verbosity hurts its Turing score. Among the trained models, GRPO-Sim and GRPO-Turing perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: GRPO-Turing produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said.
-
-
-Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that GRPO-Turing and GRPO-Sim  outperform SFT-Init and GRPO-LogProb in both domains.
-On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and GRPO-Sim are close among trained Qwen3-8B models. On Chat, GRPO-Turing scores highest overall, exceeding both GT and GPT-5, while GRPO-Sim also improves over SFT-Init.
-
-\subsection{Human Evaluation}
+\vspace{-0.4cm}
+\end{wraptable}
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. Using the expanded groups 1--10 aggregation, the Reddit and Chat results show different model rankings. On Reddit, GRPO-Sim has the highest win rate (WR $= .515$), while GRPO-Turing is near chance (WR $= .497$) and SFT-Init is well below chance (WR $= .408$), suggesting that SFT produces surface patterns that humans can identify. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
 % \footnote{As is usually the case in human evaluation of LLM outputs.}
 
