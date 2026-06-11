@@ -711,6 +711,29 @@ After excluding incomplete submissions, defined as submissions with fewer than 1
 \paragraph{Metric.}
 We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
 
+\paragraph{Reaction Time.}
+We also record reaction time (RT) on each judgment page, measured from rendering the judgment page to the participant's click on \textit{Next}. RT includes time spent completing the comprehension check, reading the target context, optionally reopening the user's history popup, and selecting a response. Table~\ref{tab:human_eval_rt} summarizes RT over the selected judgments used in Table~\ref{tab:human_eval_winrate}.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcc}
+\toprule
+Dataset & Model & Mean RT (95\% CI) & Median \\
+\midrule
+Reddit & SFT-Init & 72.42s\subtle{$\pm 5.57s$} & 51.36s \\
+Reddit & GRPO-Sim & 73.42s\subtle{$\pm 5.70s$} & 53.02s \\
+Reddit & GRPO-Turing & 72.63s\subtle{$\pm 6.53s$} & 52.73s \\
+Chat & SFT-Init & 50.98s\subtle{$\pm 6.42s$} & 33.87s \\
+Chat & GRPO-Sim & 56.04s\subtle{$\pm 5.00s$} & 38.91s \\
+Chat & GRPO-Turing & 45.82s\subtle{$\pm 3.73s$} & 33.86s \\
+\bottomrule
+\end{tabular}
+\caption{Reaction times on the judgment page for selected human-evaluation responses. Values show mean RT with 95\% CI half-width and median RT.}
+\label{tab:human_eval_rt}
+\end{table}
+
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/ui_reddit1.png}
@@ -735,7 +758,6 @@ We report the model win rate (WR): the fraction of judgments in which the annota
 \caption{User interface consent and instructions.}
 \label{fig:ui_chat}
 \end{figure*}
-\paragraph{Reaction Time.}
 
 \section{Prompts}
 \label{app:prompts}
