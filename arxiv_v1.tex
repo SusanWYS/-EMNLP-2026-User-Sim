@@ -285,7 +285,7 @@ We finally evaluate whether a generated response is specifically grounded in the
 
 \subsubsection{Human Evaluation}
 
-In addition to LLM-as-judge evaluation, we also recruit human participants from Prolific to perform a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate three models: LLM trained with just supervised finetuning (SFT-Init), RL-training with the similarity reward (GRPO-Sim), and RL-training with our Turing reward (GRPO-Turing). We target 100 users per dataset, collecting 600 binary judgments per condition (6 judgments for each target user) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools human annotators above chance. Full human evaluation details are given in Appendix~\ref{app:human-eval}.
+In addition to LLM-as-judge evaluation, we also recruit human participants from Prolific to perform a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate three models: LLM trained with just supervised finetuning (SFT-Init), RL-training with the similarity reward (GRPO-Sim), and RL-training with our Turing reward (GRPO-Turing). We did not test GRPO-Logprob for human evaluation as automatic judgment metrics indicated that this variant underperformed GRPO-Sim and GRPO-Turing. We target 100 users per dataset, collecting 600 binary judgments per condition (6 judgments for each target user) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools human annotators above chance. Full human evaluation details are given in Appendix~\ref{app:human-eval}.
 
 
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
@@ -301,19 +301,20 @@ In addition to LLM-as-judge evaluation, we also recruit human participants from 
 \section{Results}
 
 \subsection{LLM-as-Judge Evaluation}
-\paragraph{Response humanlikeness.}
+\paragraph{Turing-Trained Simulators are Most Humanlike.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
-\vspace{-4mm}
+\vspace{-2mm}
 \caption{Turing judge scores (1--7 Likert; higher = harder to distinguish from a real user) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. The dashed line and shaded band mark the Qwen3-8B base model. \textbf{LLMs trained with Turing rewards (GRPO-Turing) outperforms other training signals on humanlikeness in both domains.}}
 \label{fig:turing_dot}
 \end{figure}
 \begin{figure}[t]
+\vspace{2mm}
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
-\vspace{-4mm}
-\caption{Response similarity to ground truth (Sim, \%; higher = more similar to what the user actually said) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. \textbf{GRPO-Turing matches GRPO-Sim}, the model explicitly trained to maximize similarity, showing that optimizing for indistinguishability does not sacrifice content alignment.}
+\vspace{-2mm}
+\caption{Response similarity to ground truth (Sim, \%; higher = more similar to what the user actually said) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. \textbf{GRPO-Turing matches GRPO-Sim even though GRPO-Sim is   explicitly trained to maximize similarity}, showing that optimizing for indistinguishability does not sacrifice content alignment.}
 \label{fig:sim_dot}
 \end{figure}
 
@@ -321,10 +322,10 @@ Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. GRPO-
 
 Notably, user simulation remains a difficult task overall. Even GPT-5, presumably a much larger model, scores only slightly above SFT-Init. Qualitative inspection reveals that GPT-5 tends to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples} in the appendix). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground truth response does not translate to human-like indistinguishability.
 
-\paragraph{Response similarity to ground truth.}
-Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground truth key points, even though this verbosity hurts its Turing score. Among the trained models, GRPO-Sim and GRPO-Turing perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: GRPO-Turing produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said.
+\paragraph{Turing-Trained Model Generations are Similar to Ground Truth.}
+Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. Among the trained models, GRPO-Sim and GRPO-Turing perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: GRPO-Turing produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground truth key points, even though this verbosity hurts its Turing score. 
 
-\paragraph{Response specificity.}
+\paragraph{Turing-Trained Model Generations are Specific to Users and Contexts.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
@@ -337,19 +338,11 @@ Beyond matching content, we measure whether generated responses are specifically
 On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and GRPO-Sim are close among trained Qwen3-8B models. On Chat, GRPO-Turing scores highest overall, exceeding both GT and GPT-5, while GRPO-Sim also improves over SFT-Init.
 
 \subsection{Human Evaluation}
-Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. Using the expanded groups 1--10 aggregation, the Reddit and Chat results show different model rankings. On Reddit, GRPO-Sim has the highest win rate (WR $= .515$), while GRPO-Turing is near chance (WR $= .497$) and SFT-Init is well below chance (WR $= .408$), suggesting that SFT produces surface patterns that humans can identify. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
-% \footnote{As is usually the case in human evaluation of LLM outputs.}
+Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 target users per dataset with 6 selected annotators per target, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, GRPO-Sim has the highest win rate (WR $= .515$), while GRPO-Turing is near chance (WR $= .497$) and SFT-Init is well below chance (WR $= .408$). On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance. Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
-\caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that GRPO-Turing is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
-\label{fig:binary_gt_accuracy}
-\vspace{-0.4cm}
-\end{figure}
-
-\begin{wraptable}[9]{r}{0.43\textwidth}
-\vspace{0.05cm}
+ 
+\begin{wraptable}[9]{r}{0.35\textwidth}
+\vspace{-3mm}
 \centering
 \small
 \setlength{\tabcolsep}{1.0pt}
@@ -365,29 +358,40 @@ GRPO-Turing & \text.50\subtle{$\pm.051$} & \textbf{.57\subtle{$\pm.050$}$^*$} \\
 \vspace{-0.2cm}
 \caption{Human Eval Turing test: model win rate against ground truth ($\pm$ 95\% CI).}
 \label{tab:human_eval_winrate}
-\vspace{-0.4cm}
+\vspace{-0.2cm}
 \end{wraptable}
-These estimates are computed from 100 target users per dataset with 6 selected annotators per target, yielding 600 binary judgments per dataset--model pair. Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering.
+
+
+\paragraph{Human vs. LLM judges.} 
+Our human evaluation results are less obviously in favor of the GRPO-Turing approach. But is it possible that human judges are actually less reliable than our Sonnet 4.6 LLM judge?
+
+We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Concretely, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.  Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators generally underperform Sonnet~4.6, except in the chat domain, where the results are similar. These results suggest that in the domains we studied, Sonnet 4.6 outperforms human evaluators (that we recruited under our experimental setup) at the Turing task. We do however observe that  both evaluators agree on the model rankings: GRPO-Turing is the hardest to detect.
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
+\caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that GRPO-Turing is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
+\label{fig:binary_gt_accuracy}
+\vspace{-0.4cm}
+\end{figure}
+
+
 
 \section{Ablations and Analysis}
 
 \subsection{User Representations}
+User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM. How helpful is the induced persona? We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
 
-User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM. We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
-
-Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history.
-
-The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, indicates that the persona captures stylistic and behavioral patterns sufficient for humanlikeness, even when it does not help reproduce the exact content of the ground-truth response.
-
-We further test whether these results depend on the auxiliary model used to induce the persona $\rho$. Table~\ref{tab:persona_inductor_ablation} compares three persona inductors while keeping the downstream GRPO-Turing recipe fixed, and includes the history-only no-persona baseline for reference.
+Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history. The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, suggests that the persona captures stylistic and behavioral patterns sufficient for humanlikeness, even when it does not help reproduce the exact content of the ground-truth response. We further test whether these results depend on the auxiliary model used to induce the persona $\rho$ in Table~\ref{tab:persona_inductor_ablation} of the appendix.
 
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
-\subsection{LLM Judge vs. Human Judges}
+% \subsection{LLM Judge vs. Human Judges}
 
-Our goal is to train a model to generate responses that are indistinguishable from human responses. However, different judges may be fooled in different ways. We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Specifically, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.
+% Our goal is to train a model to generate responses that are indistinguishable from human responses. However, different judges may be fooled in different ways. We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Specifically, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.
 
-Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators generally underperform Sonnet~4.6, except in the chat domain, where the LLM judge is more easily fooled by GRPO-Turing than human annotators. Nevertheless, both evaluators agree on the model ranking: GRPO-Turing is the hardest to detect.
+% Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators generally underperform Sonnet~4.6, except in the chat domain, where the LLM judge is more easily fooled by GRPO-Turing than human annotators. Nevertheless, both evaluators agree on the model ranking: GRPO-Turing is the hardest to detect.
 
 % However, the two evaluators diverge in sensitivity. Sonnet~4.6 is more sensitive than humans on Reddit, correctly identifying ground truth at a higher rate for SFT and GRPO-Sim, while on Chat it is more easily fooled by GRPO-Turing than human annotators are.
 
@@ -397,18 +401,18 @@ Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with huma
 \setlength{\tabcolsep}{2.0pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccccc@{}}
 \toprule
-\multirow{2}{*}{Input} & \multicolumn{3}{c}{Reddit} & \multicolumn{3}{c}{Chat} \\
+\multirow{2}{*}{} & \multicolumn{3}{c}{Reddit} & \multicolumn{3}{c}{Chat} \\
 \cmidrule(lr){2-4}\cmidrule(l){5-7}
-Metric & Turing & Sim & Specificity & Turing & Sim & Specificity \\
+User Representation & Turing & Sim & Specificity & Turing & Sim & Specificity \\
 \midrule
-$u = (h, \rho)$ & \textbf{3.68}\subtle{$\pm .18$} & 3.0\subtle{$\pm .9$} & .367\subtle{$\pm .020$} & 4.31\subtle{$\pm .08$} & 5.3\subtle{$\pm .8$} & .512\subtle{$\pm .009$} \\
-$u = h$         & 3.78\subtle{$\pm .18$} & 3.3\subtle{$\pm 1.0$} & .364\subtle{$\pm .019$} & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$} & \textbf{.497}\subtle{$\pm .010$} \\
-$u = \rho$      & 3.84\subtle{$\pm .19$} & \textbf{2.7}\subtle{$\pm .7$} & \textbf{.329}\subtle{$\pm .018$} & \textbf{4.23}\subtle{$\pm .08$} & \textbf{4.1}\subtle{$\pm .7$} & .509\subtle{$\pm .009$} \\
+$u = (h, \rho)$ (user history + induced persona) & {3.68}\subtle{$\pm .18$} & 3.0\subtle{$\pm .9$} & .367\subtle{$\pm .020$} & 4.31\subtle{$\pm .08$} & 5.3\subtle{$\pm .8$} & .512\subtle{$\pm .009$} \\
+$u = h$ (user history only)      & 3.78\subtle{$\pm .18$} & 3.3\subtle{$\pm 1.0$} & .364\subtle{$\pm .019$} & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$} & {.497}\subtle{$\pm .010$} \\
+ $u = \rho$ (induced persona only)    & 3.84\subtle{$\pm .19$} & {2.7}\subtle{$\pm .7$} & {.329}\subtle{$\pm .018$} & {4.23}\subtle{$\pm .08$} & {4.1}\subtle{$\pm .7$} & .509\subtle{$\pm .009$} \\
 \bottomrule
 \end{tabular*}
-\caption{Ablation on user representation for GRPO-Turing.We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$. \textbf{Bold indicate worst performance.} Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf{Although $u = \rho$ performs slightly worse across conditions, input space representation generally has minimal impacts on GRPO-Turing training outcomes.}}
-\label{tab:ablation_combined}
 \vspace{-0.3cm}
+\caption{Ablation on user representation for GRPO-Turing.We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$.  Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$.}
+\label{tab:ablation_combined}
 \end{table}
 
 % \begin{table}[t]
@@ -467,7 +471,7 @@ Figure~\ref{fig:qualitative_examples_2} shows representative examples from both 
 \centering
 \includegraphics[width=\columnwidth]{figures/qual_exs.pdf}
 \vspace{-2em}
-\caption{Qualitative comparison of SFT, GRPO-Sim, and GRPO-Turing on one Reddit and one Chat example. \textbf{GRPO-Turing produces responses closest in tone and brevity to the real user}, while SFT copies or ignores context and GRPO-Sim generates generic editorial replies.}
+\caption{Qualitative comparison of SFT, GRPO-Sim, and GRPO-Turing on one Reddit and one Chat example.}
 \label{fig:qualitative_examples_2}
 \vspace{-1em}
 \end{figure}
@@ -757,7 +761,7 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/qualitative_examples.pdf}
-\caption{Qualitative examples from ConvoKit (Reddit) and PRISM (Chat). Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5 and Qwen3-8B produce verbose or off-target responses, while \textbf{GRPO-Turing generates replies closest in tone and style to the real user}.}
+\caption{Qualitative examples from ConvoKit (Reddit) and PRISM (Chat). Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5 and Qwen3-8B produce verbose or off-target responses.}
 \label{fig:qualitative_examples}
 \end{figure*}
 
