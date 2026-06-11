@@ -342,7 +342,7 @@ Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth resp
 
 We perform target-level paired permutation tests between GRPO-Turing and the other two models. On Reddit, GRPO-Turing significantly improves on Human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between GRPO-Turing and GRPO-sim. On Chat, GRPO-Turing significantly outperforms both SFT-Init ($p=0.044$) and GRPO-Sim ($p=0.022$). Further details are given in Appendix~\ref{app:human-eval-significance}. 
 
-We note that Reddit is significantly harder for humans to judge than Chat. As shown in Tables 9 and 10, the Reddit/Chat mean reaction time ratio per target question is 1.43, and the Reddit/Chat mean reaction time per word ratio is 1.48. Therefore, we should treat the human study as a validation of broad trends rather than conclusive evidence, especially for Reddit. Overall, humans agree with LLM judge that Turing-trained user simulators improve on human-likeness compared to SFT-Init in both Reddit and Chat.
+We note that Reddit is significantly harder for humans to judge than Chat. As shown in Tables~\ref{tab:human_eval_rt} and~\ref{tab:human_eval_rt_per_word}, the Reddit/Chat mean reaction time ratio per target question is 1.43, and the Reddit/Chat mean reaction time per word ratio is 1.48. Therefore, we should treat the human study as a validation of broad trends rather than conclusive evidence, especially for Reddit. Overall, humans agree with LLM judge that Turing-trained user simulators improve on human-likeness compared to SFT-Init in both Reddit and Chat.
 
  
 \begin{wraptable}[9]{r}{0.35\textwidth}
