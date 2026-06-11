@@ -698,6 +698,25 @@ After excluding incomplete submissions, defined as submissions with fewer than 1
 \paragraph{Metric.}
 We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
 
+\paragraph{Word Counts.}
+We summarize the amount of text shown for each target user in Table~\ref{tab:human_eval_word_counts}, counting words in the displayed user history and target context, excluding response options and interface text.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Dataset & \shortstack{Mean Words/\\Question} & History Mean & Context Mean \\
+\midrule
+Reddit & 1676.6\subtle{$\pm 306.4$} & 1328.1\subtle{$\pm 282.5$} & 348.5\subtle{$\pm 63.1$} \\
+Chat & 1303.3\subtle{$\pm 140.4$} & 1106.6\subtle{$\pm 129.8$} & 196.7\subtle{$\pm 40.2$} \\
+\bottomrule
+\end{tabular}
+\caption{Word counts for the displayed human-evaluation stimuli. Values show mean words per target with 95\% CI half-width.}
+\label{tab:human_eval_word_counts}
+\end{table}
+
 \paragraph{Reaction Time.}
 We also record reaction time (RT) on each judgment page, measured from rendering the judgment page to the participant's click on \textit{Next}. RT includes time spent completing the comprehension check, reading the target context, optionally reopening the user's history popup, and selecting a response. Table~\ref{tab:human_eval_rt} summarizes RT over the selected judgments used in Table~\ref{tab:human_eval_winrate}.
 
