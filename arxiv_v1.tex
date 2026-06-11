@@ -340,8 +340,9 @@ On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and 
 \subsection{Human Evaluation}
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, both GRPO-Sim (WR $= .515$) and GRPO-Turing (WR $= .497$) performance are near chance. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
 
-We perform target-level paired permutation tests between GRPO-Turing and the other two models. On Reddit, GRPO-Turing significantly improves on Human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between GRPO-Turing and GRPO-sim. On Chat, GRPO-Turing significantly improves compared to both SFT-Init ($p=0.044$) and GRPO-Sim ($p=0.022$). Specific testing details are given in Appendix~\ref{app:human-eval-significance}.
-% Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering.
+We perform target-level paired permutation tests between GRPO-Turing and the other two models. On Reddit, GRPO-Turing significantly improves on Human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between GRPO-Turing and GRPO-sim. On Chat, GRPO-Turing significantly improves compared to both SFT-Init ($p=0.044$) and GRPO-Sim ($p=0.022$). Further details are given in Appendix~\ref{app:human-eval-significance}. 
+
+We note that Reddit is significantly harder for humans to judge than Chat. As shown in Tables 9 and 10, the Reddit/Chat mean reaction time ratio per target question is 1.43, and the Reddit/Chat mean reaction time per word ratio is 1.48. Therefore, we should treat the human study as a validation of broad trends but not as conclusive evidence, especially for Reddit. Overall, humans agree with LLM judge that Turing-trained user simulators improve on human-likeness compared to SFT-Init in both Reddit and Chat.
 
  
 \begin{wraptable}[9]{r}{0.35\textwidth}
@@ -779,7 +780,7 @@ Mean RT & 72.42s\subtle{$\pm 5.57s$} & 73.42s\subtle{$\pm 5.70s$} & 72.63s\subtl
 Median RT & 51.36s & 53.02s & 52.73s & 33.87s & 38.91s & 33.86s \\
 \bottomrule
 \end{tabular*}
-\caption{Reaction times on the judgment page for selected human-evaluation responses. Values show mean RT with 95\% CI half-width and median RT. Aggregating across model conditions, the Reddit and Chat mean RTs are 72.83s and 50.95s, respectively, with medians of 52.47s and 35.87s; the Reddit/Chat mean RT ratio is 1.43.}
+\caption{Reaction times on the judgment page for the human-evaluation responses. Values show mean RT with 95\% CI and median RT. Aggregating across models, the Reddit and Chat mean RTs are 72.83s and 50.95s. The Reddit/Chat mean RT ratio is 1.43.}
 \label{tab:human_eval_rt}
 \end{table*}
 
@@ -797,7 +798,7 @@ Mean RT/word & 0.188s\subtle{$\pm 0.018$} & 0.183s\subtle{$\pm 0.015$} & 0.171s\
 Median RT/word & 0.122s & 0.134s & 0.127s & 0.085s & 0.101s & 0.091s \\
 \bottomrule
 \end{tabular*}
-\caption{Reaction times normalized by the displayed words for each target user. Values show mean RT per word with 95\% CI and median RT per word. Aggregating across model conditions, the Reddit and Chat mean RT/word values are 0.185s and 0.125s, respectively, with medians of 0.130s and 0.089s; the Reddit/Chat mean RT/word ratio is 1.48.}
+\caption{Reaction times normalized by the total history and context word counts for each target user. Values show mean RT per word with 95\% CI and median RT per word. Aggregating across models, the Reddit and Chat mean RT/word are 0.185s and 0.125s. The Reddit/Chat mean RT/word ratio is 1.48.}
 \label{tab:human_eval_rt_per_word}
 \end{table*}
 
