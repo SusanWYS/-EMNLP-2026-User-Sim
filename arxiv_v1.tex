@@ -718,7 +718,7 @@ We summarize the amount of text shown for each target user in Table~\ref{tab:hum
 \centering
 \small
 \setlength{\tabcolsep}{4pt}
-\resizebox{\linewidth}{!}{%
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{@{}lccc@{}}
 \toprule
 Dataset & Mean Words/Question & History Mean & Context Mean \\
@@ -727,7 +727,7 @@ Reddit & 1676.6\subtle{$\pm 306.4$} & 1328.1\subtle{$\pm 282.5$} & 348.5\subtle{
 Chat & 1303.3\subtle{$\pm 140.4$} & 1106.6\subtle{$\pm 129.8$} & 196.7\subtle{$\pm 40.2$} \\
 \bottomrule
 \end{tabular}
-}
+\end{adjustbox}
 \caption{Word counts for the displayed human-evaluation stimuli. Values show mean words per target with 95\% CI half-width.}
 \label{tab:human_eval_word_counts}
 \end{table}
@@ -759,7 +759,7 @@ Chat & GRPO-Turing & 45.82s\subtle{$\pm 3.73s$} & 33.86s \\
 \centering
 \small
 \setlength{\tabcolsep}{5pt}
-\resizebox{\linewidth}{!}{%
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{llcc}
 \toprule
 Dataset & Model & Mean RT/word & Median RT/word \\
@@ -772,7 +772,7 @@ Chat & GRPO-Sim & 0.133s\subtle{$\pm 0.011$} & 0.101s \\
 Chat & GRPO-Turing & 0.130s\subtle{$\pm 0.012$} & 0.091s \\
 \bottomrule
 \end{tabular}
-}
+\end{adjustbox}
 \caption{Reaction times normalized by the displayed words for each target user. Values show mean RT per word with 95\% CI half-width and median RT per word.}
 \label{tab:human_eval_rt_per_word}
 \end{table}
