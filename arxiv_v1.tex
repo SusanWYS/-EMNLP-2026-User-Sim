@@ -340,7 +340,7 @@ On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and 
 \subsection{Human Evaluation}
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, both GRPO-Sim (WR $= .515$) and GRPO-Turing (WR $= .497$) performance are near chance. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
 
-We perform target-level paired permutation tests between GRPO-Turing and the other two models. On Reddit, GRPO-Turing significantly improves on Human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between GRPO-Turing and GRPO-sim. On Chat, GRPO-Turing significantly improves compared to both SFT-Init ($p=0.044$) and GRPO-Sim ($p=0.022$). Specific testing details are given in Appendix~\ref{app:human-eval}.
+We perform target-level paired permutation tests between GRPO-Turing and the other two models. On Reddit, GRPO-Turing significantly improves on Human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between GRPO-Turing and GRPO-sim. On Chat, GRPO-Turing significantly improves compared to both SFT-Init ($p=0.044$) and GRPO-Sim ($p=0.022$). Specific testing details are given in Appendix~\ref{app:human-eval-significance}.
 % Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering.
 
  
@@ -700,21 +700,22 @@ Penalty cap $p_{\mathrm{cap}}$ & 0.25 & 0.40 \\
 
 We conduct a forced-choice Turing test on Prolific. Each participant views a target user's history and then judges 10 response pairs: one ground truth response and one model-generated response, presented in randomized order. The participant selects which response they believe was written by the real user. Figures~\ref{fig:ui_reddit} and~\ref{fig:ui_chat} show the annotation interfaces for the Reddit and Chat domains, respectively. Each participant is paid \$6 and the human evaluation costs approximately \$1400 in total. 
 
-\paragraph{Design.}
+\subsection{Design}
 We evaluate three model variants: SFT-Init, GRPO-Sim, and GRPO-Turing, on two datasets: Reddit (ConvoKit) and Chat (PRISM). For each dataset, we select 100 target users and split them into 10 groups of 10. Each participant is assigned to one dataset--model variant--group cell and evaluates the 10 targets in that group. We recruit 6 annotators per cell, yielding 60 participants and 600 binary judgments for each dataset--model variant pair.
 
-\paragraph{Comprehension filtering.}
+\subsection{Comprehension Filtering}
 Each trial includes comprehension checks that test whether the participant read the target user's history, such as identifying the user's most-discussed topic or most recent interlocutor. We compute each participant's comprehension accuracy across all check questions and exclude participants scoring below 75\%. 
 % One participant was excluded under this criterion (PRISM/Turing, group~3; accuracy ${=} 0.65$).
 
-\paragraph{Balancing.}
+\subsection{Balancing}
 After excluding incomplete submissions, defined as submissions with fewer than 10 judgments, and submissions from participants who fail the comprehension filter, we retain the first 6 valid completions for each dataset, model variant, and user group, ordered by initialization time. This yields exactly 60 participants and 600 votes for each dataset and model variant. 
 % Three dataset, model variant, and user group combinations required trimming one extra participant each: PRISM/Sim group~2, PRISM/Turing group~1, and PRISM/Turing group~4.
 
-\paragraph{Metric.}
+\subsection{Metric}
 We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 100 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 100 per-target win rates.
 
-\paragraph{Testing for Statistical Significance.}
+\subsection{Testing for Statistical Significance}
+\label{app:human-eval-significance}
 We test pairwise model differences at the heldout-target level, matching the estimand in Table~\ref{tab:human_eval_winrate}. For each dataset and target user $i$, we compute the selected-response win rate for each model and form paired differences $d_i = \text{WR}_{i,\text{GRPO-Turing}} - \text{WR}_{i,\text{comparison}}$ over the 100 target users. Table~\ref{tab:human_eval_significance} reports the mean paired difference. Bootstrap intervals resample the 100 target users with replacement $10^6$ times and recompute the mean difference; for compactness, the table reports the half-width of the 2.5--97.5 percentile interval. P-values come from a two-sided exact paired permutation test, implemented as sign flips of the nonzero $d_i$ values under the null that the signs are exchangeable. These pairwise p-values are not corrected for multiple comparisons.
 
 \begin{table}[t]
@@ -737,7 +738,7 @@ Chat / PRISM & Turing - GRPO-Sim & $+.072$\subtle{$\pm .058$} & $0.022$ \\
 \label{tab:human_eval_significance}
 \end{table}
 
-\paragraph{Word Counts.}
+\subsection{Word Counts}
 We summarize the amount of text shown for each target user in Table~\ref{tab:human_eval_word_counts}, counting words in the displayed user history and target context, excluding response options and interface text.
 
 \begin{table}[t]
@@ -758,7 +759,7 @@ Chat & 1303.3\subtle{$\pm 140.4$} & 1106.6\subtle{$\pm 129.8$} & 196.7\subtle{$\
 \label{tab:human_eval_word_counts}
 \end{table}
 
-\paragraph{Reaction Time.}
+\subsection{Reaction Time}
 We also record reaction time (RT) on each judgment page, measured from rendering the judgment page to the participant's click on \textit{Next}. RT includes time spent completing the comprehension check, reading the target context, optionally reopening the user's history popup, and selecting a response. Table~\ref{tab:human_eval_rt} summarizes RT over the selected judgments used in Table~\ref{tab:human_eval_winrate}; Table~\ref{tab:human_eval_rt_per_word} normalizes the same judgment-page RTs by the displayed words per target user.
 
 \begin{table*}[t]
@@ -821,9 +822,6 @@ Median RT/word & 0.122s & 0.134s & 0.127s & 0.085s & 0.101s & 0.091s \\
 \caption{User interface consent and instructions.}
 \label{fig:ui_chat}
 \end{figure*}
-
-\paragraph{Testing for Statistical Significance.}
-
 \section{Prompts}
 \label{app:prompts}
 
