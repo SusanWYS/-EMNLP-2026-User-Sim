@@ -338,7 +338,7 @@ Beyond matching content, we measure whether generated responses are specifically
 On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and GRPO-Sim are close among trained Qwen3-8B models. On Chat, GRPO-Turing scores highest overall, exceeding both GT and GPT-5, while GRPO-Sim also improves over SFT-Init.
 
 \subsection{Human Evaluation}
-Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 target users per dataset with 6 selected annotators per target, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, GRPO-Sim has the highest win rate (WR $= .515$), while GRPO-Turing is near chance (WR $= .497$) and SFT-Init is well below chance (WR $= .408$). On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance. Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering.
+Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, both GRPO-Sim (WR $= .515$) and GRPO-Turing (WR $= .497$) performance are near chance, with no statistically significant difference between the two. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance. Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering.
 
  
 \begin{wraptable}[9]{r}{0.35\textwidth}
@@ -767,7 +767,7 @@ Mean RT/word & 0.188s\subtle{$\pm 0.018$} & 0.183s\subtle{$\pm 0.015$} & 0.171s\
 Median RT/word & 0.122s & 0.134s & 0.127s & 0.085s & 0.101s & 0.091s \\
 \bottomrule
 \end{tabular*}
-\caption{Reaction times normalized by the displayed words for each target user. Values show mean RT per word with 95\% CI half-width and median RT per word.}
+\caption{Reaction times normalized by the displayed words for each target user. Values show mean RT per word with 95\% CI and median RT per word.}
 \label{tab:human_eval_rt_per_word}
 \end{table*}
 
