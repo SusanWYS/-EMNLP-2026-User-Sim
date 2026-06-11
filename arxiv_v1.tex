@@ -340,7 +340,11 @@ On Reddit, GPT-5 and the ground truth (GT) score highest, while GRPO-Turing and 
 \subsection{Human Evaluation}
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, both GRPO-Sim (WR $= .515$) and GRPO-Turing (WR $= .497$) performance are near chance. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
 
-We perform target-level paired permutation tests between GRPO-Turing and the other two models. On Reddit, GRPO-Turing significantly improves on Human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between GRPO-Turing and GRPO-sim. On Chat, GRPO-Turing significantly improves compared to both SFT-Init ($p=0.044$) and GRPO-Sim ($p=0.022$). Specific testing details are given in Appendix~\ref{app:human-eval-significance}.
+We perform target-level paired permutation tests between GRPO-Turing and the other two models. On Reddit, GRPO-Turing significantly improves on human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between GRPO-Turing and GRPO-sim. On Chat, GRPO-Turing significantly improves compared to both SFT-Init ($p=0.044$) and GRPO-Sim ($p=0.022$). Further details are given in Appendix~\ref{app:human-eval-significance}. 
+
+The human evaluation results show that both humans and LLM evaluations find that optimizing for Turing scores improves the human-likeness of model responses. We want to note that the evaluations on the Reddit domain is inherently harder than the chat domain, as annotators spent more time processing a word and responding to a target question (see Tables 9 and 10). 
+
+
 % Because several confidence intervals overlap chance, we interpret the human study primarily as a validation of broad trends rather than a definitive significance ordering.
 
  
