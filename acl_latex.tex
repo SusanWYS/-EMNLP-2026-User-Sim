@@ -696,7 +696,30 @@ After excluding incomplete submissions, defined as submissions with fewer than 1
 % Three dataset, model variant, and user group combinations required trimming one extra participant each: PRISM/Sim group~2, PRISM/Turing group~1, and PRISM/Turing group~4.
 
 \paragraph{Metric.}
-We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 50 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 50 per-target win rates.
+We report the model win rate (WR): the fraction of judgments in which the annotator chose the model-generated response over ground truth. WR is computed per target user (averaging over the ${\sim}6$ annotators for that target) and then averaged across the 100 targets. The 95\% confidence interval is $\text{mean} \pm 1.96 \times \text{SEM}$, where SEM is the standard error of the 100 per-target win rates.
+
+\paragraph{Testing for Statistical Significance.}
+We test pairwise model differences at the heldout-target level, matching the estimand in Table~\ref{tab:human_eval_winrate}. For each dataset and target user $i$, we compute the selected-response win rate for each model and form paired differences $d_i = \text{WR}_{i,\text{GRPO-Turing}} - \text{WR}_{i,\text{comparison}}$ over the 100 target users. Table~\ref{tab:human_eval_significance} reports the mean paired difference. Bootstrap intervals resample the 100 target users with replacement $10^6$ times and recompute the mean difference; for compactness, the table reports the half-width of the 2.5--97.5 percentile interval. P-values come from a two-sided exact paired permutation test, implemented as sign flips of the nonzero $d_i$ values under the null that the signs are exchangeable. These pairwise p-values are not corrected for multiple comparisons.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}llcc@{}}
+\toprule
+Dataset & Comparison & Mean diff & Paired permutation $p$ \\
+\midrule
+Reddit / ConvoKit & Turing - SFT-Init & $+.088$\subtle{$\pm .063$} & $0.0095$ \\
+Reddit / ConvoKit & Turing - GRPO-Sim & $-.018$\subtle{$\pm .063$} & $0.61$ \\
+Chat / PRISM & Turing - SFT-Init & $+.073$\subtle{$\pm .068$} & $0.044$ \\
+Chat / PRISM & Turing - GRPO-Sim & $+.072$\subtle{$\pm .058$} & $0.022$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Paired target-level significance tests for Table~\ref{tab:human_eval_winrate}. Mean differences are GRPO-Turing win rate minus the comparison model's win rate; $\pm$ values are 95\% bootstrap CI half-widths.}
+\label{tab:human_eval_significance}
+\end{table}
 
 \paragraph{Word Counts.}
 We summarize the amount of text shown for each target user in Table~\ref{tab:human_eval_word_counts}, counting words in the displayed user history and target context, excluding response options and interface text.
