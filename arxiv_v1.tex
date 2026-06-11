@@ -735,47 +735,41 @@ Chat & 1303.3\subtle{$\pm 140.4$} & 1106.6\subtle{$\pm 129.8$} & 196.7\subtle{$\
 \paragraph{Reaction Time.}
 We also record reaction time (RT) on each judgment page, measured from rendering the judgment page to the participant's click on \textit{Next}. RT includes time spent completing the comprehension check, reading the target context, optionally reopening the user's history popup, and selecting a response. Table~\ref{tab:human_eval_rt} summarizes RT over the selected judgments used in Table~\ref{tab:human_eval_winrate}; Table~\ref{tab:human_eval_rt_per_word} normalizes the same judgment-page RTs by the displayed words per target user.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \small
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{llcc}
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccccc@{}}
 \toprule
-Dataset & Model & Mean RT (95\% CI) & Median \\
+\multirow{2}{*}{Metric} & \multicolumn{3}{c}{Reddit} & \multicolumn{3}{c}{Chat} \\
+\cmidrule(lr){2-4}\cmidrule(l){5-7}
+ & SFT-Init & GRPO-Sim & GRPO-Turing & SFT-Init & GRPO-Sim & GRPO-Turing \\
 \midrule
-Reddit & SFT-Init & 72.42s\subtle{$\pm 5.57s$} & 51.36s \\
-Reddit & GRPO-Sim & 73.42s\subtle{$\pm 5.70s$} & 53.02s \\
-Reddit & GRPO-Turing & 72.63s\subtle{$\pm 6.53s$} & 52.73s \\
-Chat & SFT-Init & 50.98s\subtle{$\pm 6.42s$} & 33.87s \\
-Chat & GRPO-Sim & 56.04s\subtle{$\pm 5.00s$} & 38.91s \\
-Chat & GRPO-Turing & 45.82s\subtle{$\pm 3.73s$} & 33.86s \\
+Mean RT & 72.42s\subtle{$\pm 5.57s$} & 73.42s\subtle{$\pm 5.70s$} & 72.63s\subtle{$\pm 6.53s$} & 50.98s\subtle{$\pm 6.42s$} & 56.04s\subtle{$\pm 5.00s$} & 45.82s\subtle{$\pm 3.73s$} \\
+Median RT & 51.36s & 53.02s & 52.73s & 33.87s & 38.91s & 33.86s \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \caption{Reaction times on the judgment page for selected human-evaluation responses. Values show mean RT with 95\% CI half-width and median RT.}
 \label{tab:human_eval_rt}
-\end{table}
+\end{table*}
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \small
-\setlength{\tabcolsep}{5pt}
-\begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{llcc}
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccccc@{}}
 \toprule
-Dataset & Model & Mean RT/word & Median RT/word \\
+\multirow{2}{*}{Metric} & \multicolumn{3}{c}{Reddit} & \multicolumn{3}{c}{Chat} \\
+\cmidrule(lr){2-4}\cmidrule(l){5-7}
+ & SFT-Init & GRPO-Sim & GRPO-Turing & SFT-Init & GRPO-Sim & GRPO-Turing \\
 \midrule
-Reddit & SFT-Init & 0.188s\subtle{$\pm 0.018$} & 0.122s \\
-Reddit & GRPO-Sim & 0.183s\subtle{$\pm 0.015$} & 0.134s \\
-Reddit & GRPO-Turing & 0.171s\subtle{$\pm 0.014$} & 0.127s \\
-Chat & SFT-Init & 0.120s\subtle{$\pm 0.011$} & 0.085s \\
-Chat & GRPO-Sim & 0.133s\subtle{$\pm 0.011$} & 0.101s \\
-Chat & GRPO-Turing & 0.130s\subtle{$\pm 0.012$} & 0.091s \\
+Mean RT/word & 0.188s\subtle{$\pm 0.018$} & 0.183s\subtle{$\pm 0.015$} & 0.171s\subtle{$\pm 0.014$} & 0.120s\subtle{$\pm 0.011$} & 0.133s\subtle{$\pm 0.011$} & 0.130s\subtle{$\pm 0.012$} \\
+Median RT/word & 0.122s & 0.134s & 0.127s & 0.085s & 0.101s & 0.091s \\
 \bottomrule
-\end{tabular}
-\end{adjustbox}
+\end{tabular*}
 \caption{Reaction times normalized by the displayed words for each target user. Values show mean RT per word with 95\% CI half-width and median RT per word.}
 \label{tab:human_eval_rt_per_word}
-\end{table}
+\end{table*}
 
 \begin{figure*}[t]
 \centering
