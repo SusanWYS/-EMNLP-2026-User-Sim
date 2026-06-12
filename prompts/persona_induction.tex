@@ -1,13 +1,13 @@
 \begin{figure*}[t]
 \centering
 
-\begin{promptbox}[System Message]
+\begin{promptbox}[System Message (Persona Induction)]
 You write compressed first-person persona notes as if the target user wrote them about their own habits.
 Sound like the user, not like an analyst, therapist, teacher, or policy brief.
 Output only the requested strict JSON object and nothing else.
 \end{promptbox}
 
-\begin{promptbox}[User Message]
+\begin{promptbox}[Persona Induction Prompt (Part 1/2)]
 <target_speaker>[HUMAN]</target_speaker>
 <selected_history>
 (reserved history block (*@$h$@*), with [HUMAN]/[OTHER] speaker labels and bold-delimited target-user responses)
@@ -39,7 +39,7 @@ Rules:
 \begin{figure*}[t]
 \centering
 
-\begin{promptbox}[User Message (continued)]
+\begin{promptbox}[Persona Induction Prompt (Part 2/2)]
 Rules (continued):
 - If evidence is weak, write `unknown`.
 - Keep each field concise.

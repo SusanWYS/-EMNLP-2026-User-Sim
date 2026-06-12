@@ -1,7 +1,7 @@
 \begin{figure*}[t]
 \centering
 
-\begin{promptbox}[System Message (shared across all datasets)]
+\begin{promptbox}[System Message (User Simulation)]
 You are simulating a human labeled by [HUMAN]. Your job is to predict what [HUMAN] says as if you are that person.
 
 [PERSONA]
@@ -36,7 +36,7 @@ Do not include reasoning after `[HUMAN]:`.
 \begin{figure*}[t]
 \centering
 
-\begin{promptbox}[User Message (PRISM)]
+\begin{promptbox}[User Simulation Prompt (PRISM)]
 [USER HISTORY]
 Below are previous conversations involving [HUMAN]. Use them to infer [HUMAN]'s style, values, preferences, and likely responses.
 
@@ -70,7 +70,7 @@ Below are previous conversations involving [HUMAN]. Use them to infer [HUMAN]'s 
 \begin{figure*}[t]
 \centering
 
-\begin{promptbox}[User Message (ConvoKit)]
+\begin{promptbox}[User Simulation Prompt (ConvoKit)]
 [USER HISTORY]
 Below are [HUMAN]'s previous messages.
 

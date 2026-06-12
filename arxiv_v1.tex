@@ -273,7 +273,7 @@ In their full objective, this reward is combined with an auxiliary SFT term; in 
 
 \subsection{Evaluation}
 \subsubsection{LLM-as-Judge Evaluation}
-We use LLM-as-judge to evaluate generated responses along three dimensions, each operationalized via an LLM judge. We use Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} for all evaluations. See Appendix~\ref{app:prompts} for the full judge prompts.
+We use LLM-as-judge to evaluate generated responses along three dimensions described below. Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46}is used for all evaluations. See Appendix~\ref{app:prompts} for the full judge prompts and Appendix for model generation configuration.
 
 \paragraph{Turing distinguishability.}
  A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response is more human-like. This metric mirrors our training signal but makes use of a more powerful judge than is used for training.
@@ -585,17 +585,18 @@ Our default user representation pairs the user's behavioral history with an indu
 \midrule
 Users & 1,288 & 1,282 \\
 History & 2--4 conv. & 2--6 threads \\
-SFT train & 3,272 & 4,264 \\
-GRPO train & 4,174 & 4,737 \\
-GRPO val & 705 & 1,661 \\
-Test & 880 & 267 \\
+SFT train rows & 3,272 & 4,264 \\
+GRPO train rows & 4,174 & 4,737 \\
+GRPO val rows & 705 & 1,661 \\
+Test rows & 880 & 267 \\
 \bottomrule
 \end{tabular}
 \caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt{r/tifu} and \texttt{r/worldnews}.}
 \label{tab:preprocessing_stats}
 \end{table}
 
-
+\section{Generation Details}
+\subsection{Sampling Parameters}
 \subsection{Prompt Formatting}
 Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $y$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
 \input{prompts/format}
