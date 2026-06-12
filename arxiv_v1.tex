@@ -158,7 +158,7 @@ These approaches share a common assumption: the training signal is derived from 
 
 The classic Turing Test \citep{turing1950computing} operationalizes human-likeness through indistinguishability:  a machine passes if an evaluator cannot tell its responses from a human's. This is precisely the criterion we want from a user simulator, and it translates directly into a training signal. In this paper, we therefore train LLM user simulators via reinforcement learning on a \emph{discriminative Turing reward}, wherein an LLM judge assigns a high score when a generated response is deemed human-like, conditioned on the user's history, which includes the current session history and the user's behaviors in previous sessions. Figure~\ref{fig:main} shows an overview of our approach.
 
-We evaluate our Turing reward-trained LLMs across two settings that differ substantially in structure, in particular multi-turn dialogue~\citep{kirk2024prism} and Reddit forum discussions~\citep{chang2020convokit}. We compare against baseline training signals that have been previously explored in the literature: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, and log-probability maximization with latent chain-of-thought adapted from~\cite{gandhi2026dialogue} without the SFT loss term.\footnote{We find that training Qwen3-8B Instruct without the SFT loss term is more stable and avoids mode collapses.} We find that the Turing reward consistently outperforms both alternatives across both LLM and human evaluation metrics, suggesting that optimizing for  indistinguishability is an effective path towards learning user simulators.
+We evaluate our Turing reward-trained LLMs across two settings that differ substantially in structure, in particular multi-turn dialogue~\citep{kirk2024prism} and Reddit forum discussions~\citep{chang2020convokit}. We compare against baseline training signals that have been previously explored in the literature: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, and log-probability maximization with latent chain-of-thought adapted from~\cite{gandhi2026dialogue} without the SFT loss term.\footnote{We find that training Qwen3-8B without the SFT loss term is more stable and avoids mode collapses.} We find that the Turing reward consistently outperforms both alternatives across both LLM and human evaluation metrics, suggesting that optimizing for  indistinguishability is an effective path towards learning user simulators.
 % learning LLM-based user simulators
 
 
@@ -252,7 +252,7 @@ The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversati
 Before RL, we warm-start the policy with SFT on ground truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use a base instruct model (of the same capacity as the model to be post-trained) to generate a reasoning trace given the context and ground truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \paragraph{RL training.}
-We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}. We sample 4 candidate responses per training example and compute advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($\text{rank }{r=}64$, $\text{scaling }\alpha{=}32$) for 3 epochs. GRPO training uses a dataset disjoint from the SFT training set.
+We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}. We sample 4 candidate responses per training example and compute advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($\text{rank }{r=}64$, $\text{scaling }\alpha{=}32$) for 3 epochs \citep{lora, qlora}. GRPO training uses a dataset disjoint from the SFT training set.
 We  additionally apply \emph{length penalty term} that penalize responses falling outside a tolerance band around the ground truth length (see Appendix~\ref{app:length_penalty}). We use Qwen3.5-397B-A17B~\citep{qwenteam2026qwen35omni} as the judge. Training details are given in Appendix~\ref{app:training_details}. 
 % \llq{Should we change this to one additional reward-shaping term (length penalty)? The reward clipping one seems to be included by default.}
 
@@ -610,11 +610,11 @@ Model & Backend & Max tokens & Temp. & Top-$p$ & Top-$k$ & Pres. pen. & Rep. pen
 \midrule
 Qwen3-8B & vLLM & 2048 & 0.4 / 0.6 & 1.0 & -1 & 0.5 & 1.0 \\
 GPT-5 & API & 1024 & -- & -- & -- & -- & -- \\
-Qwen3.5-397B & OpenAI-compatible vLLM & 1024 & 0.6 & 1.0 & -1 & 0.5 & -- \\
+Qwen3.5-397B & vLLM & 1024 & 0.6 & 1.0 & -1 & 0.5 & -- \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\caption{Held-out generation sampling parameters. For Qwen3-8B, Reddit/ConvoKit generations use temperature 0.4 and Chat/PRISM generations use temperature 0.6; all Qwen3-8B rows use one generation per target and no-repeat n-gram size 0. GPT-5 generations use the API default sampling behavior, with only the completion budget set explicitly. Top-$k=-1$ and dashes indicate that the corresponding control is disabled or not set.}
+\caption{Held-out generation sampling parameters. For Qwen3-8B, Reddit generations use temperature 0.4 and Chat generations use temperature 0.6. All Qwen3-8B rows use one generation per target.}
 \label{tab:heldout_generation_params}
 \end{table}
 
@@ -630,7 +630,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \label{app:thinking-trace-prompt}
 \label{app:hyperparams}
 
-The user splits reserved for SFT training are listed in Table~\ref{tab:preprocessing_stats}. Each SFT training example pairs a ground truth user response with a generated reasoning trace. To construct each thinking trace, we run Qwen3-8B with thinking mode disabled and provide the user's reserved history $h$, induced persona $\rho$, current context $x$, and ground truth response $y_{\star}$. The prompt asks the model to explain what could have led \texttt{[HUMAN]} to write the response, focusing on the local target, intent, stance, style, and plausible length, while explicitly prohibiting copying or closely paraphrasing the ground truth response. We additionally run a ground truth leakage check and regenerate any trace flagged for exposing the wording of $y_{\star}$ until the check passes. The exact thinking-trace generation prompt is shown in Figure~\ref{fig:thinking_trace_prompt}. The resulting trace is paired with the ground truth as \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y_{\star}$. The loss is applied only to this assistant completion target, while prompt, history, persona, and contexts are masked out. Table~\ref{tab:sft_hyperparams} lists the hyperparameters for the SFT warm-start stage.
+The user splits reserved for SFT training are listed in Table~\ref{tab:preprocessing_stats}. Each SFT training example pairs a ground truth user response with a generated reasoning trace. To construct each thinking trace, we run Qwen3-8B with thinking mode disabled and provide the user's reserved history $h$, induced persona $\rho$, current context $x$, and ground truth response $y_{\star}$. The prompt asks the model to explain what could have led \texttt{[HUMAN]} to write the response, focusing on the local target, intent, stance, style, and plausible length, while explicitly prohibiting copying or closely paraphrasing the ground truth response. We additionally run a ground truth leakage check and regenerate any trace flagged for exposing the wording of $y_{\star}$ until the check passes. The exact thinking-trace generation prompt is shown in Figure~\ref{fig:thinking_trace_prompt}. The resulting trace is paired with the ground truth as \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y_{\star}$. The loss is applied only to this assistant completion target, while prompt, history, persona, and contexts are masked out. SFT training is implemented with Transformers, TRL SFTTrainer, and PEFT LoRA/QLoRA adapters \citep{transformers, TRL, peft}. Table~\ref{tab:sft_hyperparams} lists the hyperparameters for the SFT warm-start stage.
 
 \input{prompts/thinking_trace_prompt}
 
@@ -642,6 +642,7 @@ The user splits reserved for SFT training are listed in Table~\ref{tab:preproces
 \textbf{Parameter} & \textbf{Value} \\
 \midrule
 Base model & Qwen3-8B (thinking disabled)\\
+Backend & TRL SFTTrainer + Transformers/PEFT LoRA\\
 LoRA rank / alpha & 64 / 128 \\
 LoRA dropout & 0.05 \\
 Learning rate & $2 \times 10^{-4}$ \\
@@ -652,7 +653,6 @@ Gradient accumulation steps & 16 \\
 Number of GPUs & 8 \\
 Effective batch size & 128 \\
 Total epochs & 3 \\
-Loss & completion-only \\
 Precision & bfloat16 \\
 \bottomrule
 \end{tabular}
@@ -674,9 +674,10 @@ Table~\ref{tab:hyperparams} lists the hyperparameters shared across GRPO variant
 \midrule
 \multicolumn{2}{l}{\emph{Shared across all GRPO variants}} \\
 Base model & Qwen3-8B (thinking disabled)\\
+Backend & veRL \\
 Temperature & 0.6 \\
-Top p & 1.0 \\
-Top k & -1 \\
+Top \textit{p} & 1.0 \\
+Top \textit{k} & -1 \\
 Initialization & SFT checkpoint \\
 LoRA rank / alpha & 64 / 32 \\
 Learning rate & $1 \times 10^{-5}$ \\
@@ -728,7 +729,7 @@ Penalty cap $p_{\mathrm{cap}}$ & 0.25 & 0.40 \\
 \section{Human Evaluation Details}
 \label{app:human-eval}
 
-We conduct a forced-choice Turing test on Prolific. Each participant views a target user's history and then judges 10 response pairs: one ground truth response and one model-generated response, presented in randomized order. The participant selects which response they believe was written by the real user. Figures~\ref{fig:ui_reddit} and~\ref{fig:ui_chat} show the annotation interfaces for the Reddit and Chat domains, respectively. Each participant is paid \$6 and the human evaluation costs approximately \$1400 in total. 
+We conduct a forced-choice Turing test on Prolific. Each participant views a target user's history and then judges 10 response pairs: one ground truth response and one model-generated response, presented in randomized order. The participant selects which response they believe was written by the real user. Figures~\ref{fig:ui_reddit} and~\ref{fig:ui_chat} show the annotation interfaces for the Reddit and Chat domains, respectively. Each participant is paid \$6 and the human evaluation costs approximately \$2880 in total (including Prolific service fee and taxes). 
 
 \subsection{Design}
 We evaluate three model variants: SFT-Init, GRPO-Sim, and GRPO-Turing, on two datasets: Reddit (ConvoKit) and Chat (PRISM). For each dataset, we select 100 target users and split them into 10 groups of 10. Each participant is assigned to one dataset--model variant--group cell and evaluates the 10 targets in that group. We recruit 6 annotators per cell, yielding 60 participants and 600 binary judgments for each dataset--model variant pair.
@@ -760,10 +761,10 @@ We then perform paired permutation test. Under the null that the two models perf
 \toprule
 Dataset & Comparison & Mean diff & Paired permutation $p$ \\
 \midrule
-Reddit / ConvoKit & Turing - SFT-Init & $+.088$\subtle{$\pm .063$} & $0.0095$ \\
-Reddit / ConvoKit & Turing - GRPO-Sim & $-.018$\subtle{$\pm .063$} & $0.61$ \\
-Chat / PRISM & Turing - SFT-Init & $+.073$\subtle{$\pm .068$} & $0.044$ \\
-Chat / PRISM & Turing - GRPO-Sim & $+.072$\subtle{$\pm .058$} & $0.022$ \\
+Reddit & Turing - SFT-Init & $+.088$\subtle{$\pm .063$} & $0.0095$ \\
+Reddit & Turing - GRPO-Sim & $-.018$\subtle{$\pm .063$} & $0.61$ \\
+Chat & Turing - SFT-Init & $+.073$\subtle{$\pm .068$} & $0.044$ \\
+Chat & Turing - GRPO-Sim & $+.072$\subtle{$\pm .058$} & $0.022$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -880,7 +881,7 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/qualitative_examples.pdf}
-\caption{Qualitative examples from ConvoKit (Reddit) and PRISM (Chat). Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, and Qwen3-8B produce verbose responses.}
+\caption{Qualitative examples from Reddit and Chat. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, and Qwen3-8B produce verbose responses.}
 \label{fig:qualitative_examples}
 \end{figure*}
 
