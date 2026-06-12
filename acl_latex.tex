@@ -836,4 +836,36 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \label{fig:qualitative_examples}
 \end{figure*}
 
+\section{ToxicChat Moderation}
+\label{app:toxicchat-moderation}
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Harm type & Qwen3-8B Base & Reddit GRPO-Turing & Chat GRPO-Turing \\
+\midrule
+harassment & 0.27\% & 0.60\% & 0.24\% \\
+harassment/threatening & 0.010\% & 0.010\% & 0.020\% \\
+hate & 0.020\% & 0.049\% & 0.010\% \\
+hate/threatening & 0.00\% & 0.00\% & 0.00\% \\
+illicit & 0.11\% & 0.24\% & 0.11\% \\
+illicit/violent & 0.11\% & 0.20\% & 0.14\% \\
+self-harm & 0.12\% & 0.20\% & 0.12\% \\
+self-harm/intent & 0.010\% & 0.039\% & 0.020\% \\
+self-harm/instructions & 0.00\% & 0.00\% & 0.00\% \\
+sexual & 0.25\% & 0.75\% & 0.33\% \\
+sexual/minors & 0.069\% & 0.098\% & 0.079\% \\
+violence & 2.0\% & 3.1\% & 2.4\% \\
+violence/graphic & 0.020\% & 0.059\% & 0.020\% \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{OpenAI moderation harm-category flag rates on ToxicChat generations. Values are percentages of generated responses flagged by \texttt{omni-moderation-latest}; categories are not mutually exclusive.}
+\label{tab:toxicchat_harm_type_rates}
+\end{table}
+
 \end{document}
