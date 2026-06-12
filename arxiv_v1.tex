@@ -597,6 +597,7 @@ Test rows & 880 & 267 \\
 
 \section{Generation Details}
 \subsection{Sampling Parameters}
+The sampling parameters used for user simulation are listed in Table~\ref{}. 
 \subsection{Prompt Formatting}
 Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $y$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
 \input{prompts/format}
