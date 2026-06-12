@@ -859,6 +859,17 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 
 \section{Training Dynamics}
 
+\section{Training Dynamics}
+\label{app:training-dynamics}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/grpo_training_raw_scores.pdf}
+\caption{Raw per-step GRPO training scores for Reddit and Chat. The first row shows the unadjusted Turing reward for GRPO-Turing under user input ablations $u=h$, $u=\rho$, and $u=(h,\rho)$. The second and third rows show the raw similarity and log-probability reward scores for GRPO-Sim and GRPO-Logprob. Curves use every logged training step; x-axis ticks are shown every five steps.}
+\label{fig:grpo_training_raw_scores}
+\end{figure*}
+
+
 \section{More Qualitative Examples}
 The qualitative results (ground truth, GPT-5, Qwen3.5-397B, Qwen3-8B Base, SFT-Init, GRPO-Logprob, GRPO-Sim, and GRPO-Turing) for one target each on Reddit and Chat are presented in Figure~\ref{fig:qualitative_examples}.
 
