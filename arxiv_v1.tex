@@ -901,12 +901,17 @@ Opus 4.8 & 3.89\subtle{$\pm .17$} & 3.2\subtle{$\pm 1.0$} & .390\subtle{$\pm .02
 \vspace{-0.3cm}
 \end{table}
 
+\clearpage
 \section{ToxicChat Moderation}
 \label{app:toxicchat-moderation}
 
+<<<<<<< Updated upstream
 To quantify harmful behavior under adversarial prompts, we evaluate the untrained Qwen3-8B base model and the two GRPO-Turing checkpoints on ToxicChat~\citep{ToxicChat}. For each ToxicChat prompt, we generate one model response and submit the generated response to OpenAI's Moderation API (\texttt{omni-moderation-latest})~\citep{openai_moderation_api}. The API returns an overall \texttt{flagged} decision and category-level indicators for harm types such as harassment, sexual content, self-harm, and violence. We report the percentage of generations flagged in each category. These categories are not mutually exclusive, so a single response can contribute to multiple rows. The results are shown in Table~\ref{tab:toxicchat_harm_type_rates}.
 
 \begin{table}[t]
+=======
+\begin{table}[H]
+>>>>>>> Stashed changes
 \centering
 \small
 \setlength{\tabcolsep}{3pt}
