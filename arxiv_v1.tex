@@ -597,7 +597,27 @@ Test rows & 880 & 267 \\
 
 \section{Generation Details}
 \subsection{Sampling Parameters}
-The sampling parameters used for user simulation are listed in Table~\ref{}. 
+The sampling parameters used for user simulation are listed in Table~\ref{tab:heldout_generation_params}.
+
+\begin{table}[h]
+\centering
+\small
+\setlength{\tabcolsep}{3.2pt}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}llcccccc@{}}
+\toprule
+Model & Backend & Max tokens & Temp. & Top-$p$ & Top-$k$ & Pres. pen. & Rep. pen. \\
+\midrule
+Qwen3-8B & vLLM & 2048 & 0.4 / 0.6 & 1.0 & -1 & 0.5 & 1.0 \\
+GPT-5 & API & 1024 & -- & -- & -- & -- & -- \\
+Qwen3.5-397B & OpenAI-compatible vLLM & 1024 & 0.6 & 1.0 & -1 & 0.5 & -- \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Held-out generation sampling parameters. For Qwen3-8B, Reddit/ConvoKit generations use temperature 0.4 and Chat/PRISM generations use temperature 0.6; all Qwen3-8B rows use one generation per target and no-repeat n-gram size 0. GPT-5 generations use the API default sampling behavior, with only the completion budget set explicitly. Top-$k=-1$ and dashes indicate that the corresponding control is disabled or not set.}
+\label{tab:heldout_generation_params}
+\end{table}
+
 \subsection{Prompt Formatting}
 Each example is rendered as a two-message chat sequence: a system message containing the simulation instruction, the task description, and (when applicable) the induced persona $\rho$ (Figure~\ref{fig:system_prompt}); and a user message containing the behavioral history $h$ followed by the current context $x$. The model generates a chain-of-thought trace $z$ enclosed in \texttt{<reasoning>} tags, then the response $y$ prefixed by \texttt{[HUMAN]:}. Figures~\ref{fig:prism_format} and~\ref{fig:convokit_format} show the user message layout for each dataset.
 \input{prompts/format}
