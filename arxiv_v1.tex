@@ -380,7 +380,7 @@ We compare the behavior of the LLM judge and human judges by measuring their acc
 \subsection{User Representations}
 User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM. How helpful is the induced persona? We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
 
-Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history. The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, suggests that the persona captures stylistic and behavioral patterns sufficient for human-likeness, even when it does not help reproduce the exact content of the ground truth response. We further test whether the user representation results depend on the auxiliary model used to induce the persona $\rho$ in Table~\ref{tab:persona_inductor_ablation} of the appendix. We find that larger models do not reliably produce better persona for GRPO training, and training with $u=(h, \rho)$ sometimes even hurts. Training with $u=h$ yields most stable performance overall.
+Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history. The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, suggests that the persona captures stylistic and behavioral patterns sufficient for human-likeness, even when it does not help reproduce the exact content of the ground truth response. We also include the Turing score reward curves during GRPO training for the three input ablation types, confirming that the training dynamics is not much affected by input conditions. We further test whether the user representation results depend on the auxiliary model used to induce the persona $\rho$ in Table~\ref{tab:persona_inductor_ablation} of the appendix. We find that larger models do not reliably produce better persona for GRPO training, and training with $u=(h, \rho)$ sometimes even hurts. Training with $u=h$ yields most stable performance overall.
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
 % \subsection{LLM Judge vs. Human Judges}
@@ -857,6 +857,7 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \input{prompts/sim_prompt}
 \input{prompts/specificity_prompt}
 
+\section{Training Dynamics}
 
 \section{More Qualitative Examples}
 The qualitative results (ground truth, GPT-5, Qwen3.5-397B, Qwen3-8B Base, SFT-Init, GRPO-Logprob, GRPO-Sim, and GRPO-Turing) for one target each on Reddit and Chat are presented in Figure~\ref{fig:qualitative_examples}.
