@@ -273,7 +273,7 @@ In their full objective, this reward is combined with an auxiliary SFT term; in 
 
 \subsection{Evaluation}
 \subsubsection{LLM-as-Judge Evaluation}
-We use LLM-as-judge to evaluate generated responses along three dimensions described below. Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} is used for all evaluations. See Appendix~\ref{app:prompts} for the full judge prompts and Appendix~\ref{sec:sampling_params} for response generation configuration.
+We use LLM-as-judge to evaluate generated responses along three dimensions described below. Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} is used for all evaluations. See Appendix~\ref{app:judge-prompts} for the full judge prompts and Appendix~\ref{sec:sampling_params} for response generation configuration.
 
 \paragraph{Turing distinguishability.}
  A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response is more human-like. This metric mirrors our training signal but makes use of a more powerful judge than is used for training.
@@ -478,15 +478,15 @@ A recurring finding across our experiments is that content matching and human-li
 
 The same capability that makes a simulator useful, however, also makes it dangerous. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation; it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals.
 
-Trained on real-user data, our models may have picked up unintended dispositions for violence, hates, and sexually explicit contents. To measure the toxicity of the GRPO-Turing models compared to the untrained Qwen3-8b base, we run evaluations using OpenAI Moderation API and adversarial prompts from ToxicChat \citep{ToxicChat, openai_moderation_api}. We further emphasize that our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. 
+Trained on real-user data, our models may have learned unintended dispositions for violence, hates, and sexually explicit contents. To measure the toxicity of the GRPO-Turing models compared to the untrained Qwen3-8b base, we run evaluations using OpenAI Moderation API and adversarial prompts from ToxicChat \citep{ToxicChat, openai_moderation_api}. The results are presented in Appendix Table~\ref{tab:toxicchat_harm_type_rates}. We observe that posttraining on Reddit and Chat increases the overall toxicity scores, and the effects are more salient on Reddit. We further emphasize that our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. 
 
 While we believe the research value of user simulation is substantial and outweigh the risks, it should be pursued alongside safeguards such as watermarking generated content and developing AI generation detectors. As with any user-simulation technology, we argue that downstream applications should be evaluated in the context of their specific deployment setting and applicable institutional policies to avoid malicious usage. 
 \section{Related Work}
 
 \paragraph{LLM-based user simulation.}
-LMs have been used to evaluate dialogue systems~\citep{davidson2023user, sekulic2024simulating}, train conversational agents via self-play~\citep{shah2018bootstrapping, abdulhai2025consistently}, and replicate human subject studies~\citep{aher2023simulating, park2023generative}. \citet{naous2025flipping} show that assistant-tuned LLMs are structurally misaligned with the user role, while \citet{mehri2025goal} address goal drift in task-oriented simulation through explicit state tracking. These works establish that user simulation benefits from purpose-built training but model generic users rather than specific individuals.
+LMs have been used to evaluate dialogue systems~\citep{davidson2023user, sekulic2024simulating, sim2real, humt}, train conversational agents via self-play~\citep{shah2018bootstrapping, abdulhai2025consistently, utility}, and replicate human subject studies~\citep{aher2023simulating, park2023generative}. \citet{naous2025flipping} show that assistant-tuned LLMs are structurally misaligned with the user role, while \citet{mehri2025goal} address goal drift in task-oriented simulation through explicit state tracking. These works establish that user simulation benefits from purpose-built training but model generic users rather than specific individuals.
 %\paragraph{Training objectives for human simulation.}
-Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo} for user simulation, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. 
+Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo} for user simulation, \citet{wu2026humanlm} optimize for similarity along psychologically grounded dimensions such as stance and emotion, \citet{abdulhai2025consistently} use LLM-judged consistency scores as PPO rewards, and \citet{gandhi2026dialogue} show that log-probability maximization with latent chain-of-thought outperforms judge-based rewards in generic dialogue prediction. Our discriminative Turing reward takes a different approach: rather than matching content or maximizing likelihood, it trains the model to be indistinguishable from the real user. Concurrent with our work, \citet{verbal_feedback,OdysSim} build foundation models to simulate human behaviors through task-specific RL and verbal-feedback based postraining, also showing that finetuning a smaller model beats frontier LLMs on user simulation tasks.
 % We show this signal generalizes across evaluation metrics and interaction formats.
 
 \paragraph{Persona and user representation.}
@@ -847,16 +847,7 @@ Median RT/word & 0.122s & 0.134s & 0.127s & 0.085s & 0.101s & 0.091s \\
 \caption{User interface consent and instructions.}
 \label{fig:ui_chat}
 \end{figure*}
-\section{Prompts}
-\label{app:prompts}
-
-\subsection{Inference Prompt}
-\label{app:inference-prompt}
-
-At inference time, the model receives the task instruction, optionally the user's persona, the behavioral history, and the current context. It is asked to predict \texttt{[HUMAN]}'s next message while matching the user's intentions, style, vocabulary, and tone. The required output format is:
-\texttt{<reasoning>...</reasoning> [HUMAN]:} response.
-
-\subsection{Judge Prompts}
+\section{Judge Prompts}
 \label{app:judge-prompts}
 
 We use three judge prompts. The Turing distinguishability judge scores how indistinguishable a generated response is from the real user's response (Figure~\ref{fig:turing_prompt}). The similarity judge scores content overlap with the ground truth response (Figure~\ref{fig:sim_prompt}). The specificity judge scores whether the response is grounded in the interaction context and compatible with the target user (Figure~\ref{fig:specificity_prompt}).
@@ -867,12 +858,13 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \input{prompts/specificity_prompt}
 
 
-\section{Qualitative Examples}
+\section{More Qualitative Examples}
+The qualitative results (ground truth, GPT-5, Qwen3.5-397B, Qwen3-8B Base, SFT-Init, GRPO-Logprob, GRPO-Sim, and GRPO-Turing) for one target each on Reddit and Chat are presented in Figure~\ref{fig:qualitative_examples}.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/qualitative_examples.pdf}
-\caption{Qualitative examples from Reddit and Chat. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, and Qwen3-8B produce verbose responses.}
+\caption{Qualitative examples from Reddit and Chat. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, GRPO-Logprob, and Qwen3-8B produce verbose responses.}
 \label{fig:qualitative_examples}
 \end{figure*}
 
@@ -900,7 +892,7 @@ Opus 4.8 & 3.89\subtle{$\pm .17$} & 3.2\subtle{$\pm 1.0$} & .390\subtle{$\pm .02
 \section{ToxicChat Moderation}
 \label{app:toxicchat-moderation}
 
-To quantify harmful behavior under adversarial prompts, we evaluate the untrained Qwen3-8B base model and the two GRPO-Turing checkpoints on ToxicChat~\citep{ToxicChat}. For each ToxicChat prompt, we generate one model response and submit the generated response to OpenAI's Moderation API (\texttt{omni-moderation-latest})~\citep{openai_moderation_api}. The API returns an overall \texttt{flagged} decision and category-level indicators for harm types such as harassment, sexual content, self-harm, and violence. We report the percentage of generations flagged in each category. These categories are not mutually exclusive, so a single response can contribute to multiple rows.
+To quantify harmful behavior under adversarial prompts, we evaluate the untrained Qwen3-8B base model and the two GRPO-Turing checkpoints on ToxicChat~\citep{ToxicChat}. For each ToxicChat prompt, we generate one model response and submit the generated response to OpenAI's Moderation API (\texttt{omni-moderation-latest})~\citep{openai_moderation_api}. The API returns an overall \texttt{flagged} decision and category-level indicators for harm types such as harassment, sexual content, self-harm, and violence. We report the percentage of generations flagged in each category. These categories are not mutually exclusive, so a single response can contribute to multiple rows. The results are shown in Table~\ref{tab:toxicchat_harm_type_rates}.
 
 \begin{table}[t]
 \centering
