@@ -1,7 +1,7 @@
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 1/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 1/10)]
 ## Task
 
 You are judging a pairwise Turing test for personalized user simulation.
@@ -69,7 +69,7 @@ Score each response on three criteria from 0.0 to 1.0.
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 2/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 2/10)]
 ## Criteria
 
 ### 1. Immediate target
@@ -98,7 +98,7 @@ immediate_target_score:
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 3/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 3/10)]
 ### 2. Human goal
 
 Given the immediate target, identify what [HUMAN] was probably trying to do with the response. When judging the goals, use [HUMAN]'s history as evidence, not as a rigid script.
@@ -123,7 +123,7 @@ human_goal_score:
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 4/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 4/10)]
 ### 3. Communication style and length
 
 Judge how the response is written, separate from whether it is a question, statement, pivot, opinion, or personal reframing.
@@ -151,7 +151,7 @@ communication_style_score:
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 5/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 5/10)]
 ## Penalty Checks
 
 Each penalty is scored from 0.0 to 1.0. Use the same scale for every penalty:
@@ -174,7 +174,7 @@ If copied text is not a natural quote or local uptake (i.e., a direct copy from 
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 6/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 6/10)]
 ### Wrong target or speaker role
 Assign wrong_target_or_role_penalty when a response speaks from the wrong role, addresses the wrong speaker, or assigns an unsupported stance, experience, motive, relationship, or conflict to the speaker it addresses.
 
@@ -204,7 +204,7 @@ When a response is framed as a pushback, rebuttal, or challenge, check whether t
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 7/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 7/10)]
 ### Assistant-like response
 Assign assistant_like_penalty when a response clearly reads like chatbot output rather than an organic human comment based on surface form. Watch for numbered or bulleted action plans, section headers, step-by-step framing, summary or conclusion sections, repeated direct-address coaching, generic reassurance, overgenerated transition phrases such as "But wait" or "But wait—", template phrases such as "You're absolutely right", "You're absolutely correct", "here's what you need to do", "let's break this down", "next steps", or "set boundaries", overuse of dashes "-", semicolons ";", or emojis, especially multiple emojis in a short response when not justified by [HUMAN]'s history or the local context, unnatural colloquial apostrophe abbreviations such as "'em" when not supported by [HUMAN]'s history or the local context, and other AI-written template patterns. Do not treat "[...quoted text...]" as assistant-like by itself; it may appear in human-written responses.
 
@@ -244,7 +244,7 @@ Rating scale:
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 8/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 8/10)]
 ## Output Format
 
 Return exactly one valid JSON object with this schema:
@@ -272,7 +272,7 @@ Return exactly one valid JSON object with this schema:
 \begin{figure*}[p]
 \centering
 
-\begin{promptbox}[Turing Distinguishability Judge (Part 9/9)]
+\begin{promptbox}[Turing Distinguishability Judge (Part 9/10)]
   "response_a_source_copy": "<If source-copy watchlist is on for Response A, explain whether the matched text is a generic frame, common template, pet phrase, sign-off, natural quote, local uptake, direct copy from user history, or confusing/contradictory quote. If the watchlist is off, write an empty string.>",
   "source_copy_penalty_a": <number from 0.0 to 1.0>,
   "response_b_source_copy": "<If source-copy watchlist is on for Response B, explain whether the matched text is a generic frame, common template, pet phrase, sign-off, natural quote, local uptake, direct copy from user history, or confusing/contradictory quote. If the watchlist is off, write an empty string.>",
@@ -294,7 +294,13 @@ Return exactly one valid JSON object with this schema:
   "reasoning": "<Concise explanation of the base scores, penalties, final score gap, topic-pivot evidence, goal specificity, style evidence, capitalization and punctuation evidence, and final rating.>",
   "rating": <integer from 1 to 7>
 }
+\end{promptbox}
+\end{figure*}
 
+\begin{figure*}[p]
+\centering
+
+\begin{promptbox}[Turing Distinguishability Judge (Part 10/10)]
 ## Format Rules
 
 - Output only valid JSON.
@@ -307,5 +313,13 @@ Return exactly one valid JSON object with this schema:
 - "rating" must be a single integer from 1 to 7.
 
 Your output:
+\end{promptbox}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+
+\begin{promptbox}[Model Output]
+
 \end{promptbox}
 \end{figure*}
