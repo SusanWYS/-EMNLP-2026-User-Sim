@@ -350,13 +350,11 @@ On Reddit, GPT-5, Qwen3.5-397B, and the ground truth (GT) score highest, while G
 \midrule
 SFT-Init    & .41\subtle{$\pm.045$} & .49\subtle{$\pm.061$} \\
 GRPO-Sim    & .52\subtle{$\pm.049$} & .50\subtle{$\pm.055$} \\
-GRPO-Turing & \text.50\subtle{$\pm.051$} & \textbf{.57\subtle{$\pm.050$}$^*$} \\
+GRPO-Turing & .50\subtle{$\pm.051$} & \textbf{.57\subtle{$\pm.050$}$^*$} \\
 \bottomrule
 \end{tabular}
-\vspace{-0.2cm}
 \caption{Human Eval Turing test: model win rate against ground truth ($\pm$ 95\% CI). \textbf{* denotes that the difference between GRPO-Turing and GRPO-Sim/SFT-Init is statistically significant.}}
 \label{tab:human_eval_winrate}
-\vspace{-0.2cm}
 \end{wraptable}
 
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, both GRPO-Sim and GRPO-Turing performance are near chance. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
