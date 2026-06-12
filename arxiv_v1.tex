@@ -476,9 +476,9 @@ Figure~\ref{fig:qualitative_examples_2} shows representative examples from both 
 A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground truth content, it does not make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form, and that a discriminative signal is better suited than a matching signal for user simulation.
 % [discuss healthy score range]
 
-The goal of this work is to improve LLM based user simulators for research on interactive systems, evaluation, and human-centered modeling. The same capability that makes a simulator useful, however, also makes it dangerous. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation; it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals. Our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. 
+The same capability that makes a simulator useful, however, also makes it dangerous. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation; it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals.
 
-To better measure the toxicity of our trained GRPO-Turing models compared to the untrained Qwen3-8b base,
+Trained on real-user data, our models may have picked up unintended dispositions for violence, hates, and sexually explicit contents. To measure the toxicity of the GRPO-Turing models compared to the untrained Qwen3-8b base, we run evaluations using OpenAI Moderation API and adversarial prompts from ToxicChat \citep{ToxicChat, openai_moderation_api}. We further emphasize that our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. 
 
 While we believe the research value of user simulation is substantial and outweigh the risks, it should be pursued alongside safeguards such as watermarking generated content and developing AI generation detectors. As with any user-simulation technology, we argue that downstream applications should be evaluated in the context of their specific deployment setting and applicable institutional policies to avoid malicious usage. 
 \section{Related Work}
@@ -909,23 +909,23 @@ Opus 4.8 & 3.89\subtle{$\pm .17$} & 3.2\subtle{$\pm 1.0$} & .390\subtle{$\pm .02
 \toprule
 Harm type & Qwen3-8B Base & Reddit GRPO-Turing & Chat GRPO-Turing \\
 \midrule
-harassment & 0.27\% & 0.60\% & 0.24\% \\
-harassment/threatening & 0.010\% & 0.010\% & 0.020\% \\
-hate & 0.020\% & 0.049\% & 0.010\% \\
+harassment & 0.27\% & \textbf{0.60\%} & 0.24\% \\
+harassment/threatening & 0.010\% & 0.010\% & \textbf{0.020\%} \\
+hate & 0.020\% & \textbf{0.049\%} & 0.010\% \\
 hate/threatening & 0.00\% & 0.00\% & 0.00\% \\
-illicit & 0.11\% & 0.24\% & 0.11\% \\
-illicit/violent & 0.11\% & 0.20\% & 0.14\% \\
-self-harm & 0.12\% & 0.20\% & 0.12\% \\
-self-harm/intent & 0.010\% & 0.039\% & 0.020\% \\
+illicit & 0.11\% & \textbf{0.24\%} & 0.11\% \\
+illicit/violent & 0.11\% & \textbf{0.20\%} & 0.14\% \\
+self-harm & 0.12\% & \textbf{0.20\%} & 0.12\% \\
+self-harm/intent & 0.010\% & \textbf{0.039\%} & 0.020\% \\
 self-harm/instructions & 0.00\% & 0.00\% & 0.00\% \\
-sexual & 0.25\% & 0.75\% & 0.33\% \\
-sexual/minors & 0.069\% & 0.098\% & 0.079\% \\
-violence & 2.0\% & 3.1\% & 2.4\% \\
-violence/graphic & 0.020\% & 0.059\% & 0.020\% \\
+sexual & 0.25\% & \textbf{0.75\%} & 0.33\% \\
+sexual/minors & 0.069\% & \textbf{0.098\%} & 0.079\% \\
+violence & 2.0\% & \textbf{3.1\%} & 2.4\% \\
+violence/graphic & 0.020\% & \textbf{0.059\%} & 0.020\% \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\caption{OpenAI moderation harm-category flag rates on ToxicChat generations. Values are percentages of generated responses flagged by \texttt{omni-moderation-latest}; categories are not mutually exclusive.}
+\caption{OpenAI moderation harm-category flag rates on ToxicChat generations. Values are percentages of generated responses flagged by \texttt{omni-moderation-latest}; categories are not mutually exclusive. Bold indicates highest values.}
 \label{tab:toxicchat_harm_type_rates}
 \end{table}
 
