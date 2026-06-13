@@ -96,7 +96,7 @@
 \author{Yingshan Susan Wang$^{1*}$, Cedegao E. Zhang$^{1*}$, Linlu Qiu$^{1*}$, Zexue He$^{2}\thanks{Core contributors.}$\:\:, \\
 \vspace{2mm}
 \textbf{Pengyuan Li$^3$, Alex Pentland$^2$, Roger P. Levy$^1$, Yoon Kim$^1$} \\
-  $^1$Massachusetts Institute of Technology, $^2$Stanford University, $^3$MIT-IBM Watson AI    \vspace{1mm} \\
+  $^1$Massachusetts Institute of Technology, $^2$Stanford University, $^3$MIT-IBM Watson AI Lab    \vspace{1mm} \\
   \texttt{\{susanw26, cedzhang, linluqiu\}@mit.edu}, \texttt{zexueh@stanford.edu} 
 }
 
@@ -276,7 +276,7 @@ In their full objective, this reward is combined with an auxiliary SFT term; in 
 We use LLM-as-judge to evaluate generated responses along three dimensions described below. Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} is used for all evaluations. See Appendix~\ref{app:judge-prompts} for the full judge prompts and Appendix~\ref{sec:sampling_params} for response generation configuration.
 
 \paragraph{Turing distinguishability.}
- A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response is more human-like. This metric mirrors our training signal but makes use of a more powerful judge than is used for training.
+ A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the  scores. Higher scores indicate the generated response is more human-like. This metric mirrors our training signal but makes use of a different and potentially more powerful\footnote{According to some benchmarks, e.g., \url{https://artificialanalysis.ai/leaderboards/models}.} judge than is used for training.
 
 \paragraph{Response similarity to ground truth.} We also measure similarity between the generated and ground truth responses, following \citet{wu2026humanlm}.  An LLM judge scores how well a generated response captures the overall content of the ground truth human response. The judge extracts key points from the ground truth, then scores semantic similarity, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said; we report this score as a percentage in results.
 
@@ -340,7 +340,7 @@ On Reddit, GPT-5, Qwen3.5-397B, and the ground truth (GT) score highest, while G
 \subsection{Human Evaluation}
  
 \begin{wraptable}[12]{r}{0.35\textwidth}
-\vspace{0mm}
+\vspace{-4mm}
 \centering
 \small
 \setlength{\tabcolsep}{1.0pt}
@@ -354,10 +354,11 @@ GRPO-Turing & .50\subtle{$\pm.051$} & \textbf{.57\subtle{$\pm.050$}$^*$} \\
 \bottomrule
 \end{tabular}
 \caption{Human Eval Turing test: model win rate against ground truth ($\pm$ 95\% CI). \textbf{* denotes that the difference between GRPO-Turing and GRPO-Sim/SFT-Init is statistically significant.}}
+\vspace{4mm}
 \label{tab:human_eval_winrate}
 \end{wraptable}
 
-Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, both GRPO-Sim and GRPO-Turing performance are near chance. On Chat, GRPO-Turing has the highest win rate (WR $= .567$), while SFT-Init and GRPO-Sim remain close to chance.
+Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, both GRPO-Sim and GRPO-Turing performance are near chance. On Chat, GRPO-Turing has the highest win rate (WR $= .57$), while SFT-Init and GRPO-Sim remain close to chance.
 
 We perform target-level paired permutation tests between GRPO-Turing and the other two models. On Reddit, GRPO-Turing significantly improves on human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between GRPO-Turing and GRPO-sim. On Chat, GRPO-Turing significantly outperforms both SFT-Init ($p=0.044$) and GRPO-Sim ($p=0.022$). Further statistical test details are given in Appendix~\ref{app:human-eval-significance}. 
 
@@ -374,13 +375,18 @@ We note that Reddit is significantly harder for humans to judge than Chat. As sh
 \end{figure}
 Our human evaluation results are less obviously in favor of the GRPO-Turing approach. But is it possible that human judges are actually less reliable than our Sonnet 4.6 LLM judge?
 
-We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Concretely, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.  Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators generally underperform Sonnet~4.6, except for judging GRPO-Turing on Chat, where the results are similar. These results suggest that in the domains we studied, Sonnet 4.6 outperforms human evaluators (recruited under our experimental setup) at the Turing task. 
+We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Concretely, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.  Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators recruited under our experimental setup generally underperform Sonnet~4.6, except for judging GRPO-Turing on Chat, where the results are similar. 
+% \llq{the last sentence seems a bit repetitive of the second to last one}
 % We do however observe that  both evaluators agree on the model rankings: GRPO-Turing is the hardest to detect.
 \section{Ablations and Analysis}
 \subsection{User Representations}
 User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM. How helpful is the induced persona? We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
 
-Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history. The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, suggests that the persona captures stylistic and behavioral patterns sufficient for human-likeness, even when it does not help reproduce the exact content of the ground truth response. We also include the Turing score reward curves during GRPO training for the three input ablation types, confirming that the training dynamics is not much affected by input conditions. We further test whether the user representation results depend on the auxiliary model used to induce the persona $\rho$ in Table~\ref{tab:persona_inductor_ablation} of the appendix. We find that larger models do not reliably produce better persona for GRPO training, and training with $u=(h, \rho)$ sometimes even hurts. Training with $u=h$ yields most stable performance overall.
+Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history. The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, suggests that the persona captures stylistic and behavioral patterns sufficient for human-likeness, even when it does not help reproduce the exact content of the ground truth response. We also include the normalized Turing reward curves in [0, 1] during GRPO training for the three input conditions, confirming that training dynamics is not much affected by input types (Figure~\ref{fig:grpo_training_raw_scores}).
+
+To mitigate the bias from a single persona inductor model, we further test whether the user representation results depend on the auxiliary model used to induce the persona $\rho$ in Table~\ref{tab:persona_inductor_ablation} of the appendix. We find that larger models do not reliably produce better persona for GRPO training, and training with $u=(h, \rho)$ does not necessarily improve performance. we leave more systematic investigation of better user representation as future work.
+% Training with $u=h$ yields most stable performance overall. 
+% \llq{this seems to go against the reason we use history + persona in the first place.}
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
 
 % \subsection{LLM Judge vs. Human Judges}
@@ -473,12 +479,13 @@ Figure~\ref{fig:qualitative_examples_2} shows representative examples from both 
 
 \section{Discussion}
 \label{sec:discussion}
-A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground truth content, it does not make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering similarity. This suggests that what makes a response recognizably machine-generated lies largely in surface form, and that a discriminative signal is better suited than a matching signal for user simulation.
+A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground truth content, it does not make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering content similarity, contextual fit, and specificity to target users. This suggests that a discriminative signal is better suited than a matching signal for user simulation.
+% what makes a response recognizably machine-generated lies largely in surface form \llq{i think its a bit hard to see where this conclusion come from}, and that 
 % [discuss healthy score range]
 
 The same capability that makes a simulator useful, however, also makes it dangerous. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation; it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals.
 
-Trained on real-user data, our models may have learned unintended dispositions for violence, hates, and sexually explicit contents. To measure the toxicity of the GRPO-Turing models compared to the untrained Qwen3-8b base, we run evaluations using OpenAI Moderation API and adversarial prompts from ToxicChat \citep{ToxicChat, openai_moderation_api}. The results are presented in Appendix Table~\ref{tab:toxicchat_harm_type_rates}. We observe that posttraining on Reddit and Chat increases the overall toxicity scores, and the effects are more salient on Reddit. We further emphasize that our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. 
+% Trained on real-user data, our models may have learned unintended dispositions for violence, hates, and sexually explicit contents. To measure the toxicity of the GRPO-Turing models compared to the untrained Qwen3-8b base, we run evaluations using OpenAI Moderation API and adversarial prompts from ToxicChat \citep{ToxicChat, openai_moderation_api}. The results are presented in Appendix Table~\ref{tab:toxicchat_harm_type_rates}. We observe that posttraining on Reddit and Chat increases the overall toxicity scores, and the effects are more salient on Reddit. We further emphasize that our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. 
 
 While we believe the research value of user simulation is substantial and outweigh the risks, it should be pursued alongside safeguards such as watermarking generated content and developing AI generation detectors. As with any user-simulation technology, we argue that downstream applications should be evaluated in the context of their specific deployment setting and applicable institutional policies to avoid malicious usage. 
 \section{Related Work}
@@ -522,7 +529,8 @@ We acknowledge the following limitations of our study. First, while we evaluate 
 The goal of this work is to improve LLM-based user simulators for research on interactive systems, evaluation, and human-centered modeling. Our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. As with any user-simulation technology, we argue that downstream applications should be evaluated in the context of their specific deployment setting and applicable institutional policies to avoid malicious usage.
 
 \section*{Acknowledgments}
-We thank the Modal credit grant for academics program (https://modal.com/academics) for providing the cloud computing GPU resources.
+This study was supported by MIT-IBM Watson AI Lab and the AI2050 program at
+Schmidt Sciences (Grant G-25-67980). We thank the Modal credit grant for academics program (https://modal.com/academics) for providing some of the cloud computing GPU resources.
 \bibliography{references}
 \bibliographystyle{colm2026_conference}
 
@@ -621,7 +629,7 @@ Each example is rendered as a two-message chat sequence: a system message contai
 \label{app:thinking-trace-prompt}
 \label{app:hyperparams}
 
-The user splits reserved for SFT training are listed in Table~\ref{tab:preprocessing_stats}. Each SFT training example pairs a ground truth user response with a generated reasoning trace. To construct each thinking trace, we run Qwen3-8B with thinking mode disabled and provide the user's reserved history $h$, induced persona $\rho$, current context $x$, and ground truth response $y_{\star}$. The prompt asks the model to explain what could have led \texttt{[HUMAN]} to write the response, focusing on the local target, intent, stance, style, and plausible length, while explicitly prohibiting copying or closely paraphrasing the ground truth response. We additionally run a ground truth leakage check and regenerate any trace flagged for exposing the wording of $y_{\star}$ until the check passes. The exact thinking-trace generation prompt is shown in Figure~\ref{fig:thinking_trace_prompt}. The resulting trace is paired with the ground truth as \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y_{\star}$. The loss is applied only to this assistant completion target, while prompt, history, persona, and contexts are masked out. SFT training is implemented with Transformers, TRL SFTTrainer, and PEFT LoRA/QLoRA adapters \citep{transformers, TRL, peft}. Table~\ref{tab:sft_hyperparams} lists the hyperparameters for the SFT warm-start stage.
+The user splits reserved for SFT training are listed in Table~\ref{tab:preprocessing_stats}. Each SFT training example pairs a ground truth user response with a generated reasoning trace \citep{lu2026llmagentssimulatemultiturn}. To construct each thinking trace, we run Qwen3-8B with thinking mode disabled and provide the user's reserved history $h$, induced persona $\rho$, current context $x$, and ground truth response $y_{\star}$. The prompt asks the model to explain what could have led \texttt{[HUMAN]} to write the response, focusing on the local target, intent, stance, style, and plausible length, while explicitly prohibiting copying or closely paraphrasing the ground truth response. We additionally run a ground truth leakage check and regenerate any trace flagged for exposing the wording of $y_{\star}$ until the check passes. The exact thinking-trace generation prompt is shown in Figure~\ref{fig:thinking_trace_prompt}. The resulting trace is paired with the ground truth as \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y_{\star}$. The loss is applied only to this assistant completion target, while prompt, history, persona, and contexts are masked out. SFT training is implemented with Transformers, TRL SFTTrainer, and PEFT LoRA/QLoRA adapters \citep{transformers, TRL, peft}. Table~\ref{tab:sft_hyperparams} lists the hyperparameters for the SFT warm-start stage.
 
 \input{prompts/thinking_trace_prompt}
 
@@ -859,11 +867,11 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 
 \section{Training Dynamics}
 \label{app:training-dynamics}
-
+GRPO training dynamics of all three rewards along with the input ablation runs for GRPO-Turing are shown in Figure~\ref{fig:grpo_training_raw_scores}.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/grpo_training_raw_scores.pdf}
-\caption{Raw per-step GRPO training scores for Reddit and Chat. The first row shows the unadjusted Turing reward for GRPO-Turing under user input ablations $u=h$, $u=\rho$, and $u=(h,\rho)$. The second and third rows show the raw similarity and log-probability reward scores for GRPO-Sim and GRPO-Logprob. Curves use every logged training step; x-axis ticks are shown every five steps.}
+\caption{Raw per-step GRPO training scores for Reddit and Chat. The first row shows the unadjusted Turing reward for GRPO-Turing under user input ablations $u=h$, $u=\rho$, and $u=(h,\rho)$. The second and third rows show the raw similarity and log-probability reward scores for GRPO-Sim and GRPO-Logprob. Curves use every logged training step.}
 \label{fig:grpo_training_raw_scores}
 \end{figure*}
 
@@ -899,39 +907,39 @@ Opus 4.8 & 3.89\subtle{$\pm .17$} & 3.2\subtle{$\pm 1.0$} & .390\subtle{$\pm .02
 \vspace{-0.3cm}
 \end{table}
 
-\clearpage
-\section{ToxicChat Moderation}
-\label{app:toxicchat-moderation}
+% \clearpage
+% \section{ToxicChat Moderation}
+% \label{app:toxicchat-moderation}
 
-To quantify harmful behavior under adversarial prompts, we evaluate the untrained Qwen3-8B base model and the two GRPO-Turing checkpoints on ToxicChat~\citep{ToxicChat}. For each ToxicChat prompt, we generate one model response and submit the generated response to OpenAI's Moderation API (\texttt{omni-moderation-latest})~\citep{openai_moderation_api}. The API returns an overall \texttt{flagged} decision and category-level indicators for harm types such as harassment, sexual content, self-harm, and violence. We report the percentage of generations flagged in each category. These categories are not mutually exclusive, so a single response can contribute to multiple rows. The results are shown in Table~\ref{tab:toxicchat_harm_type_rates}.
+% To quantify harmful behavior under adversarial prompts, we evaluate the untrained Qwen3-8B base model and the two GRPO-Turing checkpoints on ToxicChat~\citep{ToxicChat}. For each ToxicChat prompt, we generate one model response and submit the generated response to OpenAI's Moderation API (\texttt{omni-moderation-latest})~\citep{openai_moderation_api}. The API returns an overall \texttt{flagged} decision and category-level indicators for harm types such as harassment, sexual content, self-harm, and violence. We report the percentage of generations flagged in each category. These categories are not mutually exclusive, so a single response can contribute to multiple rows. The results are shown in Table~\ref{tab:toxicchat_harm_type_rates}.
 
-\begin{table}[t]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{@{}lccc@{}}
-\toprule
-Harm type & Qwen3-8B Base & Reddit GRPO-Turing & Chat GRPO-Turing \\
-\midrule
-harassment & 0.27\% & \textbf{0.60\%} & 0.24\% \\
-harassment/threatening & 0.010\% & 0.010\% & \textbf{0.020\%} \\
-hate & 0.020\% & \textbf{0.049\%} & 0.010\% \\
-hate/threatening & 0.00\% & 0.00\% & 0.00\% \\
-illicit & 0.11\% & \textbf{0.24\%} & 0.11\% \\
-illicit/violent & 0.11\% & \textbf{0.20\%} & 0.14\% \\
-self-harm & 0.12\% & \textbf{0.20\%} & 0.12\% \\
-self-harm/intent & 0.010\% & \textbf{0.039\%} & 0.020\% \\
-self-harm/instructions & 0.00\% & 0.00\% & 0.00\% \\
-sexual & 0.25\% & \textbf{0.75\%} & 0.33\% \\
-sexual/minors & 0.069\% & \textbf{0.098\%} & 0.079\% \\
-violence & 2.0\% & \textbf{3.1\%} & 2.4\% \\
-violence/graphic & 0.020\% & \textbf{0.059\%} & 0.020\% \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\caption{OpenAI moderation harm-category flag rates on ToxicChat generations. Values are percentages of generated responses flagged by \texttt{omni-moderation-latest}; categories are not mutually exclusive. Bold indicates highest values.}
-\label{tab:toxicchat_harm_type_rates}
-\end{table}
+% \begin{table}[t]
+% \centering
+% \small
+% \setlength{\tabcolsep}{3pt}
+% \begin{adjustbox}{max width=\linewidth}
+% \begin{tabular}{@{}lccc@{}}
+% \toprule
+% Harm type & Qwen3-8B Base & Reddit GRPO-Turing & Chat GRPO-Turing \\
+% \midrule
+% harassment & 0.27\% & \textbf{0.60\%} & 0.24\% \\
+% harassment/threatening & 0.010\% & 0.010\% & \textbf{0.020\%} \\
+% hate & 0.020\% & \textbf{0.049\%} & 0.010\% \\
+% hate/threatening & 0.00\% & 0.00\% & 0.00\% \\
+% illicit & 0.11\% & \textbf{0.24\%} & 0.11\% \\
+% illicit/violent & 0.11\% & \textbf{0.20\%} & 0.14\% \\
+% self-harm & 0.12\% & \textbf{0.20\%} & 0.12\% \\
+% self-harm/intent & 0.010\% & \textbf{0.039\%} & 0.020\% \\
+% self-harm/instructions & 0.00\% & 0.00\% & 0.00\% \\
+% sexual & 0.25\% & \textbf{0.75\%} & 0.33\% \\
+% sexual/minors & 0.069\% & \textbf{0.098\%} & 0.079\% \\
+% violence & 2.0\% & \textbf{3.1\%} & 2.4\% \\
+% violence/graphic & 0.020\% & \textbf{0.059\%} & 0.020\% \\
+% \bottomrule
+% \end{tabular}
+% \end{adjustbox}
+% \caption{OpenAI moderation harm-category flag rates on ToxicChat generations. Values are percentages of generated responses flagged by \texttt{omni-moderation-latest}; categories are not mutually exclusive. Bold indicates highest values.}
+% \label{tab:toxicchat_harm_type_rates}
+% \end{table}
 
 \end{document}
