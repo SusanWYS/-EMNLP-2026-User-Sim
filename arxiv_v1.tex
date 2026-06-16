@@ -675,13 +675,12 @@ Precision & bfloat16 \\
 Table~\ref{tab:hyperparams} lists the hyperparameters shared across GRPO variants. All GRPO runs are initialized from the SFT checkpoints and trained on a GRPO user split disjoint from the SFT data (see Table~\ref{tab:preprocessing_stats}). We sample four candidate responses per example, compute group-relative advantages within each candidate group, and optimize the resulting policy objective with LoRA adapters. All GRPO trainings are veRL-based \citep{verl}. Across SFT and GRPO, we train on B200/B300 machines for about 1680 GPU hours.
 
 We optimize the GRPO objective of \citet{shao2024deepseekmath}. For each prompt $q$, GRPO samples a group of $G$ outputs $\{o_1,\dots,o_G\}$ from the old policy $\pi_{\theta_{\mathrm{old}}}$ and updates the policy $\pi_\theta$ by maximizing
-\begin{equation}
-\label{eq:grpo}
+\begin{equation*}
 \begin{aligned}
 &\mathcal{J}_{\mathrm{GRPO}}(\theta) = \mathbb{E}\big[\, q \sim P(Q),\ \{o_i\}_{i=1}^{G} \sim \pi_{\theta_{\mathrm{old}}}(O \mid q) \,\big] \\
 &\resizebox{\linewidth}{!}{$\displaystyle \frac{1}{G}\sum_{i=1}^{G}\frac{1}{|o_i|}\sum_{t=1}^{|o_i|}\bigg\{ \min\!\Big[ \frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})}\,\hat{A}_{i,t},\ \mathrm{clip}\!\Big(\frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})},\, 1-\varepsilon,\, 1+\varepsilon\Big)\,\hat{A}_{i,t} \Big] - \beta\, \mathbb{D}_{\mathrm{KL}}\!\big[\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big] \bigg\} ,$}
 \end{aligned}
-\end{equation}
+\end{equation*}
 where $\varepsilon$ is the clipping range and $\beta$ the KL coefficient. In our setting, the symbols instantiate as follows:
 \begin{itemize}
 \item $q \sim P(Q)$: a training prompt drawn (uniformly) from the GRPO user split. Each prompt $q = (x, u)$ pairs a target context $x$ with the user representation $u=(h,\rho)$, i.e.\ the reserved behavior history $h$ and induced persona $\rho$ (Section~\ref{sec:problem}); $P(Q)$ is the empirical distribution over these $(\text{context},\text{user})$ prompts.
