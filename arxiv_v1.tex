@@ -160,7 +160,7 @@ These approaches share a common assumption: the training signal is derived from 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/main_figure.pdf}
-    \caption{Overview of \textsc{Turing-RL}. Given a user's history, induced persona, and current conversation context, an SFT-initialized policy generates multiple candidate responses via chain-of-thought (COT) reasoning. A Turing judge (LLM) compares each candidate against the ground truth human response on a 1--7 scale, scoring which is more likely written by the real user. This discriminative Turing reward is used to train the policy with GRPO.}
+    \caption{Overview of \textsc{Turing-RL}. Given a user's history, induced persona, and current conversation context, an SFT-initialized policy generates multiple candidate responses via chain-of-thought (CoT) reasoning. A Turing judge (LLM) compares each candidate against the ground truth human response on a 1--7 scale, scoring which is more likely written by the real user. This discriminative Turing reward is used to train the policy with GRPO.}
     \label{fig:main}
 \end{figure*}
 
@@ -234,7 +234,7 @@ The final RL objective is then given by
 %   s^* = \begin{cases} 8 - s & \text{if the candidate is Response A} \\ s & \text{if the candidate is Response B} \end{cases}
 % \end{equation}
 % and normalize to obtain the reward $r_{\mathrm{turing}} = (s^* - 1) / 6 \in [0, 1]$, where 0 means the candidate was identified as synthetic with maximum confidence, 0.5 means the judge could not distinguish the two, and 1 means the candidate was mistaken for the real user. 
-and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, after an initial supervised finetuning (SFT) phase on a disjoint subset of the training data (more details in Appendix~\ref{app:training_details}).
+and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024deepseekmath}, after an initial supervised finetuning (SFT) phase on a disjoint subset of the training data.
 
 % sampling $G$ candidate responses per example and computing advantages via within-group normalization. We also perform supervised fine-tuning (SFT) first on a disjoint subset of the training data to warm-start our model, as is commonly done in post-training pipelines.
 
@@ -242,22 +242,20 @@ and we train with Group Relative Policy Optimization~\citep[GRPO;][]{shao2024dee
 \section{Experimental Setup}
 
 \subsection{Datasets}
-We evaluate our approach on two domains: Reddit forum discussion and multi-turn chat. Both domains contain interaction data annotated with user information. We reserve a fixed block of prior interactions as behavior history $h$, and use the remaining interactions as prediction targets. We split users into training and evaluation sets. Full preprocessing details and statistics are given in Appendix~\ref{app:dataset-stats}.
+We evaluate our approach on two domains: multi-turn chat and Reddit forum discussion. Both domains contain interaction data annotated with user information. We reserve a fixed block of prior interactions as behavior history $h$, and use the remaining interactions as prediction targets. We split users into training and evaluation sets. Full preprocessing details and statistics are given in Appendix~\ref{app:dataset-stats}.
 
 % We evaluate across two interaction formats that differ in structure, register, and social context.
 % In both datasets, users are partitioned into disjoint SFT, GRPO, and held-out test pools, and a fixed block of prior interactions per user is reserved as behavioral history $h$, disjoint from all prediction targets. Full preprocessing details and split statistics are given in Appendix~\ref{app:dataset-stats}.
 
+\paragraph{(Chat) Multi-turn chat: PRISM.}
+The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between humans and LLM assistants, spanning 1,500 participants from 75 countries. We select users with at least 6 conversations (1,288 users) and hold out 128 users (880 target user-response turns) for evaluation. 
 
 \paragraph{(Reddit) Online forum discussion: ConvoKit.}
 The ConvoKit subreddit corpus~\citep{chang2020convokit} contains discussions on Reddit. We select 14 subreddits, selecting users with at least 8 threads (1,282 users), and hold out \texttt{r/tifu} and \texttt{r/worldnews} for evaluation (102 users, 267 examples), with no user overlap with training. Each target thread yields one example: the user's last comment, and the ancestor comment chain starting from the original post to the target comment.
 
-\paragraph{(Chat) Multi-turn chat: PRISM.}
-The PRISM Alignment Dataset~\citep{kirk2024prism} contains multi-turn conversations between humans and LLM assistants, spanning 1,500 participants from 75 countries. We select users with at least 6 conversations (1,288 users) and hold out 128 users (880 target user-response turns) for evaluation. 
-
-
 \subsection{Training}
 \paragraph{SFT warm start.}
-Before RL, we warm-start the policy with SFT on ground truth user responses augmented with chain-of-thought reasoning traces. For each training example, we use a base instruct model (of the same capacity as the model to be post-trained) to generate a reasoning trace given the context and ground truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
+Before RL, we warm-start the policy with SFT on ground truth user responses augmented with chain-of-thought reasoning traces, a common practice in LLM RL \cite[e.g.,][]{guo2025deepseek}. For each training example, we use a base instruct model (of the same capacity as the model to be post-trained) to generate a reasoning trace given the context and ground truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \paragraph{RL training.}
 We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}. We sample 4 candidate responses per training example and compute advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($\text{rank }{r=}64$, $\text{scaling }\alpha{=}32$) for 3 epochs \citep{lora, qlora}. GRPO training uses a dataset disjoint from the SFT training set.
@@ -293,7 +291,7 @@ We finally evaluate whether a generated response is specifically grounded in the
 
 \subsubsection{Human Evaluation}
 
-In addition to LLM-as-judge evaluation, we also recruit human participants from Prolific to perform a forced-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate three models: LLM trained with just supervised finetuning (SFT-Init), RL-training with the similarity reward (Sim-RL), and RL-training with our Turing reward (Turing-RL). We do not test Logprob-RL for human evaluation as LLM-as-Judge results indicate that this variant underperforms Sim-RL and Turing-RL. We target 100 heldout samples per dataset, collecting 600 binary judgments per condition (6 judgments for each target sample) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means the model fools human annotators above chance. Full human evaluation details are given in Appendix~\ref{app:human-eval}.
+In addition to LLM-as-judge evaluation, we also recruit over four hundred human participants from Prolific to perform a binary-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate three models: LLM trained with just supervised finetuning (SFT-Init), RL-training with the similarity reward (Sim-RL), and RL-training with our Turing reward (Turing-RL). We do not test Logprob-RL for human evaluation as LLM-as-Judge results indicate that this variant underperforms Sim-RL and Turing-RL. We target 100 heldout samples per dataset, collecting 600 binary judgments per condition (6 judgments for each target sample) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means that the model response is picked by human annotators above chance. Full human evaluation details are given in Appendix~\ref{app:human-eval}.
 
 
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
@@ -314,7 +312,7 @@ In addition to LLM-as-judge evaluation, we also recruit human participants from 
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
 \vspace{-2mm}
-\caption{Turing judge scores (1--7 Likert; higher = harder to distinguish from a real user) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI. \textbf{LLMs trained with Turing rewards (Turing-RL) outperforms other training signals on human-likeness in both domains.}}
+\caption{Turing judge scores (1--7 Likert; higher = harder to distinguish from a real user) from Sonnet~4.6 on Chat and Reddit, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI. \textbf{LLMs trained with Turing rewards (Turing-RL) outperforms other training signals on human-likeness in both domains.}}
 \label{fig:turing_dot}
 \end{figure}
 \begin{figure}[t]
@@ -322,7 +320,7 @@ In addition to LLM-as-judge evaluation, we also recruit human participants from 
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
 \vspace{-2mm}
-\caption{Response similarity to ground truth (Sim, \%; higher = more similar to what the user actually said) from Sonnet~4.6 on Reddit and Chat, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI. \textbf{Turing-RL matches Sim-RL even though Sim-RL is   explicitly trained to maximize similarity}, showing that optimizing for indistinguishability does not sacrifice content alignment.}
+\caption{Response similarity to ground truth (Sim, \%; higher = more similar to what the user actually said) from Sonnet~4.6 on Chat and Reddit, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI. \textbf{Turing-RL matches Sim-RL even though Sim-RL is   explicitly trained to maximize similarity}, showing that optimizing for indistinguishability does not sacrifice content alignment.}
 \label{fig:sim_dot}
 \end{figure}
 
@@ -341,6 +339,8 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. Among 
 \caption{Response specificity ($[0,1]$; higher = more grounded in the interaction context and compatible with the target user) from Sonnet~4.6, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. GT is the ground truth human response, and the dashed line marks the Qwen3-8B base model with 95\% CI. \textbf{Turing-RL is among the strongest on Chat, while Turing-RL and Sim-RL are strongest among the trained models on Reddit},  outperforming SFT-Init and Logprob-RL.}
 \label{fig:specificity}
 \end{figure}
+
+\vspace{-2cm}
 
 Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that Turing-RL and Sim-RL outperform SFT-Init and Logprob-RL in both domains.
 On Reddit, GPT-5, Qwen3.5-397B, and the ground truth (GT) score highest, while Turing-RL and Sim-RL are close among trained Qwen3-8B models. On Chat, Qwen3.5-397B scores highest overall, followed by Turing-RL, which exceeds both GT and GPT-5. Sim-RL also improves over SFT-Init.
