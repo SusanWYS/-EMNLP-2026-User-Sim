@@ -361,14 +361,14 @@ Sim-RL    & .50\subtle{$\pm.055$} & \textbf{.52\subtle{$\pm.049$}} \\
 Turing-RL & \textbf{.57\subtle{$\pm.050$}} & \textbf{.50\subtle{$\pm.051$}} \\
 \bottomrule
 \end{tabular}
-\caption{Human Eval Turing test: model win rates against ground truth ($\pm$ 95\% CI). Best results (up to statistical significance) are bolded. Turing-RL greatly improves over SFT-Init on both domains.}
+\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). Best results (up to statistical significance) are bolded. Turing-RL greatly improves over SFT-Init on both domains.}
 \vspace{4mm}
 \label{tab:human_eval_winrate}
 \end{wraptable}
 
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. Overall, Turing-RL demonstrate the strongest results. On Chat, Turing-RL has the highest win rate (WR $= .57$), while SFT-Init and Sim-RL remain close to chance. On Reddit, both Sim-RL and Turing-RL are near chance and much higher than SFT-Init. 
 
-We perform target-level paired permutation tests between Turing-RL and the other two models. On Reddit, Turing-RL significantly improves on human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between Turing-RL and Sim-RL. On Chat, Turing-RL significantly outperforms both SFT-Init ($p=0.044$) and Sim-RL ($p=0.022$). Further statistical test details are given in Appendix~\ref{app:human-eval-significance}. 
+We perform target-level paired permutation tests between Turing-RL and the other two models. On Chat, Turing-RL significantly outperforms both SFT-Init ($p=0.044$) and Sim-RL ($p=0.022$). On Reddit, Turing-RL significantly improves on human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between Turing-RL and Sim-RL. Further statistical test details are given in Appendix~\ref{app:human-eval-significance}. 
 
 We note that Reddit is significantly harder for humans to judge than Chat. As shown in Tables~\ref{tab:human_eval_rt} and~\ref{tab:human_eval_rt_per_word}, the Reddit/Chat mean reaction time ratio per target question is 1.43, and the Reddit/Chat mean reaction time per word ratio is 1.48. Therefore, we should treat the human study as a validation of broad trends rather than conclusive evidence, especially for Reddit. Overall, humans agree with LLM judge that Turing-trained user simulators improve on human-likeness compared to SFT-Init on both Reddit and Chat.
 
