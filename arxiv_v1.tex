@@ -412,13 +412,13 @@ To mitigate the bias from a single persona inductor model, we further test wheth
 \setlength{\tabcolsep}{2.0pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccccc@{}}
 \toprule
-\multirow{2}{*}{} & \multicolumn{3}{c}{Reddit} & \multicolumn{3}{c}{Chat} \\
+\multirow{2}{*}{} & \multicolumn{3}{c}{Chat} & \multicolumn{3}{c}{Reddit} \\
 \cmidrule(lr){2-4}\cmidrule(l){5-7}
 User Representation & Turing & Sim & Specificity & Turing & Sim & Specificity \\
 \midrule
-$u = (h, \rho)$ (user history + induced persona) & {3.68}\subtle{$\pm .18$} & 3.0\subtle{$\pm .9$} & .367\subtle{$\pm .020$} & 4.31\subtle{$\pm .08$} & 5.3\subtle{$\pm .8$} & .512\subtle{$\pm .009$} \\
-$u = h$ (user history only)      & 3.78\subtle{$\pm .18$} & 3.3\subtle{$\pm 1.0$} & .364\subtle{$\pm .019$} & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$} & {.497}\subtle{$\pm .010$} \\
- $u = \rho$ (induced persona only)    & 3.84\subtle{$\pm .19$} & {2.7}\subtle{$\pm .7$} & {.329}\subtle{$\pm .018$} & {4.23}\subtle{$\pm .08$} & {4.1}\subtle{$\pm .7$} & .509\subtle{$\pm .009$} \\
+$u = (h, \rho)$ (user history + induced persona) & 4.31\subtle{$\pm .08$} & 5.3\subtle{$\pm .8$} & .512\subtle{$\pm .009$} & {3.68}\subtle{$\pm .18$} & 3.0\subtle{$\pm .9$} & .367\subtle{$\pm .020$} \\
+$u = h$ (user history only)      & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$} & {.497}\subtle{$\pm .010$} & 3.78\subtle{$\pm .18$} & 3.3\subtle{$\pm 1.0$} & .364\subtle{$\pm .019$} \\
+ $u = \rho$ (induced persona only)    & {4.23}\subtle{$\pm .08$} & {4.1}\subtle{$\pm .7$} & .509\subtle{$\pm .009$} & 3.84\subtle{$\pm .19$} & {2.7}\subtle{$\pm .7$} & {.329}\subtle{$\pm .018$} \\
 \bottomrule
 \end{tabular*}
 \vspace{-0.3cm}
