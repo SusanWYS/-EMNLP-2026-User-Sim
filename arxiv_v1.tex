@@ -353,12 +353,12 @@ On Reddit, GPT-5, Qwen3.5-397B, and the ground truth (GT) score highest, while T
 \setlength{\tabcolsep}{1.0pt}
 \begin{tabular}{@{}lcc@{}}
 \toprule
- & \textbf{Reddit} & \textbf{Chat} \\
+ & \textbf{Chat} & \textbf{Reddit} \\
 \midrule
-SFT-Init    & .41\subtle{$\pm.045$} & .49\subtle{$\pm.061$} \\
-Sim-RL    & \textbf{.52\subtle{$\pm.049$}} & .50\subtle{$\pm.055$} \\
-% Turing-RL & .50\subtle{$\pm.051$} & \textbf{.57\subtle{$\pm.050$}$^*$} \\
-Turing-RL & \textbf{.50\subtle{$\pm.051$}} & \textbf{.57\subtle{$\pm.050$}} \\
+SFT-Init    & .49\subtle{$\pm.061$} & .41\subtle{$\pm.045$} \\
+Sim-RL    & .50\subtle{$\pm.055$} & \textbf{.52\subtle{$\pm.049$}} \\
+% Turing-RL & \textbf{.57\subtle{$\pm.050$}$^*$} & .50\subtle{$\pm.051$}  \\
+Turing-RL & \textbf{.57\subtle{$\pm.050$}} & \textbf{.50\subtle{$\pm.051$}} \\
 \bottomrule
 \end{tabular}
 \caption{Human Eval Turing test: model win rates against ground truth ($\pm$ 95\% CI). Best results (up to statistical significance) are bolded. Turing-RL greatly improves over SFT-Init on both domains.}
@@ -366,7 +366,7 @@ Turing-RL & \textbf{.50\subtle{$\pm.051$}} & \textbf{.57\subtle{$\pm.050$}} \\
 \label{tab:human_eval_winrate}
 \end{wraptable}
 
-Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. The Reddit and Chat results show different model rankings. On Reddit, both Sim-RL and Turing-RL performance are near chance. On Chat, Turing-RL has the highest win rate (WR $= .57$), while SFT-Init and Sim-RL remain close to chance.
+Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair. Overall, Turing-RL demonstrate the strongest results. On Chat, Turing-RL has the highest win rate (WR $= .57$), while SFT-Init and Sim-RL remain close to chance. On Reddit, both Sim-RL and Turing-RL are near chance and much higher than SFT-Init. 
 
 We perform target-level paired permutation tests between Turing-RL and the other two models. On Reddit, Turing-RL significantly improves on human-likeness compared to SFT-Init ($p=0.0095$). No statistically significant difference is detected between Turing-RL and Sim-RL. On Chat, Turing-RL significantly outperforms both SFT-Init ($p=0.044$) and Sim-RL ($p=0.022$). Further statistical test details are given in Appendix~\ref{app:human-eval-significance}. 
 
@@ -376,7 +376,7 @@ We note that Reddit is significantly harder for humans to judge than Chat. As sh
 
 \begin{figure}[t]
 \centering
-\vspace{0.2cm}
+\vspace{0.4cm}
 \includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
 \vspace{-0.6cm}
 \caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that Turing-RL is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
