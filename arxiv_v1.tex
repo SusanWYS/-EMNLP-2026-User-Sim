@@ -673,6 +673,27 @@ Precision & bfloat16 \\
 
 Table~\ref{tab:hyperparams} lists the hyperparameters shared across GRPO variants. All GRPO runs are initialized from the SFT checkpoints and trained on a GRPO user split disjoint from the SFT data (see Table~\ref{tab:preprocessing_stats}). We sample four candidate responses per example, compute group-relative advantages within each candidate group, and optimize the resulting policy objective with LoRA adapters. All GRPO trainings are veRL-based \citep{verl}. Across SFT and GRPO, we train on B200/B300 machines for about 1680 GPU hours.
 
+We optimize the GRPO objective of \citet{shao2024deepseekmath}. For each prompt $q$, GRPO samples a group of $G$ outputs $\{o_1,\dots,o_G\}$ from the old policy $\pi_{\theta_{\mathrm{old}}}$ and updates the policy $\pi_\theta$ by maximizing
+\begin{equation}
+\label{eq:grpo}
+\begin{aligned}
+\mathcal{J}_{\mathrm{GRPO}}(\theta) ={}& \mathbb{E}\big[\, q \sim P(Q),\ \{o_i\}_{i=1}^{G} \sim \pi_{\theta_{\mathrm{old}}}(O \mid q) \,\big] \\
+&\frac{1}{G}\sum_{i=1}^{G}\frac{1}{|o_i|}\sum_{t=1}^{|o_i|}\Bigg\{ \min\!\bigg[ \frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})}\,\hat{A}_{i,t}, \\
+&\qquad\quad \mathrm{clip}\!\Big(\frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})},\, 1-\varepsilon,\, 1+\varepsilon\Big)\,\hat{A}_{i,t} \bigg] \\
+&\qquad\quad -\ \beta\, \mathbb{D}_{\mathrm{KL}}\!\big[\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big] \Bigg\},
+\end{aligned}
+\end{equation}
+where $\varepsilon$ is the clipping range and $\beta$ the KL coefficient. In our setting, the symbols instantiate as follows:
+\begin{itemize}
+\item $q \sim P(Q)$: a training prompt drawn (uniformly) from the GRPO user split. Each prompt $q = (x, u)$ pairs a target context $x$ with the user representation $u=(h,\rho)$, i.e.\ the reserved behavior history $h$ and induced persona $\rho$ (Section~\ref{sec:problem}); $P(Q)$ is the empirical distribution over these $(\text{context},\text{user})$ prompts.
+\item $\{o_i\}_{i=1}^{G}$: the $G=4$ candidate generations sampled per prompt. Each $o_i = (z_i, \hat{y}_i)$ is a chain-of-thought reasoning trace $z_i$ followed by the simulated user response $\hat{y}_i$, and $o_{i,t}$ is its $t$-th token.
+\item $\pi_\theta$: the simulator policy being optimized, i.e.\ our LoRA-adapted Qwen3-8B $p_\theta(\cdot \mid x, u)$.
+\item $\pi_{\theta_{\mathrm{old}}}$: the behavior (sampling) policy that produced the group $\{o_i\}$, namely the policy from immediately before the current update; the per-token ratio $\pi_\theta/\pi_{\theta_{\mathrm{old}}}$ is the importance weight. Because we take a single PPO epoch per batch (Table~\ref{tab:hyperparams}), $\pi_{\theta_{\mathrm{old}}}=\pi_\theta$ at the first inner step.
+\item $\pi_{\mathrm{ref}}$: the fixed reference policy, our SFT checkpoint (Appendix~\ref{app:sft_training_details}) that initializes RL. The penalty $\mathbb{D}_{\mathrm{KL}}\!\big[\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big]$, estimated with the unbiased estimator of \citet{shao2024deepseekmath}, anchors the simulator to this checkpoint with coefficient $\beta=1\times10^{-3}$.
+\item $\varepsilon$: the PPO clipping range, set to $0.2$ (Table~\ref{tab:hyperparams}).
+\item $\hat{A}_{i,t}$: the advantage of token $t$ in output $o_i$. We use outcome supervision, so every token of $o_i$ shares the same group-normalized Turing reward, $\hat{A}_{i,t}=\big(r_i-\mathrm{mean}(\mathbf{r})\big)/\mathrm{std}(\mathbf{r})$, where $r_i=r_{\mathrm{turing}}(\hat{y}_i,y_\star)$ is the capped, normalized LLM-judge Turing reward (Section~\ref{sec:training}) and $\mathbf{r}=\{r_1,\dots,r_G\}$ are the group rewards. The reasoning tokens $z_i$ receive the same advantage, but the reward depends only on the final response $\hat{y}_i$.
+\end{itemize}
+
 \begin{table}[h]
 \centering
 \small
