@@ -678,10 +678,8 @@ We optimize the GRPO objective of \citet{shao2024deepseekmath}. For each prompt 
 \begin{equation}
 \label{eq:grpo}
 \begin{aligned}
-\mathcal{J}_{\mathrm{GRPO}}(\theta) ={}& \mathbb{E}\big[\, q \sim P(Q),\ \{o_i\}_{i=1}^{G} \sim \pi_{\theta_{\mathrm{old}}}(O \mid q) \,\big] \\
-&\frac{1}{G}\sum_{i=1}^{G}\frac{1}{|o_i|}\sum_{t=1}^{|o_i|}\Bigg\{ \min\!\bigg[ \frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})}\,\hat{A}_{i,t}, \\
-&\qquad\quad \mathrm{clip}\!\Big(\frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})},\, 1-\varepsilon,\, 1+\varepsilon\Big)\,\hat{A}_{i,t} \bigg] \\
-&\qquad\quad -\ \beta\, \mathbb{D}_{\mathrm{KL}}\!\big[\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big] \Bigg\},
+&\mathcal{J}_{\mathrm{GRPO}}(\theta) = \mathbb{E}\big[\, q \sim P(Q),\ \{o_i\}_{i=1}^{G} \sim \pi_{\theta_{\mathrm{old}}}(O \mid q) \,\big] \\
+&\resizebox{\linewidth}{!}{$\displaystyle \frac{1}{G}\sum_{i=1}^{G}\frac{1}{|o_i|}\sum_{t=1}^{|o_i|}\bigg\{ \min\!\Big[ \frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})}\,\hat{A}_{i,t},\ \mathrm{clip}\!\Big(\frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})},\, 1-\varepsilon,\, 1+\varepsilon\Big)\,\hat{A}_{i,t} \Big] - \beta\, \mathbb{D}_{\mathrm{KL}}\!\big[\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big] \bigg\} ,$}
 \end{aligned}
 \end{equation}
 where $\varepsilon$ is the clipping range and $\beta$ the KL coefficient. In our setting, the symbols instantiate as follows:
