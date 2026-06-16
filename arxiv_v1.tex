@@ -137,7 +137,7 @@ The currently dominant use cases of large language models (LLMs) involves having
 % Such user simulators could serve as testbeds for conversational agents~\citep{naous2025flipping}, training environments for interactive systems~\citep{abdulhai2025consistently, mehri2025goal}, and proxies for studying human responses at scale~\citep{park2023generative, aher2023simulating, lu2025multiturn}.
 Such user simulators could serve as foundational building blocks for social world models in AI agents \citep{rabinowitz2018machine, collins2024building}, training environments and testbeds for interactive systems~\citep{abdulhai2025consistently, mehri2025goal}, and proxies for studying human behaviors at scale~\citep{park2023generative, aher2023simulating, lu2025multiturn}.\footnote{User simulators could also have harmful applications, such as in enabling fraud and distribution of misinformation at scale. See our discussion in \S\ref{sec:discussion}.}
 
-Simulating an individual is fundamentally difficult: what distinguishes one person from another resists easy categorization. Two people with identical demographics can hold sharply different opinions~\citep{hwang2023aligning, santurkar2023opinions}, and individual preferences cannot be recovered from group-level labels alone~\citep{jiang2024indievalue, kirk2024prism}. Recent work has begun addressing this challenge through purpose-built user language models~\citep{naous2025flipping}, latent user-state alignment~\citep{wu2026humanlm}, and log-probability maximization with latent reasoning in token space~\citep{gandhi2026dialogue}.
+Simulating an individual is fundamentally difficult: what distinguishes one person from another resists easy categorization. Two people with identical demographics can hold sharply different opinions~\citep{hwang2023aligning, santurkar2023opinions}, and individual preferences cannot be recovered from group-level labels alone~\citep{jiang2024indievalue, kirk2024prism}. Recent work has begun addressing this challenge through purpose-built user language models~\citep{naous2025flipping}, latent user-state alignment~\citep{wu2026humanlm}, and log-probability maximization with chain of thought~\citep{gandhi2026dialogue}.
 % and persona induction from interaction history~\citep{ryan2025synthesizeme}. 
 These approaches share a common assumption: the training signal is derived from matching a specific ground truth response, whether by scoring similarity against it with an LLM judge or by  maximizing its log-probability. However, the set of plausible responses to a given context is enormous, i.e., the same person in the same context could say many different things. An ideal user simulator model should therefore go beyond replicating the ground truth response and instead produce responses indistinguishable from what the user {could have said}.
 
@@ -164,9 +164,9 @@ These approaches share a common assumption: the training signal is derived from 
     \label{fig:main}
 \end{figure*}
 
-The classic Turing Test \citep{turing1950computing} operationalizes human-likeness through indistinguishability: a machine passes if an evaluator cannot tell its responses from a human's. This is precisely the criterion we want from a user simulator, and it translates directly into a training signal. In this paper, we therefore propose Turing-RL: training LLM user simulators via reinforcement learning on a \emph{discriminative Turing reward}, wherein an LLM judge assigns a high score when a generated response is deemed human-like, conditioned on the user's history, which includes the current session history and the user's behaviors in previous sessions. Figure~\ref{fig:main} shows an overview of our approach.
+The classic Turing Test \citep{turing1950computing} operationalizes human-likeness through indistinguishability: a machine passes if an evaluator cannot tell its responses from a human's. This is precisely the criterion we want from a user simulator, and it translates directly into a training signal. In this paper, we therefore propose Turing-RL: training LLM user simulators via reinforcement learning (RL) on a \emph{discriminative Turing reward}, wherein an LLM judge assigns a high score when a generated response is deemed human-like, conditioned on the user's history, which includes the current session history and the user's behaviors in previous sessions. Figure~\ref{fig:main} shows an overview of our approach.
 
-We evaluate our Turing-RL-trained LLMs across two settings that differ substantially in structure, in particular multi-turn dialogue~\citep{kirk2024prism} and Reddit forum discussions~\citep{chang2020convokit}. We compare against baseline training signals that have been previously explored in the literature: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, and log-probability maximization with latent chain-of-thought adapted from~\cite{gandhi2026dialogue} without the SFT loss term.\footnote{We find that dropping the SFT loss term is more stable for Qwen3-8B GRPO training and avoids mode collapses.} We find that Turing-RL consistently outperforms both alternatives across both LLM and human evaluation metrics, suggesting that optimizing for  indistinguishability is an effective path towards learning user simulators.
+We evaluate our Turing-RL-trained LLMs across two settings that differ substantially in structure, in particular multi-turn dialogue~\citep{kirk2024prism} and Reddit forum discussions~\citep{chang2020convokit}. We compare against baseline training signals that have been previously explored in the literature: a response-similarity reward adapted from HumanLM~\citep{wu2026humanlm}, and log-probability maximization with latent chain-of-thought adapted from~\cite{gandhi2026dialogue} without the SFT loss term.\footnote{We find that dropping the SFT loss term is more stable for Qwen3-8B GRPO training and avoids mode collapses.} \llq{do we need to mention this detail in the intro? i think we could just say we adapt... and leave the details in baselines section} We find that Turing-RL consistently outperforms both alternatives across both LLM and human evaluation metrics, suggesting that optimizing for  indistinguishability is an effective path towards learning user simulators.
 % learning LLM-based user simulators
 
 
@@ -255,7 +255,7 @@ The ConvoKit subreddit corpus~\citep{chang2020convokit} contains discussions on 
 
 \subsection{Training}
 \paragraph{SFT warm start.}
-Before RL, we warm-start the policy with SFT on ground truth user responses augmented with chain-of-thought reasoning traces, a common practice in LLM RL \cite[e.g.,][]{guo2025deepseek}. For each training example, we use a base instruct model (of the same capacity as the model to be post-trained) to generate a reasoning trace given the context and ground truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
+Before RL, we warm-start the policy with SFT on ground truth user responses augmented with chain-of-thought reasoning traces, a common practice in LLM RL \cite[e.g.,][]{guo2025deepseek}. For each training example, we use a base instruct model (of the same capacity as the model to be post-trained)\llq{why not the base instruct model? what the } to generate a reasoning trace given the context and ground truth response, explaining what could have led the user to write that response. The SFT target pairs the trace with the ground truth: \texttt{<reasoning>}$t$\texttt{</reasoning> [HUMAN]:}~$y$. The model is trained with LoRA using completion-only loss. At inference time, the model generates both the trace and the response autoregressively. See Appendix~\ref{app:thinking-trace-prompt} for the trace elicitation prompt.
 
 \paragraph{RL training.}
 We optimize the Turing discriminative judge signal with GRPO~\citep{shao2024deepseekmath}. We sample 4 candidate responses per training example and compute advantages via within-group normalization. All models are initialized from the SFT checkpoint discussed above and trained with LoRA ($\text{rank }{r=}64$, $\text{scaling }\alpha{=}32$) for 3 epochs \citep{lora, qlora}. GRPO training uses a dataset disjoint from the SFT training set.
@@ -291,7 +291,7 @@ We finally evaluate whether a generated response is specifically grounded in the
 
 \subsubsection{Human Evaluation}
 
-In addition to LLM-as-judge evaluation, we also recruit over four hundred human participants from Prolific to perform a binary-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate three models: LLM trained with just supervised finetuning (SFT-Init), RL-training with the similarity reward (Sim-RL), and RL-training with our Turing reward (Turing-RL). We do not test Logprob-RL for human evaluation as LLM-as-Judge results indicate that this variant underperforms Sim-RL and Turing-RL. We target 100 heldout samples per dataset, collecting 600 binary judgments per condition (6 judgments for each target sample) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means that the model response is picked by human annotators above chance. Full human evaluation details are given in Appendix~\ref{app:human-eval}.
+In addition to LLM-as-judge evaluation, we also recruit over three hundred human participants from Prolific to perform a binary-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate three models: LLM trained with just supervised finetuning (SFT-Init), RL-training with the similarity reward (Sim-RL), and RL-training with our Turing reward (Turing-RL). We do not test Logprob-RL for human evaluation as LLM-as-Judge results indicate that this variant underperforms Sim-RL and Turing-RL. We target 100 heldout samples per dataset, collecting 600 binary judgments per condition (6 judgments for each target sample) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means that the model response is picked by human annotators above chance. Full human evaluation details are given in Appendix~\ref{app:human-eval}.
 
 
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
@@ -361,7 +361,7 @@ Sim-RL    & .50\subtle{$\pm.055$} & \textbf{.52\subtle{$\pm.049$}} \\
 Turing-RL & \textbf{.57\subtle{$\pm.050$}} & \textbf{.50\subtle{$\pm.051$}} \\
 \bottomrule
 \end{tabular}
-\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). Best results (up to statistical significance) are bolded. Turing-RL greatly improves over SFT-Init on both domains.}
+\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). Best results (up to statistical significance) are bolded. Turing-RL greatly improves over SFT-Init on both domains. }
 \vspace{4mm}
 \label{tab:human_eval_winrate}
 \end{wraptable}
@@ -481,7 +481,7 @@ Figure~\ref{fig:qualitative_examples_2} shows representative examples from both 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1.0\columnwidth]{figures/qual_exs.pdf}
-\vspace{0em}
+\vspace{-1em}
 \caption{Qualitative comparison of the ground truth, GPT-5, SFT, Sim-RL, and Turing-RL on one one Chat and one Reddit example.}
 \label{fig:qualitative_examples_2}
 \vspace{-1em}
@@ -555,37 +555,9 @@ Each training example is a tuple $(u, x, y)$ where the user representation $u = 
 
 \subsection{Dataset Preprocessing}
 
-We show the dataset statistics after preprocessing in Table~\ref{tab:preprocessing_stats}.
+We show the dataset statistics after preprocessing in Table~\ref{tab:preprocessing_stats} below.
 
-\paragraph{(Reddit) ConvoKit.}
-This dataset is distributed under the MIT License. We reconstruct Reddit threads from comment identifiers and parent pointers.
-% Deleted, removed, and non-user comments (e.g., bot comments) cannot serve as targets or enter $h$.
-We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training.
-We use the remaining subreddits for SFT and GRPO training. These include \texttt{r/AmItheAsshole}, \texttt{r/AskMen}, \texttt{r/AskWomen}, \texttt{r/business}, \texttt{r/changemyview}, \texttt{r/Economics}, \texttt{r/Frugal}, \texttt{r/MaliciousCompliance}, \texttt{r/news}, \texttt{r/relationship\_advice}, \texttt{r/relationships}, and \texttt{r/TrueReddit}.
-
-Users are deterministically split into disjoint SFT and GRPO sets at a 40/60 ratio.
-For each user, 2--6 threads are reserved as $h$, and users with insufficient threads are discarded. Each target thread yields one example: $y_{\star}$ is the user's final comment, and $x$ is the original post plus the ancestor reply chain leading to that comment.
-
-% This avoids highly correlated examples from the same thread.
-
-% GRPO training and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. 
-% This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO training/validation sets. 
-
-
-
-\paragraph{(Chat) PRISM.}
-This dataset is distributed under the cc license. We retain PRISM users with at least six conversations, yielding 1,288 qualified users. We randomly hold out 128 qualified users with a fixed seed, yielding 128 held-out test users and 880 test examples. The remaining 1,160 users are split with the same seed into disjoint GRPO and SFT sets using a 60/40 user ratio: 696 users for GRPO and 464 users for SFT. For each user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation yields one example: $x$ is all preceding turns, and $y$ is the user's utterance at that turn.
-
-% GRPO train and validation examples are split within each GRPO user using a deterministic tail-split policy: for a user with $n$ target rows, $\lfloor 0.1n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation. Before applying this tail split, target rows are sorted by conversation id and target turn index, so validation rows come from later target turns and training does not use a later target from the same conversation than validation.
-
-
-\subsection{Persona Induction}
-
-Our default user representation pairs the user's behavioral history with an induced persona. To induce a persona, we prompt GPT-5.4 nano (temperature 0.2, max output length 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal quirks, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user. Figure~\ref{fig:persona_induction} shows the induction prompt.
-
-\input{prompts/persona_induction}
-
-\begin{table}[t]
+\begin{table}[h]
 \centering
 \small
 \begin{tabular}{lrr}
@@ -603,6 +575,33 @@ Test rows & 880 & 267 \\
 \caption{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt{r/tifu} and \texttt{r/worldnews}.}
 \label{tab:preprocessing_stats}
 \end{table}
+
+\paragraph{(Chat) PRISM.}
+This dataset is distributed under the cc license. We retain PRISM users with at least six conversations, yielding 1,288 qualified users. We randomly hold out 128 qualified users with a fixed seed, yielding 128 held-out test users and 880 test examples. The remaining 1,160 users are split with the same seed into disjoint GRPO and SFT sets using a 60/40 user ratio: 696 users for GRPO and 464 users for SFT. For each user, 2--4 conversations are reserved as $h$; the rest serve as targets. Because PRISM dialogues are linear, each user turn in a target conversation yields one example: $x$ is all preceding turns, and $y$ is the user's utterance at that turn.
+
+\paragraph{(Reddit) ConvoKit.}
+This dataset is distributed under the MIT License. We reconstruct Reddit threads from comment identifiers and parent pointers.
+% Deleted, removed, and non-user comments (e.g., bot comments) cannot serve as targets or enter $h$.
+We reserve \texttt{r/tifu} and \texttt{r/worldnews} as held-out test subreddits and remove their users from both SFT and GRPO training.
+We use the remaining subreddits for SFT and GRPO training. These include \texttt{r/AmItheAsshole}, \texttt{r/AskMen}, \texttt{r/AskWomen}, \texttt{r/business}, \texttt{r/changemyview}, \texttt{r/Economics}, \texttt{r/Frugal}, \texttt{r/MaliciousCompliance}, \texttt{r/news}, \texttt{r/relationship\_advice}, \texttt{r/relationships}, and \texttt{r/TrueReddit}.
+
+Users are deterministically split into disjoint SFT and GRPO sets at a 40/60 ratio.
+For each user, 2--6 threads are reserved as $h$, and users with insufficient threads are discarded. Each target thread yields one example: $y_{\star}$ is the user's final comment, and $x$ is the original post plus the ancestor reply chain leading to that comment.
+
+% This avoids highly correlated examples from the same thread.
+
+% GRPO training and validation examples are then split within each GRPO user using the same deterministic tail-split policy as the preprocessing pipeline: for a user with $n$ target rows, $\lfloor 0.3n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation and the earlier rows to training. 
+% This gives every GRPO training user at least one validation row; users with only one eligible row are dropped from GRPO training/validation sets. 
+
+
+% GRPO train and validation examples are split within each GRPO user using a deterministic tail-split policy: for a user with $n$ target rows, $\lfloor 0.1n \rfloor$ rows, with a minimum of one when $n>1$, are assigned to validation. Before applying this tail split, target rows are sorted by conversation id and target turn index, so validation rows come from later target turns and training does not use a later target from the same conversation than validation.
+
+
+\subsection{Persona Induction}
+
+Our default user representation pairs the user's behavioral history with an induced persona. To induce a persona, we prompt GPT-5.4 nano (temperature 0.2, max output length 2{,}048 tokens) to summarize each user's history block $h$ into a fixed persona $\rho$ with five fields: values, verbal quirks, expression style, length prior, and background. The same $\rho$ is reused for every example belonging to that user. Figure~\ref{fig:persona_induction} shows the induction prompt.
+
+\input{prompts/persona_induction}
 
 \section{Generation Details}\label{sec:sampling_params}
 \subsection{Sampling Parameters}
@@ -681,15 +680,15 @@ We optimize the GRPO objective of \citet{shao2024deepseekmath}. For each prompt 
 &\resizebox{\linewidth}{!}{$\displaystyle \frac{1}{G}\sum_{i=1}^{G}\frac{1}{|o_i|}\sum_{t=1}^{|o_i|}\bigg\{ \min\!\Big[ \frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})}\,\hat{A}_{i,t},\ \mathrm{clip}\!\Big(\frac{\pi_\theta(o_{i,t}\mid q,o_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(o_{i,t}\mid q,o_{i,<t})},\, 1-\varepsilon,\, 1+\varepsilon\Big)\,\hat{A}_{i,t} \Big] - \beta\, \mathbb{D}_{\mathrm{KL}}\!\big[\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big] \bigg\} ,$}
 \end{aligned}
 \end{equation*}
-where $\varepsilon$ is the clipping range and $\beta$ the KL coefficient. In our setting, the symbols instantiate as follows:
+where $\varepsilon$ is the clipping range and $\beta$ the KL coefficient. More specifically:
 \begin{itemize}
-\item $q \sim P(Q)$: a training prompt drawn (uniformly) from the GRPO user split. Each prompt $q = (x, u)$ pairs a target context $x$ with the user representation $u=(h,\rho)$, i.e.\ the reserved behavior history $h$ and induced persona $\rho$ (Section~\ref{sec:problem}); $P(Q)$ is the empirical distribution over these $(\text{context},\text{user})$ prompts.
-\item $\{o_i\}_{i=1}^{G}$: the $G=4$ candidate generations sampled per prompt. Each $o_i = (z_i, \hat{y}_i)$ is a chain-of-thought reasoning trace $z_i$ followed by the simulated user response $\hat{y}_i$, and $o_{i,t}$ is its $t$-th token.
-\item $\pi_\theta$: the simulator policy being optimized, i.e.\ our LoRA-adapted Qwen3-8B $p_\theta(\cdot \mid x, u)$.
+\item $q \sim P(Q)$: a training prompt drawn from the GRPO user split. $P(Q)$ is the empirical distribution over these prompts.
+\item $\{o_i\}_{i=1}^{G}$: the $G=4$ candidate generations sampled per prompt. Each $o_i = (z_i, \hat{y}_i)$ is a reasoning trace $z_i$ followed by the response $\hat{y}_i$. $o_{i,t}$ is its $t$-th token.
+\item $\pi_\theta$: the simulator policy being optimized.
 \item $\pi_{\theta_{\mathrm{old}}}$: the behavior (sampling) policy that produced the group $\{o_i\}$, namely the policy from immediately before the current update; the per-token ratio $\pi_\theta/\pi_{\theta_{\mathrm{old}}}$ is the importance weight. Because we take a single PPO epoch per batch (Table~\ref{tab:hyperparams}), $\pi_{\theta_{\mathrm{old}}}=\pi_\theta$ at the first inner step.
-\item $\pi_{\mathrm{ref}}$: the fixed reference policy, our SFT checkpoint (Appendix~\ref{app:sft_training_details}) that initializes RL. The penalty $\mathbb{D}_{\mathrm{KL}}\!\big[\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big]$, estimated with the unbiased estimator of \citet{shao2024deepseekmath}, anchors the simulator to this checkpoint with coefficient $\beta=1\times10^{-3}$.
+\item $\pi_{\mathrm{ref}}$: the SFT checkpoint (Appendix~\ref{app:sft_training_details}) that initializes RL. The penalty $\mathbb{D}_{\mathrm{KL}}\!\big[\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big]$ coefficient is $\beta=1\times10^{-3}$ (Table~\ref{tab:hyperparams}).
 \item $\varepsilon$: the PPO clipping range, set to $0.2$ (Table~\ref{tab:hyperparams}).
-\item $\hat{A}_{i,t}$: the advantage of token $t$ in output $o_i$. We use outcome supervision, so every token of $o_i$ shares the same group-normalized Turing reward, $\hat{A}_{i,t}=\big(r_i-\mathrm{mean}(\mathbf{r})\big)/\mathrm{std}(\mathbf{r})$, where $r_i=r_{\mathrm{turing}}(\hat{y}_i,y_\star)$ is the capped, normalized LLM-judge Turing reward (Section~\ref{sec:training}) and $\mathbf{r}=\{r_1,\dots,r_G\}$ are the group rewards. The reasoning tokens $z_i$ receive the same advantage, but the reward depends only on the final response $\hat{y}_i$.
+\item $\hat{A}_{i,t}$: the advantage of token $t$ in output $o_i$. $\hat{A}_{i,t}=\big(r_i-\mathrm{mean}(\mathbf{r})\big)/\mathrm{std}(\mathbf{r})$, where $r_i$ is individual response reward and $\mathbf{r}=\{r_1,\dots,r_G\}$ are the group rewards. The reasoning tokens $z_i$ receive the same advantage.
 \end{itemize}
 
 \begin{table}[h]
@@ -910,7 +909,7 @@ The qualitative results (ground truth, GPT-5, Qwen3.5-397B, Qwen3-8B Base, SFT-I
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/qualitative_examples.pdf}
-\caption{Qualitative examples from Reddit and Chat. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, Logprob-RL, and Qwen3-8B produce verbose responses.}
+\caption{Qualitative examples from Chat and Reddit. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, Logprob-RL, and Qwen3-8B produce verbose responses.}
 \label{fig:qualitative_examples}
 \end{figure*}
 
