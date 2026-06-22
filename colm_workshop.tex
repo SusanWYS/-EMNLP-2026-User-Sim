@@ -353,13 +353,11 @@ On Reddit, GPT-5, Qwen3.5-397B, and the ground truth (GT) score highest, while T
 
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair.  On Chat, Turing-RL has the highest win rate (WR $= .57$), while SFT-Init and Sim-RL remain close to chance. On Reddit, both Sim-RL and Turing-RL are near chance and much higher than SFT-Init. 
 
- 
 \begin{wraptable}[9]{r}{0.4\textwidth}
-\vspace{-4mm}
 \centering
 \small
-\setlength{\tabcolsep}{1.0pt}
-\begin{tabular}{@{}lcc@{}}
+\setlength{\tabcolsep}{0pt}
+\begin{tabular*}{0.75\linewidth}{@{\extracolsep{\fill}}lcc@{}}
 \toprule
  & \textbf{Chat} & \textbf{Reddit} \\
 \midrule
@@ -368,10 +366,10 @@ Sim-RL    & .50\subtle{$\pm.055$} & .52\subtle{$\pm.049$} \\
 % Turing-RL & \textbf{.57\subtle{$\pm.050$}$^*$} & .50\subtle{$\pm.051$}  \\
 Turing-RL & .57\subtle{$\pm.050$} & {.50\subtle{$\pm.051$}} \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \vspace{-2mm}
 \caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). Turing-RL greatly improves over SFT-Init on both domains. }
-% \vspace{4mm}
+\vspace{4mm}
 \label{tab:human_eval_winrate}
 \end{wraptable}
 
