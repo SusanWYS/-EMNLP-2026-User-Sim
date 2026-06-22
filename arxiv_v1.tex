@@ -355,8 +355,8 @@ Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth resp
 \begin{wraptable}[9]{r}{0.4\textwidth}
 \centering
 \small
-\setlength{\tabcolsep}{1.0pt}
-\begin{tabular}{@{}lcc@{}}
+\setlength{\tabcolsep}{0pt}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lcc@{}}
 \toprule
  & \textbf{Chat} & \textbf{Reddit} \\
 \midrule
@@ -365,7 +365,7 @@ Sim-RL    & .50\subtle{$\pm.055$} & .52\subtle{$\pm.049$} \\
 % Turing-RL & \textbf{.57\subtle{$\pm.050$}$^*$} & .50\subtle{$\pm.051$}  \\
 Turing-RL & .57\subtle{$\pm.050$} & {.50\subtle{$\pm.051$}} \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \vspace{-2mm}
 \caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). Turing-RL greatly improves over SFT-Init on both domains. }
 \vspace{4mm}
