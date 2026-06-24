@@ -369,7 +369,7 @@ Turing-RL & .57\subtle{$\pm.050$} & {.50\subtle{$\pm.051$}} \\
 \bottomrule
 \end{tabular*}
 \vspace{-2mm}
-\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). Turing-RL greatly improves over SFT-Init on both domains. }
+\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI).}
 \vspace{4mm}
 \label{tab:human_eval_winrate}
 \end{wraptable}
@@ -488,13 +488,13 @@ A recurring finding across our experiments is that content matching and human-li
 % what makes a response recognizably machine-generated lies largely in surface form \llq{i think its a bit hard to see where this conclusion come from}, and that 
 % [discuss healthy score range]
 
-The same capability that makes a simulator useful, however, also poses risks. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation; it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals. While we believe the positive research and application value of user simulation is substantial and outweigh the risks, it should be pursued alongside safeguards such as watermarking generated content and developing AI generation detectors. As with any dual-use technology, we argue that downstream applications should be evaluated in the context of their specific deployment setting and applicable institutional policies to avoid malicious usage. 
+The same capability that makes a simulator useful, however, also poses risks. A model trained to be indistinguishable from a specific person, conditioned on their prior behavior, is by construction well suited to impersonation; it could be used to fabricate convincing messages attributed to real individuals, or to scale fraud and social-engineering attacks. We emphasize that our simulators are trained and evaluated on public or consented research data and are intended for studying interactive systems and human behavior in aggregate, not for reproducing identifiable individuals. While we believe the positive research and application value of user simulation is substantial and outweigh the risks, it should be pursued alongside safeguards such as watermarking generated content and developing AI generation detectors. As with any dual-use technology, we argue that downstream applications should be evaluated in the context of their specific deployment setting and applicable institutional policies to avoid malicious usage. We also discuss future directions of this work in Appendix~\ref{app:future-directions}.
 
 % Trained on real-user data, our models may have learned unintended dispositions for violence, hates, and sexually explicit contents. To measure the toxicity of the Turing-RL models compared to the untrained Qwen3-8b base, we run evaluations using OpenAI Moderation API and adversarial prompts from ToxicChat \citep{ToxicChat, openai_moderation_api}. The results are presented in Appendix Table~\ref{tab:toxicchat_harm_type_rates}. We observe that posttraining on Reddit and Chat increases the overall toxicity scores, and the effects are more salient on Reddit. We further emphasize that our experiments are limited to offline benchmark settings, and the models are not intended for any adversarial uses. 
 
 
 
-There are several directions for future work. First, it would be valuable to study whether user simulators can help LLM assistants become more personalized and better aligned with users' goals and intentions, for example in multi-agent systems \citep{guo2024large, tomavsev2026intelligent} and cognitive architectures \citep{sumers2023cognitive, liu2026cognitive}. Second, while this work focuses on training LLMs to produce \textit{outputs} that are indistinguishable from human-written text, it remains an open question whether the models' reasoning \textit{processes} align with those of humans. One avenue is to compare model-generated reasoning traces with verbalized thought traces from humans \citep{wurgaft2025scaling, kargupta2025cognitive}; another is to explore richer representations for reasoning beyond natural language alone \citep{jha2025modeling, zhang2025code, li2026simulating}. Third, reliable user simulators could enable experiments that elicit group and collective behaviors from populations of simulated agents in open-ended settings, providing a new tool for replicating and extending research in computational social science \citep{lazer2009computational, ziems2024can}.
+
 
 \section{Related Work}
 
@@ -544,6 +544,10 @@ Our work suggests a promising recipe for building accurate and generalizable use
 \clearpage
 
 \appendix
+
+\section{Future Directions}
+\label{app:future-directions}
+There are several directions for future work. First, it would be valuable to study whether user simulators can help LLM assistants become more personalized and better aligned with users' goals and intentions, for example in multi-agent systems \citep{guo2024large, tomavsev2026intelligent} and cognitive architectures \citep{sumers2023cognitive, liu2026cognitive}. Second, while this work focuses on training LLMs to produce \textit{outputs} that are indistinguishable from human-written text, it remains an open question whether the models' reasoning \textit{processes} align with those of humans. One avenue is to compare model-generated reasoning traces with verbalized thought traces from humans \citep{wurgaft2025scaling, kargupta2025cognitive}; another is to explore richer representations for reasoning beyond natural language alone \citep{jha2025modeling, zhang2025code, li2026simulating}. Third, reliable user simulators could enable experiments that elicit group and collective behaviors from populations of simulated agents in open-ended settings, providing a new tool for replicating and extending research in computational social science \citep{lazer2009computational, ziems2024can}.
 
 \section{Dataset Details}
 \label{app:dataset-stats}
