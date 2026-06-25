@@ -187,7 +187,7 @@ We study user simulation in an interactive setting, where we are given the curre
 
 The most straightforward way to represent a user is through their behavior history $h$ (e.g., prior utterances or posts that are not part of the current session). For each user, we reserve a fixed block of $k$ prior interactions at dataset construction time and reuse it as $h$ across all prediction targets for that user. We require $h$ to be disjoint from the current target context $x$ and ground truth response $y_\star$, ensuring that the user representation is never contaminated by the target example. The size $k$ is sampled per user from a small range.
 
-Additionally, we can also pair the raw behavior history with an induced persona $\rho$. We induce $\rho$ by prompting an auxiliary language model to summarize stable traits from the same user's history block $h$. See  Figure~\ref{fig:persona_induction} of the appendix for the prompt used for persona induction. We use $u = (h, \rho)$ as the default in most of our experiments, and ablate on the choice of $u$ (i.e., without the persona) in the ablation study.
+Additionally, we can also pair the raw behavior history with an induced persona $\rho$. We induce $\rho$ by prompting an auxiliary language model to summarize stable traits from the same user's history block $h$. See  Figure~\ref{fig:persona_induction} of the appendix for the prompt used for persona induction. We use $u = (h, \rho)$ as the default in most of our experiments, and ablate on the choice of $u$ (i.e., without the persona or without the history) in the ablation study.
 
 % Formally, given triples $(u, x, y)$, $x$ is the immediate interaction context (e.g., a dialogue history or a forum thread), and $u$ is user-specific information about the target individual beyond what appears in $x$. $y$ is one ground truth response produced by that person.
 % We observe that $y$ is only a single sample from a broader distribution $p^\star(\cdot \mid x, u)$ of responses the user could authentically produce: the same person in the same context could say many different things, all genuinely their own. Our goal is therefore not to reproduce the specific $y$ in the training data, but to learn a simulator $p_\theta(\hat{y} \mid x, u)$, parameterized by $\theta$, that approximates $p^\star$ such that generated $\hat{y}$ are truly representative of the user utterance's goal, style, and perspective.
@@ -282,7 +282,7 @@ In their full objective, this reward is combined with an auxiliary SFT term; in 
 We use LLM-as-a-judge to evaluate generated responses along three dimensions described below. Claude Sonnet 4.6~\citep{anthropic2026claudesonnet46} is used for all evaluations. See Appendix~\ref{app:judge-prompts} for the full judge prompts and Appendix~\ref{sec:sampling_params} for response generation configuration.
 
 \paragraph{Turing distinguishability.}
- A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in both orderings and average the scores. Higher scores indicate the generated response is more human-like. This metric mirrors our training signal but makes use of a different and potentially more powerful\footnote{According to some benchmarks, e.g., \url{https://artificialanalysis.ai/leaderboards/models}.}   Sonnet 4.6 judge than the Qwen3.5-397B-A17B judge  used for training.
+ A judge is presented with the user's behavioral history, the interaction context, and two responses: the ground truth human response and a model-generated candidate, with position randomized. The judge rates which response was written by the real user on a 1--7 scale across three criteria (immediate target, human goal, and communication style). To control for position bias, we evaluate each pair in a randomized ordering and convert the ordering to a canonical one for scoring, fixing choice A to be the ground truth and choice B to be model-generated. Higher scores indicate the generated response is more human-like. This metric mirrors our training signal but makes use of a different and potentially more powerful\footnote{According to some benchmarks, e.g., \url{https://artificialanalysis.ai/leaderboards/models}.}   Sonnet 4.6 judge than the Qwen3.5-397B-A17B judge  used for training.
 
 \paragraph{Response similarity to ground truth.} We also measure similarity between the generated and ground truth responses, following \citet{wu2026humanlm}.  An LLM judge scores how well a generated response captures the overall content of the ground truth human response. The judge extracts key points from the ground truth, then scores semantic similarity, penalizing extraneous content, wrong perspective, and source copying. This yields a single score in $[0, 1]$ measuring whether the model said roughly what the real user said; we report this score as a percentage in results.
 
@@ -291,7 +291,7 @@ We finally evaluate whether a generated response is specifically grounded in the
 
 \subsubsection{Human Evaluation}
 
-In addition to LLM-as-a-judge evaluation, we also recruit over three hundred human participants from Prolific to perform a binary-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate three models: LLM trained with just supervised finetuning (SFT-Init), RL-training with the similarity reward (Sim-RL), and RL-training with our Turing reward (Turing-RL). We do not test Logprob-RL for human evaluation as LLM-as-a-judge results indicate that this variant underperforms Sim-RL and Turing-RL. We target 100 heldout samples per dataset, collecting 600 binary judgments per condition (6 judgments for each target sample) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means that the model response is picked by human annotators above chance. Full human evaluation details are given in Appendix~\ref{app:human-eval}.
+In addition to LLM-as-a-judge evaluation, we also recruit 360 human participants from Prolific to perform a binary-choice Turing test: given a target user's history and two candidate responses (one real, one model-generated) in randomized order, annotators select which was written by the real user. We evaluate three models: LLM trained with just supervised finetuning (SFT-Init), RL-training with the similarity reward (Sim-RL), and RL-training with our Turing reward (Turing-RL). We do not test Logprob-RL for human evaluation as LLM-as-a-judge results indicate that this variant underperforms Sim-RL and Turing-RL. We target 100 heldout samples per dataset, collecting 600 binary judgments per condition (6 judgments for each target sample) after filtering for comprehension. We report the model win rate (WR), where WR ${>} 0.5$ means that the model response is picked by human annotators above chance. Full human evaluation details are given in Appendix~\ref{app:human-eval}.
 
 
 % We fix the user representation to $u = (h, \rho)$ and compare four training conditions: (1)~GRPO with Turing reward (proposed), (2)~GRPO with response similarity reward~\citep{wu2026humanlm}, (3)~GRPO with log-probability and latent thinking~\citep{gandhi2026dialogue}, and (4)~supervised fine-tuning (SFT). We also report the performance of the untrained base model (Qwen3-8B) and GPT-5 (minimal reasoning effort) as zero-shot references.
@@ -312,7 +312,7 @@ In addition to LLM-as-a-judge evaluation, we also recruit over three hundred hum
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
 \vspace{-2mm}
-\caption{\textbf{LLMs trained with Turing rewards (Turing-RL) outperforms other training signals on human-likeness in both domains.} Turing judge scores (1--7 Likert; higher = harder to distinguish from a real user) from Sonnet~4.6 on Chat and Reddit, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI.}
+\caption{\textbf{LLMs trained with Turing rewards (Turing-RL) outperforms other training signals on human-likeness in both domains.} Turing judge scores (1--7 Likert; higher = more human-like) from Sonnet~4.6 on Chat and Reddit, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI.}
 \label{fig:turing_dot}
 % \vspace{-3mm}
 \end{figure}
@@ -328,7 +328,7 @@ In addition to LLM-as-a-judge evaluation, we also recruit over three hundred hum
 
 Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. Turing-RL outperforms all other models, including Sim-RL and SFT-Init, on both Reddit and Chat. The gap is large on Chat, where Turing-RL exceeds the next-best model by a wide margin.
 
-Notably, user simulation remains a difficult task overall. Even GPT-5 and Qwen3.5-397B---much more capable models that our user simulator---do not improve much compared to Qwen3-8B base. Qualitative inspection reveals that GPT-5 and Qwen3.5-397B tend to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples_2} and Figure~\ref{fig:qualitative_examples}). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground truth response does not translate to human-like indistinguishability.
+Notably, user simulation remains a difficult task overall. Even GPT-5 and Qwen3.5-397B---much more capable models than our user simulator---do not improve much compared to Qwen3-8B base. Qualitative inspection reveals that GPT-5 and Qwen3.5-397B tend to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples_2} and Figure~\ref{fig:qualitative_examples}). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground truth response does not translate to human-like indistinguishability.
 
 \paragraph{Turing-RL does not sacrifice similarity to ground turth.}
 Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. Among the trained models, Sim-RL and Turing-RL perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: Turing-RL produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground truth key points, even though this verbosity hurts its Turing score. 
@@ -344,7 +344,7 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. Among 
 \end{figure}
 
 Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that Turing-RL and Sim-RL outperform SFT-Init and Logprob-RL in both domains.
-On Reddit, GPT-5, Qwen3.5-397B, and the ground truth (GT) score highest, while Turing-RL and Sim-RL are close among trained Qwen3-8B models. On Chat, Qwen3.5-397B scores highest overall, followed by Turing-RL, which exceeds both GT and GPT-5. Sim-RL also improves over SFT-Init.
+On Chat, Qwen3.5-397B scores highest overall, followed by Turing-RL, which exceeds both GT and GPT-5. Sim-RL also improves over SFT-Init. On Reddit, GPT-5, Qwen3.5-397B, and the ground truth (GT) score highest, while Turing-RL and Sim-RL are close among trained Qwen3-8B models. 
 
 \subsection{Human Evaluation}
 
@@ -367,7 +367,7 @@ Turing-RL & .57\subtle{$\pm.050$} & {.50\subtle{$\pm.051$}} \\
 \bottomrule
 \end{tabular*}
 \vspace{-2mm}
-\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). Turing-RL greatly improves over SFT-Init on both domains. }
+\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). }
 \vspace{4mm}
 \label{tab:human_eval_winrate}
 \end{wraptable}
@@ -398,7 +398,7 @@ User representation is a core aspect of user simulation. As discussed in \S\ref{
 
 Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history. The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, suggests that the persona captures stylistic and behavioral patterns sufficient for human-likeness, even when it does not help reproduce the exact content of the ground truth response. We also include the normalized Turing reward curves in [0, 1] during GRPO training for the three input conditions, confirming that training dynamics is not much affected by input types (Figure~\ref{fig:grpo_training_raw_scores}).
 
-To mitigate the bias from a single persona inductor model, we further test whether the user representation results depend on the auxiliary model used to induce the persona $\rho$ in Table~\ref{tab:persona_inductor_ablation} of the appendix. We find that larger models do not reliably produce better persona for GRPO training, and training with $u=(h, \rho)$ does not necessarily improve performance. we leave more systematic investigation of better user representation as future work.
+To mitigate the bias from a single persona inductor model, we further test whether the user representation results depend on the auxiliary model used to induce the persona $\rho$ in Table~\ref{tab:persona_inductor_ablation} of the appendix. We find that larger models do not reliably produce better persona for user representation, and training with $u=(h, \rho)$ does not necessarily improve performance. we leave more systematic investigation of better user representation as future work.
 % Training with $u=h$ yields most stable performance overall. 
 % \llq{this seems to go against the reason we use history + persona in the first place.}
 % We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
@@ -426,7 +426,7 @@ $u = h$ (user history only)      & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$}
 \bottomrule
 \end{tabular*}
 \vspace{-0.3cm}
-\caption{Ablation on user representation for Turing-RL. We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$.  Values are mean $\pm$ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$.}
+\caption{Ablation on user representation for Turing-RL. We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$.  Values are mean $\pm$ 95\% CI; Turing is on a 1--7 scale, Sim is reported in \%, and Specificity is in $[0,1]$.}
 \label{tab:ablation_combined}
 \end{table}
 
