@@ -330,7 +330,7 @@ Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. Turin
 
 Notably, user simulation remains a difficult task overall. Even GPT-5 and Qwen3.5-397B---much more capable models than our user simulator---do not improve much compared to Qwen3-8B base. Qualitative inspection reveals that GPT-5 and Qwen3.5-397B tend to produce verbose, overly hedged responses that read as assistant-like rather than human-like (see Figure~\ref{fig:qualitative_examples_2} and Figure~\ref{fig:qualitative_examples}). Training with the similarity reward does not significantly improve the Turing score over the SFT-Init checkpoint, suggesting that matching the content of the ground truth response does not translate to human-like indistinguishability.
 
-\paragraph{Turing-RL does not sacrifice similarity to ground turth.}
+\paragraph{Turing-RL does not sacrifice similarity to ground truth.}
 Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. Among the trained models, Sim-RL and Turing-RL perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: Turing-RL produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground truth key points, even though this verbosity hurts its Turing score. 
 
 \paragraph{Turing-RL user simulators  are more grounded in context.}
@@ -367,7 +367,7 @@ Turing-RL & .57\subtle{$\pm.050$} & {.50\subtle{$\pm.051$}} \\
 \bottomrule
 \end{tabular*}
 \vspace{-2mm}
-\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI). }
+\caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI).}
 \vspace{4mm}
 \label{tab:human_eval_winrate}
 \end{wraptable}
