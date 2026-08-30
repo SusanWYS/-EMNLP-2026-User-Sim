@@ -304,23 +304,23 @@ In addition to LLM-as-a-judge evaluation, we also recruit 360 human participants
 
 \subsection{LLM-as-a-Judge Evaluation}
 \paragraph{Turing-RL trains  human-like simulators.}
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot.pdf}
+\includegraphics[width=\textwidth]{figures/sonnet46_turing_dot.pdf}
 \vspace{-2mm}
 \caption{\textbf{LLMs trained with Turing rewards (Turing-RL) outperforms other training signals on human-likeness in both domains.} Turing judge scores (1--7 Likert; higher = more human-like) from Sonnet~4.6 on Chat and Reddit, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI.}
 \label{fig:turing_dot}
 % \vspace{-3mm}
-\end{figure}
+\end{figure*}
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \vspace{2mm}
 \centering
-\includegraphics[width=\columnwidth]{figures/sonnet46_sim_dot.pdf}
+\includegraphics[width=\textwidth]{figures/sonnet46_sim_dot.pdf}
 \vspace{-2mm}
 \caption{\textbf{Turing-RL matches Sim-RL even though Sim-RL is   explicitly trained to maximize similarity}, showing that optimizing for indistinguishability does not sacrifice content alignment. Response similarity to ground truth (Sim, \%; higher = more similar to what the user actually said) from Sonnet~4.6 on Chat and Reddit, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI.}
 \label{fig:sim_dot}
-\end{figure}
+\end{figure*}
 
 Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. Turing-RL outperforms all other models, including Sim-RL and SFT-Init, on both Reddit and Chat. The gap is large on Chat, where Turing-RL exceeds the next-best model by a wide margin.
 
@@ -330,14 +330,14 @@ Notably, user simulation remains a difficult task overall. Even GPT-5 and Qwen3.
 Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. Among the trained models, Sim-RL and Turing-RL perform comparably, both improving over the SFT model. This confirms that training with the Turing reward does not sacrifice content alignment: Turing-RL produces responses that are both hard to distinguish from the real user and similar in content to what the user actually said. GPT-5 achieves notably high similarity on Reddit, likely because its verbose outputs happen to cover more of the ground truth key points, even though this verbosity hurts its Turing score. 
 
 \paragraph{Turing-RL user simulators  are more grounded in context.}
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot.pdf}
+\includegraphics[width=\textwidth]{figures/sonnet46_specificity_dot.pdf}
 % \vspace{-4mm}
 \caption{\textbf{Turing-RL is among the strongest on Chat, while Turing-RL and Sim-RL are strongest among the trained models on Reddit},  outperforming SFT-Init and Logprob-RL. Response specificity ($[0,1]$; higher = more grounded in the interaction context and compatible with the target user) from Sonnet~4.6, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. GT is the ground truth human response, and the dashed line marks the Qwen3-8B base model with 95\% CI.}
 \label{fig:specificity}
 % \vspace{-0.5cm}
-\end{figure}
+\end{figure*}
 
 Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that Turing-RL and Sim-RL outperform SFT-Init and Logprob-RL in both domains.
 On Chat, Qwen3.5-397B scores highest overall, followed by Turing-RL, which exceeds both GT and GPT-5. Sim-RL also improves over SFT-Init. On Reddit, GPT-5, Qwen3.5-397B, and the ground truth (GT) score highest, while Turing-RL and Sim-RL are close among trained Qwen3-8B models. 
@@ -351,7 +351,7 @@ Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth resp
 \centering
 \small
 \setlength{\tabcolsep}{6pt}
-\begin{tabular}{@{}lcc@{}}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcc@{}}
 \toprule
  & \textbf{Chat} & \textbf{Reddit} \\
 \midrule
@@ -360,7 +360,7 @@ Sim-RL    & .50\subtle{$\pm.055$} & .52\subtle{$\pm.049$} \\
 % Turing-RL & \textbf{.57\subtle{$\pm.050$}$^*$} & .50\subtle{$\pm.051$}  \\
 Turing-RL & .57\subtle{$\pm.050$} & {.50\subtle{$\pm.051$}} \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI).}
 \label{tab:human_eval_winrate}
 \end{table}
@@ -371,15 +371,15 @@ We note that Reddit is significantly harder for humans to judge than Chat. As sh
 
 \paragraph{Are Humans or LLMs Better Judges?} 
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
 \vspace{0.4cm}
-\includegraphics[width=\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
+\includegraphics[width=\textwidth]{figures/human_vs_sonnet46_binary_gt_accuracy.pdf}
 % \vspace{-4mm}
 \caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that Turing-RL is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
 \label{fig:binary_gt_accuracy}
 % \vspace{-0.2cm}
-\end{figure}
+\end{figure*}
 Our human evaluation results are less obviously in favor of the Turing-RL approach. But is it possible that human judges are actually less reliable than the Sonnet 4.6 LLM judge?
 
 We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Concretely, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.  Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators recruited under our experimental setup generally underperform Sonnet~4.6, except for judging Turing-RL on Chat, where the results are similar. 
