@@ -332,7 +332,7 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. Among 
 \paragraph{Turing-RL user simulators  are more grounded in context.}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/sonnet46_specificity_dot1.pdf}
+\includegraphics[width=0.98\columnwidth]{figures/sonnet46_specificity_dot1.pdf}
 % \vspace{-4mm}
 \caption{\textbf{Turing-RL is among the strongest on Chat, while Turing-RL and Sim-RL are strongest among the trained models on Reddit},  outperforming SFT-Init and Logprob-RL. Response specificity ($[0,1]$; higher = more grounded in the interaction context and compatible with the target user) from Sonnet~4.6, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. GT is the ground truth human response, and the dashed line marks the Qwen3-8B base model with 95\% CI.}
 \label{fig:specificity}
@@ -374,7 +374,7 @@ We note that Reddit is significantly harder for humans to judge than Chat. As sh
 \begin{figure}[t]
 \centering
 \vspace{0.4cm}
-\includegraphics[width=0.9\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy1.pdf}
+\includegraphics[width=0.85\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy1.pdf}
 % \vspace{-4mm}
 \caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that Turing-RL is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
 \label{fig:binary_gt_accuracy}
@@ -473,7 +473,7 @@ $u = h$ (user history only)      & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$}
 
 \subsection{Qualitative Examples}
 
-Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL. On Chat, the ground truth is a natural pivot often observed in human-AI conversations. All of the model generations stay anchored to the previous response, and Sim-RL aligns with GPT-5 and Qwen3.5-397B in content. Both SFT-Init and Turing-RL ask plausible follow-ups, although the question raised by SFT-Init is already partially answered in the context. On Reddit, the ground truth is a sharp comment. GPT-5 and Qwen3.5-397B write overly verbose responses in an assistant-like style. SFT-Init responds by paraphrasing a main point in the context. Sim-RL matches GPT-5 in content but is more succinct. Turing-RL provides a plausible human-like reaction. Additional examples including more baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}.
+Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL. On Chat, the ground truth is a natural pivot often observed in human-AI conversations. All of the model generations stay anchored to the previous response, and Sim-RL aligns with GPT-5 and Qwen3.5-397B in content. Both SFT-Init and Turing-RL ask plausible follow-ups, although the question raised by SFT-Init is already partially answered in the context. On Reddit, the ground truth is a sharp comment. GPT-5 and Qwen3.5-397B write overly verbose responses in an assistant-like style. SFT-Init responds by paraphrasing a main point in the context. Sim-RL matches GPT-5 in content but is more succinct. Turing-RL provides a plausible human-like reaction. Additional examples including more baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}. We also present qualitative outputs from the training-time judge in Appendix x.
 
 \begin{figure*}[t]
 \centering
@@ -483,7 +483,7 @@ Figure~\ref{fig:qualitative_examples_2} shows representative examples from both 
 \label{fig:qualitative_examples_2}
 \vspace{-1em}
 \end{figure*}
-
+\subsection{Cross-Domain Generalization}
 \section{Discussion}
 \label{sec:discussion}
 A recurring finding across our experiments is that content matching and human-likeness come apart. While similarity reward improves how well a response covers the ground truth content, it does not necessarily make the response harder to distinguish from the real user. The Turing reward, in contrast, improves indistinguishability without lowering content similarity. This suggests that a discriminative signal is better suited than a matching signal for user simulation.
