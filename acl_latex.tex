@@ -512,14 +512,14 @@ Figure~\ref{fig:qualitative_examples_2} shows representative examples from both 
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/qual_exs.pdf}
+\includegraphics[width=0.9\textwidth]{figures/qual_exs.pdf}
 \vspace{-1em}
 \caption{Qualitative comparison of the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL on one Chat and one Reddit example.}
 \label{fig:qualitative_examples_2}
 \vspace{-1em}
 \end{figure*}
 \subsection{Cross-Domain Generalization}
-Could models trained to simulate open-ended chat transfer to task-oriented dialogues? We evaluate the three Chat-trained simulators on the first 100 users of MS-TOD, a multi-session task-oriented dialogue benchmark designed to evaluate agents rather than user simulators~\citep{du2026memguide}. As in our Chat evaluation, each simulator conditions on two to four sessions of fixed user history, an inferred persona, and the current context. Table~\ref{tab:mstod_transfer} shows that both RL variants transfer beyond their training domain, with Turing-RL achieving the highest Turing and similarity scores. These results do not imply that an LLM can simulate users in every task-oriented setting: MS-TOD provides no established simulator-specific task metrics, so we evaluate human-likeness and response similarity rather than goal completion. Appendix Table~\ref{tab:mstod_example} gives a qualitative example.
+Can models trained to simulate open-ended chat transfer to task-oriented dialogues? We evaluate the three Chat-trained simulators on the first 100 users of MS-TOD, a multi-session task-oriented dialogue benchmark designed to evaluate agents rather than user simulators~\citep{du2026memguide}. As in our Chat evaluation, each simulator conditions on two to four sessions of fixed user history, an inferred persona, and the current context. Table~\ref{tab:mstod_transfer} shows that both RL variants transfer beyond their training domain, with Turing-RL achieving the highest Turing and similarity scores. These results do not imply that an LLM can simulate users in every task-oriented setting: MS-TOD provides no established simulator-specific task metrics, so we evaluate human-likeness and response similarity rather than goal completion. Appendix Table~\ref{tab:mstod_example} gives a qualitative example.
 
 \begin{table}[t]
 \centering
@@ -948,7 +948,7 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \section{Training-Time Turing Judge Example}
 \label{app:training-judge-example}
 
-We reproduce one complete example from the Chat training split below. The Qwen3.5-397B-A17B training-time judge received the target user's historical context, the current conversation, and the ground-truth and model-generated responses in randomized order. In this instance, the ground truth was Response~A and the model output was Response~B. The judge assigned the model a Turing score of 3 on the 1--7 scale: although the model response was a coherent local continuation, the judge found the ground truth more consistent with the user's terse, lowercase style and tendency to pivot to a practical question. The blocks below preserve the context and parsed judge output verbatim.
+We reproduce one complete training and judge example from the Chat training split below. The Qwen3.5-397B-A17B training-time judge received the target user's historical context, the current conversation, and the ground-truth and model-generated responses in randomized order. In this instance, the ground truth was Response~A and the model output was Response~B. The judge assigned the model a Turing score of 3 on the 1--7 scale: although the model response was a coherent local continuation, the judge found the ground truth more consistent with the user's terse, lowercase style and tendency to pivot to a practical question. The blocks below preserve the context and parsed judge output verbatim.
 
 \begin{artifactbox}[Historical user context]
 [HISTORICAL CONTEXT]
