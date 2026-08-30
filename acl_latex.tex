@@ -688,10 +688,10 @@ where $\varepsilon$ is the clipping range and $\beta$ the KL coefficient. More s
 \item $\hat{A}_{i,t}$: the advantage of token $t$ in output $o_i$. $\hat{A}_{i,t}=\big(r_i-\mathrm{mean}(\mathbf{r})\big)/\mathrm{std}(\mathbf{r})$, where $r_i$ is individual response reward and $\mathbf{r}=\{r_1,\dots,r_G\}$ are the group rewards. The reasoning tokens $z_i$ receive the same advantage.
 \end{itemize}
 
-\begin{table}[h]
+\begin{table*}[t]
 \centering
 \small
-\begin{tabular}{ll}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ll@{}}
 \toprule
 \textbf{Parameter} & \textbf{Value} \\
 \midrule
@@ -714,10 +714,10 @@ PPO clip ratio & 0.2 \\
 Loss Aggregation & token mean \\
 
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \caption{GRPO training hyperparameters shared across all reward variants.}
 \label{tab:hyperparams}
-\end{table}
+\end{table*}
 
 \subsection{Length Penalty}
 \label{app:length_penalty}
