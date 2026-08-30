@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex acl_latex"] 1788098924.36337 "acl_latex.aux" "acl_latex.bbl" "acl_latex" 1788098928.75084 0
+["bibtex acl_latex"] 1788099556.77033 "acl_latex.aux" "acl_latex.bbl" "acl_latex" 1788099561.26261 0
   "./acl_natbib.bst" 1780110182.24891 45186 3d1af46d62cc9172ef6e42b56c1cd613 ""
   "./references.bib" 1788098817.90764 28797 d7fc4ddc7ba4516a0733e8ed1d9ae16b ""
-  "acl_latex.aux" 1788098928.45203 55488 e8378d495367fd811a54c3bf4b0e3643 "pdflatex"
+  "acl_latex.aux" 1788099560.96494 55412 5807528b0e55e3471cb98d083741b513 "pdflatex"
   (generated)
   "acl_latex.bbl"
   "acl_latex.blg"
   (rewritten before read)
-["pdflatex"] 1788098924.41818 "acl_latex.tex" "acl_latex.pdf" "acl_latex" 1788098928.75154 0
+["pdflatex"] 1788099556.82566 "acl_latex.tex" "acl_latex.pdf" "acl_latex" 1788099561.2633 0
   "/etc/texmf/web2c/texmf.cnf" 1771961221.85341 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1558214095 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
@@ -65,7 +65,6 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1248133631 30251 6afa5cb1d0204815a708a080681d4674 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb" 1248133631 37912 77d683123f92148345f3fc36a38d9ab1 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1248133631 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb" 1248133631 36094 798f80770b3b148ceedd006d487db67c ""
@@ -77,7 +76,6 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1248133631 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb" 1248133631 32442 c975af247b6702f7ca0c299af3616b80 ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb" 1248133631 30212 b6aafa449db0097a6b9b890f66741063 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1248133631 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb" 1558214095 55526 184de5d68af8c544d6d1653244a2b006 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb" 1136849748 35941 f27169cc74234d5bd5e4cca5abafaabb ""
@@ -285,11 +283,11 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1771962468.9046 5349216 bf3a80e68d946c7acd95ff030fd9bb63 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1771961255 6831120 7a8920521b2023ff229f2e01d990437d ""
   "acl.sty" 1780110182.24437 11615 e2c027f483aa40e577ed34264c8b0655 ""
-  "acl_latex.aux" 1788098928.45203 55488 e8378d495367fd811a54c3bf4b0e3643 "pdflatex"
-  "acl_latex.bbl" 1788098924.41016 24218 05adf0cdab5197bc480fe124543cf0ac "bibtex acl_latex"
-  "acl_latex.listing" 1788098926.89688 385 431110603c387e34504edf5e210e3bf8 "pdflatex"
-  "acl_latex.out" 1788098928.45455 5616 c93c64d1a4eb656c99dd2b6fbe728c8f "pdflatex"
-  "acl_latex.tex" 1788098906.24205 86168 5b4457fe5c216462a31b686e4956e0e1 ""
+  "acl_latex.aux" 1788099560.96494 55412 5807528b0e55e3471cb98d083741b513 "pdflatex"
+  "acl_latex.bbl" 1788099556.81805 24218 05adf0cdab5197bc480fe124543cf0ac "bibtex acl_latex"
+  "acl_latex.listing" 1788099559.41891 385 431110603c387e34504edf5e210e3bf8 "pdflatex"
+  "acl_latex.out" 1788099560.96754 5616 c93c64d1a4eb656c99dd2b6fbe728c8f "pdflatex"
+  "acl_latex.tex" 1788099545.87807 86000 0b06eeb7d48aced8e4967f6e8571efb7 ""
   "figures/consent.png" 1780110182.25985 188065 b5feec6faad444acb2cc55d2226d5546 ""
   "figures/grpo_training_raw_scores.pdf" 1781472706.25355 36766 55a2d6f30e855cd59be325c3b94e78b2 ""
   "figures/human_vs_sonnet46_binary_gt_accuracy.pdf" 1781576806.6332 18389 bcf3f237e05ad1230189bb61246b1303 ""

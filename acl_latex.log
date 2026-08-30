@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.24)  30 AUG 2026 10:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.24)  30 AUG 2026 10:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1128,17 +1128,6 @@ Underfull \vbox (badness 6001) has occurred while \output is active []
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
 (Font)              scaled to size 10.95pt on input line 250.
  [3]
-Overfull \hbox (39.05429pt too wide) detected at line 273
-\U/msb/m/n/9 E\OT1/cmr/m/n/9 [\OML/cmm/m/it/9 r[]\OT1/cmr/m/n/9 (\OML/cmm/m/it/
-9 z\OT1/cmr/m/n/9 )] \OMS/cmsy/m/n/9 ^^T [] [] \OML/cmm/m/it/9 p[]\OT1/cmr/m/n/
-9 (\OML/cmm/m/it/9 y[] \OMS/cmsy/m/n/9 j \OML/cmm/m/it/9 x; u; z\OT1/cmr/m/n/9 
-)\OML/cmm/m/it/9 p[]\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 z \OMS/cmsy/m/n/9 j \OML/cm
-m/m/it/9 x; u\OT1/cmr/m/n/9 ) = [] \OML/cmm/m/it/9 p[]\OT1/cmr/m/n/9 (\OML/cmm/
-m/it/9 y[] \OMS/cmsy/m/n/9 j \OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )\OML/cmm/m/it/9 :
-
- []
-
-
 Underfull \hbox (badness 6188) in paragraph at lines 281--281
 [][][]\T1/ptm/m/n/9 (+20) According to some bench-marks, e.g., [][]$\T1/zi4/m/n
 /9 https : / /
@@ -1148,7 +1137,7 @@ Underfull \hbox (badness 6188) in paragraph at lines 281--281
 
 pdfTeX warning: pdflatex (file ./figures/sonnet46_turing_dot.pdf): PDF inclusio
 n: found PDF version <1.6>, but at most version <1.5> allowed
-<figures/sonnet46_turing_dot.pdf, id=395, 518.54831pt x 110.32166pt>
+<figures/sonnet46_turing_dot.pdf, id=391, 518.54831pt x 110.32166pt>
 File: figures/sonnet46_turing_dot.pdf Graphic file (type pdf)
 <use figures/sonnet46_turing_dot.pdf>
 Package pdftex.def Info: figures/sonnet46_turing_dot.pdf  used on input line 30
@@ -1158,7 +1147,7 @@ Package pdftex.def Info: figures/sonnet46_turing_dot.pdf  used on input line 30
 
 pdfTeX warning: pdflatex (file ./figures/sonnet46_sim_dot.pdf): PDF inclusion: 
 found PDF version <1.6>, but at most version <1.5> allowed
-<figures/sonnet46_sim_dot.pdf, id=396, 518.54831pt x 110.32166pt>
+<figures/sonnet46_sim_dot.pdf, id=392, 518.54831pt x 110.32166pt>
 File: figures/sonnet46_sim_dot.pdf Graphic file (type pdf)
 <use figures/sonnet46_sim_dot.pdf>
 Package pdftex.def Info: figures/sonnet46_sim_dot.pdf  used on input line 319.
@@ -1172,16 +1161,13 @@ Underfull \hbox (badness 2119) in paragraph at lines 330--331
 
 pdfTeX warning: pdflatex (file ./figures/sonnet46_specificity_dot.pdf): PDF inc
 lusion: found PDF version <1.6>, but at most version <1.5> allowed
-<figures/sonnet46_specificity_dot.pdf, id=401, 518.54831pt x 110.32166pt>
+<figures/sonnet46_specificity_dot.pdf, id=397, 518.54831pt x 110.32166pt>
 File: figures/sonnet46_specificity_dot.pdf Graphic file (type pdf)
 <use figures/sonnet46_specificity_dot.pdf>
 Package pdftex.def Info: figures/sonnet46_specificity_dot.pdf  used on input li
 ne 335.
 (pdftex.def)             Requested size: 219.08614pt x 46.60916pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [5 <./figures/sonnet46_turing_dot.pdf> <./figures/sonnet46_sim_dot.pdf
+[5 <./figures/sonnet46_turing_dot.pdf> <./figures/sonnet46_sim_dot.pdf
 
 pdfTeX warning: pdflatex (file ./figures/sonnet46_sim_dot.pdf): PDF inclusion: 
 multiple pdfs with page group included in a single page
@@ -1190,72 +1176,33 @@ multiple pdfs with page group included in a single page
 pdfTeX warning: pdflatex (file ./figures/sonnet46_specificity_dot.pdf): PDF inc
 lusion: multiple pdfs with page group included in a single page
 >]
-Overfull \hbox (5.04913pt too wide) in paragraph at lines 371--372
-[][]\T1/ptm/m/n/10.95 (-20) We
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 371--372
-\T1/ptm/m/n/10.95 (+20) per-
- []
-
-
-Overfull \hbox (0.9414pt too wide) in paragraph at lines 371--372
-\T1/ptm/m/n/10.95 (-20) form
- []
-
-
-Overfull \hbox (6.07327pt too wide) in paragraph at lines 371--372
-\T1/ptm/m/n/10.95 (-20) target-
- []
-
-
-Overfull \hbox (0.50334pt too wide) in paragraph at lines 371--372
-\T1/ptm/m/n/10.95 (-20) level
- []
-
-
-Overfull \hbox (6.89702pt too wide) in paragraph at lines 371--372
-\T1/ptm/m/n/10.95 (-20) paired
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 371--372
-\T1/ptm/m/n/10.95 (+20) per-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 371--372
-\T1/ptm/m/n/10.95 (+20) mu-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 371--372
-\T1/ptm/m/n/10.95 (+20) ta-
- []
-
-<figures/human_vs_sonnet46_binary_gt_accuracy.pdf, id=535, 475.1319pt x 140.984
+<figures/human_vs_sonnet46_binary_gt_accuracy.pdf, id=532, 475.1319pt x 140.984
 7pt>
 File: figures/human_vs_sonnet46_binary_gt_accuracy.pdf Graphic file (type pdf)
 <use figures/human_vs_sonnet46_binary_gt_accuracy.pdf>
 Package pdftex.def Info: figures/human_vs_sonnet46_binary_gt_accuracy.pdf  used
- on input line 380.
+ on input line 377.
 (pdftex.def)             Requested size: 219.08614pt x 65.00862pt.
-[6 <./figures/human_vs_sonnet46_binary_gt_accuracy.pdf>]
-Overfull \hbox (151.66023pt too wide) in alignment at lines 413--423
-[] [] [] [] [] [] []
- []
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [6 <./figures/human_vs_sonnet46_binary_gt_accuracy.pdf>]
 
 pdfTeX warning: pdflatex (file ./figures/qual_exs.pdf): PDF inclusion: found PD
 F version <1.6>, but at most version <1.5> allowed
-<figures/qual_exs.pdf, id=600, 1263.03975pt x 873.37897pt>
+<figures/qual_exs.pdf, id=599, 1263.03975pt x 873.37897pt>
 File: figures/qual_exs.pdf Graphic file (type pdf)
 <use figures/qual_exs.pdf>
-Package pdftex.def Info: figures/qual_exs.pdf  used on input line 483.
-(pdftex.def)             Requested size: 219.08614pt x 151.48428pt.
-[7 <./figures/qual_exs.pdf>] [8] (./acl_latex.bbl
+Package pdftex.def Info: figures/qual_exs.pdf  used on input line 480.
+(pdftex.def)             Requested size: 455.24411pt x 314.78934pt.
+[7]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [8 <./figures/qual_exs.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+(./acl_latex.bbl
 Underfull \hbox (badness 2012) in paragraph at lines 6--13
 \T1/ptm/m/n/10 (+20) turn re-in-force-ment learn-ing.  In \T1/ptm/m/it/10 (+20)
  Ad-vances in
@@ -1274,18 +1221,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 27--30
 . com /
  []
 
-
+[9]
 Underfull \hbox (badness 1590) in paragraph at lines 70--75
 []\T1/ptm/m/n/10 (+20) Jonathan P. Chang, Caleb Chiam, Liye Fu, An-
  []
 
-[9]
+
 Underfull \hbox (badness 1810) in paragraph at lines 161--165
 \T1/ptm/m/n/10 (+20) el-ing oth-ers' minds as code.  \T1/ptm/m/it/10 (+20) arXi
 v preprint
  []
 
-[10]
+[10] [11]
 Underfull \hbox (badness 1038) in paragraph at lines 393--397
 \T1/ptm/m/n/10 (+20) u-la-tors for build-ing col-lab-o-ra-tive llm as-sis-tants
 [][].
@@ -1296,29 +1243,27 @@ Underfull \hbox (badness 1320) in paragraph at lines 400--404
 \T1/ptm/m/n/10 (+20) and Thomas L Grif-fiths. 2023.  Cog-ni-tive ar-
  []
 
-[11]
+
 Underfull \hbox (badness 1189) in paragraph at lines 471--476
 []\T1/ptm/m/n/10 (+20) Cedegao E Zhang, Cé-dric Co-las, Gabriel Poe-sia,
  []
 
-) [12
-
-]
-Underfull \hbox (badness 4846) in paragraph at lines 584--588
+) [12]
+Underfull \hbox (badness 4846) in paragraph at lines 581--585
 \T1/zi4/m/n/10.95 r/business\T1/ptm/m/n/10.95 (+20) , \T1/zi4/m/n/10.95 r/chang
 emyview\T1/ptm/m/n/10.95 (+20) , \T1/zi4/m/n/10.95 r/Economics\T1/ptm/m/n/10.95
  (+20) ,
  []
 
 
-Underfull \hbox (badness 4846) in paragraph at lines 584--588
+Underfull \hbox (badness 4846) in paragraph at lines 581--585
 \T1/zi4/m/n/10.95 r/Frugal\T1/ptm/m/n/10.95 (+20) , \T1/zi4/m/n/10.95 r/Malicio
 usCompliance\T1/ptm/m/n/10.95 (+20) , \T1/zi4/m/n/10.95 r/news\T1/ptm/m/n/10.95
  (+20) ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 584--588
+Underfull \hbox (badness 10000) in paragraph at lines 581--585
 \T1/zi4/m/n/10.95 r/relationship_advice\T1/ptm/m/n/10.95 (+20) , \T1/zi4/m/n/10
 .95 r/relationships\T1/ptm/m/n/10.95 (+20) ,
  []
@@ -1426,9 +1371,6 @@ Package textcomp Info: Symbol \textasciigrave not provided by
  (./acl_latex.listing)) [13
 
 ]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 (./prompts/thinking_trace_prompt.tex
 \openout5 = `acl_latex.listing'.
 
@@ -1436,75 +1378,61 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 \openout5 = `acl_latex.listing'.
 
  (./acl_latex.listing))
-Overfull \hbox (74.32596pt too wide) in paragraph at lines 649--668
- [][] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [14{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}]
-Underfull \vbox (badness 1803) has occurred while \output is active []
-
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 6
-86.
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+81.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [15{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-Overfull \hbox (20.22581pt too wide) in paragraph at lines 698--722
+) [14{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}]
+Overfull \hbox (20.22581pt too wide) in paragraph at lines 693--717
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+[15{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[16]
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [17]
-[18]
-Underfull \hbox (badness 1394) in paragraph at lines 819--819
+ [16]
+[17]
+Underfull \hbox (badness 1394) in paragraph at lines 814--814
 []\T1/ptm/m/n/10 (+20) Table 9: |Word counts for the dis-played human-
  []
 
-<figures/ui_reddit1.png, id=1107, 877.2775pt x 778.91pt>
+<figures/ui_reddit1.png, id=1076, 877.2775pt x 778.91pt>
 File: figures/ui_reddit1.png Graphic file (type png)
 <use figures/ui_reddit1.png>
-Package pdftex.def Info: figures/ui_reddit1.png  used on input line 864.
+Package pdftex.def Info: figures/ui_reddit1.png  used on input line 859.
 (pdftex.def)             Requested size: 341.43307pt x 303.15565pt.
-<figures/ui_reddit2.png, id=1109, 1206.5075pt x 865.2325pt>
+<figures/ui_reddit2.png, id=1078, 1206.5075pt x 865.2325pt>
 File: figures/ui_reddit2.png Graphic file (type png)
 <use figures/ui_reddit2.png>
-Package pdftex.def Info: figures/ui_reddit2.png  used on input line 865.
+Package pdftex.def Info: figures/ui_reddit2.png  used on input line 860.
 (pdftex.def)             Requested size: 455.24411pt x 326.46815pt.
-<figures/ui_chat1.png, id=1110, 883.3pt x 864.22874pt>
+<figures/ui_chat1.png, id=1079, 883.3pt x 864.22874pt>
 File: figures/ui_chat1.png Graphic file (type png)
 <use figures/ui_chat1.png>
-Package pdftex.def Info: figures/ui_chat1.png  used on input line 872.
+Package pdftex.def Info: figures/ui_chat1.png  used on input line 867.
 (pdftex.def)             Requested size: 341.43307pt x 334.05438pt.
-<figures/ui_chat2.png, id=1111, 1195.46625pt x 867.24pt>
+<figures/ui_chat2.png, id=1080, 1195.46625pt x 867.24pt>
 File: figures/ui_chat2.png Graphic file (type png)
 <use figures/ui_chat2.png>
-Package pdftex.def Info: figures/ui_chat2.png  used on input line 873.
+Package pdftex.def Info: figures/ui_chat2.png  used on input line 868.
 (pdftex.def)             Requested size: 455.24411pt x 330.25598pt.
-<figures/consent.png, id=1112, 733.74126pt x 533.995pt>
+<figures/consent.png, id=1081, 733.74126pt x 533.995pt>
 File: figures/consent.png Graphic file (type png)
 <use figures/consent.png>
-Package pdftex.def Info: figures/consent.png  used on input line 881.
+Package pdftex.def Info: figures/consent.png  used on input line 876.
 (pdftex.def)             Requested size: 341.43307pt x 248.48436pt.
-<figures/instructions.png, id=1113, 719.68875pt x 603.25375pt>
+<figures/instructions.png, id=1082, 719.68875pt x 603.25375pt>
 File: figures/instructions.png Graphic file (type png)
 <use figures/instructions.png>
-Package pdftex.def Info: figures/instructions.png  used on input line 882.
+Package pdftex.def Info: figures/instructions.png  used on input line 877.
 (pdftex.def)             Requested size: 341.43307pt x 286.19872pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [19]
 (./prompts/turing_prompt.tex
 \openout5 = `acl_latex.listing'.
 
@@ -1573,42 +1501,39 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 \openout5 = `acl_latex.listing'.
 
  (./acl_latex.listing))
-<figures/grpo_training_raw_scores.pdf, id=1152, 617.91632pt x 449.61188pt>
+<figures/grpo_training_raw_scores.pdf, id=1087, 617.91632pt x 449.61188pt>
 File: figures/grpo_training_raw_scores.pdf Graphic file (type pdf)
 <use figures/grpo_training_raw_scores.pdf>
 Package pdftex.def Info: figures/grpo_training_raw_scores.pdf  used on input li
-ne 901.
+ne 896.
 (pdftex.def)             Requested size: 455.24411pt x 331.24629pt.
 
-Underfull \hbox (badness 4752) in paragraph at lines 908--909
+Underfull \hbox (badness 4752) in paragraph at lines 903--904
 \T1/ptm/m/n/10.95 (+20) The qual-i-ta-tive re-sults (ground truth, GPT-
  []
 
 
-Underfull \hbox (badness 1014) in paragraph at lines 908--909
+Underfull \hbox (badness 1014) in paragraph at lines 903--904
 \T1/ptm/m/n/10.95 (+20) 5, Qwen3.5-397B, Qwen3-8B Base, SFT-Init,
  []
 
-
+[18]
 
 pdfTeX warning: pdflatex (file ./figures/qualitative_examples.pdf): PDF inclusi
 on: found PDF version <1.6>, but at most version <1.5> allowed
-<figures/qualitative_examples.pdf, id=1154, 1261.31369pt x 1542.15013pt>
+<figures/qualitative_examples.pdf, id=1120, 1261.31369pt x 1542.15013pt>
 File: figures/qualitative_examples.pdf Graphic file (type pdf)
 <use figures/qualitative_examples.pdf>
 Package pdftex.def Info: figures/qualitative_examples.pdf  used on input line 9
-12.
+07.
 (pdftex.def)             Requested size: 455.24411pt x 556.60904pt.
+[19
 
-Overfull \hbox (66.27263pt too wide) in alignment at lines 921--932
-[] [] [] [] [] [] []
- []
-
-[20] [21 <./figures/ui_reddit1.png> <./figures/ui_reddit2.png>] [22 <./figures/
-ui_chat1.png> <./figures/ui_chat2.png>] [23 <./figures/consent.png> <./figures/
-instructions.png>] [24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34]
-[35] [36] [37] [38] [39] [40] [41 <./figures/grpo_training_raw_scores.pdf>]
-[42 <./figures/qualitative_examples.pdf>] (./acl_latex.aux)
+] [20] [21] [22 <./figures/ui_reddit1.png> <./figures/ui_reddit2.png>]
+[23 <./figures/ui_chat1.png> <./figures/ui_chat2.png>] [24 <./figures/consent.p
+ng> <./figures/instructions.png>] [25] [26] [27] [28] [29] [30] [31] [32]
+[33] [34] [35] [36] [37] [38] [39] [40] [41] [42 <./figures/grpo_training_raw_s
+cores.pdf>] [43 <./figures/qualitative_examples.pdf>] (./acl_latex.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1617,38 +1542,36 @@ Package rerunfilecheck Info: File `acl_latex.out' has not changed.
 (rerunfilecheck)             Checksum: C93C64D1A4EB656C99DD2B6FBE728C8F;5616.
  ) 
 Here is how much of TeX's memory you used:
- 35583 strings out of 476106
- 691731 string characters out of 5793933
- 4605975 words of memory out of 5000000
- 55518 multiletter control sequences out of 15000+600000
- 639667 words of font info for 437 fonts, out of 8000000 for 9000
+ 35582 strings out of 476106
+ 691667 string characters out of 5793933
+ 4735975 words of memory out of 5000000
+ 55513 multiletter control sequences out of 15000+600000
+ 639794 words of font info for 439 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  93i,13n,99p,1445b,2013s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4
 r.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/font
-s/type1/public/cm-super/sftt0900.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
-tmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on acl_latex.pdf (42 pages, 2245917 bytes).
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/t
+exmf/fonts/type1/public/cm-super/sftt0900.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
+w/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on acl_latex.pdf (43 pages, 2229513 bytes).
 PDF statistics:
- 2239 PDF objects out of 2487 (max. 8388607)
- 1871 compressed objects within 19 object streams
- 895 named destinations out of 1000 (max. 500000)
+ 2234 PDF objects out of 2487 (max. 8388607)
+ 1869 compressed objects within 19 object streams
+ 896 named destinations out of 1000 (max. 500000)
  74795 words of extra memory for PDF output out of 89155 (max. 10000000)
 
