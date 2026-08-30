@@ -1,4 +1,4 @@
-\begin{thebibliography}{66}
+\begin{thebibliography}{67}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Abdulhai et~al.(2025)Abdulhai, Cheng, Clay, Althoff, Levine, and
@@ -104,6 +104,15 @@ Tim Dettmers, Artidoro Pagnoni, Ari Holtzman, and Luke Zettlemoyer. 2023.
 \newblock \href {https://api.semanticscholar.org/CorpusID:258841328} {Qlora:
   Efficient finetuning of quantized llms}.
 \newblock \emph{ArXiv}, abs/2305.14314.
+
+\bibitem[{Du et~al.(2026)Du, Wang, He, Liang, Wang, Li, Gui, Pan, Xu, and
+  Wong}]{du2026memguide}
+Yiming Du, Bingbing Wang, Yang He, Bin Liang, Baojun Wang, Zhongyang Li, Lin
+  Gui, Jeff~Z. Pan, Ruifeng Xu, and Kam-Fai Wong. 2026.
+\newblock \href {https://doi.org/10.1609/aaai.v40i36.40313} {{MemGuide}:
+  Intent-driven memory selection for goal-oriented multi-session {LLM} agents}.
+\newblock \emph{Proceedings of the AAAI Conference on Artificial Intelligence},
+  40(36):30584--30592.
 
 \bibitem[{Frith and Frith(2005)}]{frith2005theory}
 Chris Frith and Uta Frith. 2005.

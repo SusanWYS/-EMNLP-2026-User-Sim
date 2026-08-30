@@ -71,17 +71,24 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textbf  {Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim }6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit  {GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that Turing-RL is the hardest model to distinguish from real users. \textbf  {Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}}{6}{figure.caption.19}\protected@file@percent }
 \newlabel{fig:binary_gt_accuracy}{{5}{6}{\textbf {Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim }6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit {GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that Turing-RL is the hardest model to distinguish from real users. \textbf {Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}{figure.caption.19}{}}
 \@writefile{toc}{\contentsline {paragraph}{Are Humans or LLMs Better Judges?}{6}{figure.caption.19}\protected@file@percent }
-\citation{guo2024large,tomavsev2026intelligent}
-\citation{sumers2023cognitive,liu2026cognitive}
-\citation{wurgaft2025scaling,kargupta2025cognitive}
-\citation{jha2025modeling,zhang2025code,li2026simulating}
-\citation{lazer2009computational,ziems2024can}
+\citation{du2026memguide}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Ablations and Analysis}{7}{section.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}User Representations}{7}{subsection.5.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Qualitative Examples}{7}{subsection.5.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Cross-Domain Generalization}{7}{subsection.5.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {6}Discussion}{7}{section.6}\protected@file@percent }
 \newlabel{sec:discussion}{{6}{7}{Discussion}{section.6}{}}
+\citation{guo2024large,tomavsev2026intelligent}
+\citation{sumers2023cognitive,liu2026cognitive}
+\citation{wurgaft2025scaling,kargupta2025cognitive}
+\citation{jha2025modeling,zhang2025code,li2026simulating}
+\citation{lazer2009computational,ziems2024can}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Ablation on user representation for Turing-RL. We compare three input conditions: history and persona $u = (h, \rho )$, history only $u = h$, and persona only $u = \rho $. Values are mean $\pm $ 95\% CI; Turing is on a 1--7 scale, Sim is reported in \%, and Specificity is in $[0,1]$.}}{8}{table.caption.20}\protected@file@percent }
+\newlabel{tab:ablation_combined}{{2}{8}{Ablation on user representation for Turing-RL. We compare three input conditions: history and persona $u = (h, \rho )$, history only $u = h$, and persona only $u = \rho $. Values are mean $\pm $ 95\% CI; Turing is on a 1--7 scale, Sim is reported in \%, and Specificity is in $[0,1]$}{table.caption.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Qualitative comparison of the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL on one Chat and one Reddit example.}}{8}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:qualitative_examples_2}{{6}{8}{Qualitative comparison of the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL on one Chat and one Reddit example}{figure.caption.21}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Out-of-domain transfer to the first 100 MS-TOD users. Higher is better.}}{8}{table.caption.22}\protected@file@percent }
+\newlabel{tab:mstod_transfer}{{3}{8}{Out-of-domain transfer to the first 100 MS-TOD users. Higher is better}{table.caption.22}{}}
 \citation{davidson2023user,sekulic2024simulating,sim2real,humt}
 \citation{shah2018bootstrapping,abdulhai2025consistently,utility}
 \citation{aher2023using,park2023generative}
@@ -93,12 +100,6 @@
 \citation{gandhi2026dialogue}
 \citation{OdysSim}
 \citation{verbal_feedback}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Ablation on user representation for Turing-RL. We compare three input conditions: history and persona $u = (h, \rho )$, history only $u = h$, and persona only $u = \rho $. Values are mean $\pm $ 95\% CI; Turing is on a 1--7 scale, Sim is reported in \%, and Specificity is in $[0,1]$.}}{8}{table.caption.20}\protected@file@percent }
-\newlabel{tab:ablation_combined}{{2}{8}{Ablation on user representation for Turing-RL. We compare three input conditions: history and persona $u = (h, \rho )$, history only $u = h$, and persona only $u = \rho $. Values are mean $\pm $ 95\% CI; Turing is on a 1--7 scale, Sim is reported in \%, and Specificity is in $[0,1]$}{table.caption.20}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Qualitative comparison of the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL on one Chat and one Reddit example.}}{8}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:qualitative_examples_2}{{6}{8}{Qualitative comparison of the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL on one Chat and one Reddit example}{figure.caption.21}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Related Work}{8}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{LLM-based user simulation.}{8}{section*.22}\protected@file@percent }
 \citation{zhang2018personalizing}
 \citation{wolf2019transfertransfo}
 \citation{jiang2024personallm}
@@ -114,8 +115,10 @@
 \citation{bourgin2019cognitive,peterson2021using}
 \citation{argyle2023out,horton2023large,aher2023using,park2024generative}
 \citation{binz2025foundation}
-\@writefile{toc}{\contentsline {paragraph}{Persona and user representation.}{9}{section*.23}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Human behavior prediction.}{9}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Related Work}{9}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{LLM-based user simulation.}{9}{section*.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Persona and user representation.}{9}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Human behavior prediction.}{9}{section*.25}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{9}{section.8}\protected@file@percent }
 \bibdata{references}
 \bibcite{abdulhai2025consistently}{{1}{2025}{{Abdulhai et~al.}}{{Abdulhai, Cheng, Clay, Althoff, Levine, and Jaques}}}
@@ -132,67 +135,68 @@
 \bibcite{collins2024building}{{12}{2024}{{Collins et~al.}}{{Collins, Sucholutsky, Bhatt, Chandra, Wong, Lee, Zhang, Zhi-Xuan, Ho, Mansinghka, Weller, Tenenbaum, and Griffiths}}}
 \bibcite{davidson2023user}{{13}{2023}{{Davidson et~al.}}{{Davidson, Romeo, Shu, Gung, Gupta, Mansour, and Zhang}}}
 \bibcite{qlora}{{14}{2023}{{Dettmers et~al.}}{{Dettmers, Pagnoni, Holtzman, and Zettlemoyer}}}
-\bibcite{frith2005theory}{{15}{2005}{{Frith and Frith}}{{}}}
-\bibcite{gandhi2026dialogue}{{16}{2026}{{Gandhi et~al.}}{{Gandhi, Bhatia, and Goodman}}}
-\bibcite{griffiths2024bayesian}{{17}{2024}{{Griffiths et~al.}}{{Griffiths, Chater, and Tenenbaum}}}
-\bibcite{guo2025deepseek}{{18}{2025}{{Guo et~al.}}{{Guo, Yang, Zhang, Song, Wang, Zhu, Xu, Zhang, Ma, Bi et~al.}}}
-\bibcite{guo2024large}{{19}{2024}{{Guo et~al.}}{{Guo, Chen, Wang, Chang, Pei, Chawla, Wiest, and Zhang}}}
-\bibcite{horton2023large}{{20}{2023}{{Horton et~al.}}{{Horton, Filippas, and Manning}}}
-\bibcite{lora}{{21}{2021}{{Hu et~al.}}{{Hu, Shen, Wallis, Allen-Zhu, Li, Wang, and Chen}}}
-\bibcite{hwang2023aligning}{{22}{2023}{{Hwang et~al.}}{{Hwang, Majumder, and Tandon}}}
-\bibcite{jha2025modeling}{{23}{2025}{{Jha et~al.}}{{Jha, Huang, Ye, Jaques, and Kleiman-Weiner}}}
-\bibcite{jiang2024personallm}{{24}{2024}{{Jiang et~al.}}{{Jiang, Zhang, Cao, Breazeal, Roy, and Kabbara}}}
-\bibcite{jiang2024indievalue}{{25}{2025}{{Jiang et~al.}}{{Jiang, Sorensen, Levine, and Choi}}}
-\bibcite{kahneman2013prospect}{{26}{2013}{{Kahneman and Tversky}}{{}}}
-\bibcite{kargupta2025cognitive}{{27}{2025}{{Kargupta et~al.}}{{Kargupta, Li, Wang, Lee, Chen, Ahia, Light, Griffiths, Kleiman-Weiner, Han et~al.}}}
-\bibcite{kirk2024prism}{{28}{2024}{{Kirk et~al.}}{{Kirk, Whitefield, R{\"o}ttger, Bean, Margatina, Ciro, Mosquera, Bartolo, Williams, He, Vidgen, and Hale}}}
-\bibcite{lazer2009computational}{{29}{2009}{{Lazer et~al.}}{{Lazer, Pentland, Adamic, Aral, Barab{\'a}si, Brewer, Christakis, Contractor, Fowler, Gutmann et~al.}}}
-\bibcite{li2026simulating}{{30}{2026}{{Li et~al.}}{{Li, Wu, Mo, Qu, Tang, Zhao, Gan, Fan, Yu, Zhao et~al.}}}
-\bibcite{li2016diversity}{{31}{2016}{{Li et~al.}}{{Li, Galley, Brockett, Gao, and Dolan}}}
-\bibcite{liu2026cognitive}{{32}{2026}{{Liu et~al.}}{{Liu, Arumugam, Zhang, Escola, Pitkow, and Griffiths}}}
-\bibcite{lu2026llmagentssimulatemultiturn}{{33}{2026}{{Lu et~al.}}{{Lu, Huang, Han, Yao, Bei, Gesi, Xie, Sang, Zheshen, Wang, He, and Wang}}}
-\bibcite{lu2025multiturn}{{34}{2025}{{Lu et~al.}}{{Lu, Huang, Han, Yao, Bei, Gesi, Xie, Wang, He, and Wang}}}
-\bibcite{peft}{{35}{2022}{{Mangrulkar et~al.}}{{Mangrulkar, Gugger, Debut, Belkada, Paul, Bossan, and Tietz}}}
-\bibcite{mehri2025goal}{{36}{2025}{{Mehri et~al.}}{{Mehri, Yang, Kim, Tur, Mehri, and Hakkani-T{\"u}r}}}
-\bibcite{naous2025flipping}{{37}{2025}{{Naous et~al.}}{{Naous, Laban, Xu, and Neville}}}
-\bibcite{newell1994unified}{{38}{1994}{{Newell}}{{}}}
-\bibcite{user_sim_survey}{{39}{2026}{{Ni et~al.}}{{Ni, Wang, Wang, Kveton, Dernoncourt, Xia, Chen, Luera, Basu, Mukherjee, Mathur, Ahmed, Wu, Li, Zhang, Zhang, Yu, Kim, Gu, Tu, Siu, Wang, Yoon, Lipka, Park, Lin, Bui, Zhao, Derr, and Rossi}}}
-\bibcite{park2023generative}{{40}{2023}{{Park et~al.}}{{Park, O'Brien, Cai, Morris, Liang, and Bernstein}}}
-\bibcite{park2024generative}{{41}{2024}{{Park et~al.}}{{Park, Zou, Shaw, Hill, Cai, Morris, Willer, Liang, and Bernstein}}}
-\bibcite{peterson2021using}{{42}{2021}{{Peterson et~al.}}{{Peterson, Bourgin, Agrawal, Reichman, and Griffiths}}}
-\bibcite{qwenteam2026qwen35omni}{{43}{2026}{{Qwen Team}}{{}}}
-\bibcite{rabinowitz2018machine}{{44}{2018}{{Rabinowitz et~al.}}{{Rabinowitz, Perbet, Song, Zhang, Eslami, and Botvinick}}}
-\bibcite{ryan2025synthesizeme}{{45}{2025}{{Ryan et~al.}}{{Ryan, Shaikh, Bhagirath, Frees, Held, and Yang}}}
-\bibcite{santurkar2023opinions}{{46}{2023}{{Santurkar et~al.}}{{Santurkar, Durmus, Ladhak, Lee, Liang, and Hashimoto}}}
-\bibcite{sekulic2024simulating}{{47}{2024}{{Sekuli{\'c} et~al.}}{{Sekuli{\'c}, Ferraro, and Aliannejadi}}}
-\bibcite{shah2018bootstrapping}{{48}{2018}{{Shah et~al.}}{{Shah, Hakkani-T{\"u}r, Liu, and T{\"u}r}}}
-\bibcite{shao2024deepseekmath}{{49}{2024}{{Shao et~al.}}{{Shao, Wang, Zhu, Xu, Song, Bi, Zhang, Zhang, Li, Wu et~al.}}}
-\bibcite{verl}{{50}{2024}{{Sheng et~al.}}{{Sheng, Zhang, Ye, Wu, Zhang, Zhang, Peng, Lin, and Wu}}}
-\bibcite{simon1955behavioral}{{51}{1955}{{Simon}}{{}}}
-\bibcite{utility}{{52}{2026}{{Suh et~al.}}{{Suh, Raj, Kang, and Chang}}}
-\bibcite{sumers2023cognitive}{{53}{2023}{{Sumers et~al.}}{{Sumers, Yao, Narasimhan, and Griffiths}}}
-\bibcite{verbal_feedback}{{54}{2026}{{Sun et~al.}}{{Sun, Zhou, Liu, Du, Sun, Xie, Ma, Chen, Wan, Yang, Zhou, Wu, Welleck, Neubig, Yang, and Sap}}}
-\bibcite{tomavsev2026intelligent}{{55}{2026}{{Toma{\v {s}}ev et~al.}}{{Toma{\v {s}}ev, Franklin, and Osindero}}}
-\bibcite{turing1950computing}{{56}{1950}{{Turing}}{{}}}
-\bibcite{TRL}{{57}{2020}{{von Werra et~al.}}{{von Werra, Belkada, Tunstall, Beeching, Thrush, Lambert, Huang, Rasul, and Gallouédec}}}
-\bibcite{transformers}{{58}{2020}{{Wolf et~al.}}{{Wolf, Debut, Sanh, Chaumond, Delangue, Moi, Cistac, Rault, Louf, Funtowicz, Davison, Shleifer, von Platen, Ma, Jernite, Plu, Xu, Le~Scao, Gugger, Drame, Lhoest, and Rush}}}
-\bibcite{wolf2019transfertransfo}{{59}{2019}{{Wolf et~al.}}{{Wolf, Sanh, Chaumond, and Delangue}}}
-\bibcite{wu2026humanlm}{{60}{2026}{{Wu et~al.}}{{Wu, Choi, Khatua, Wang, He-Yueya, Weerasooriya, Wei, Yang, Leskovec, and Zou}}}
-\bibcite{wurgaft2025scaling}{{61}{2025}{{Wurgaft et~al.}}{{Wurgaft, Prystawski, Gandhi, Zhang, Tenenbaum, and Goodman}}}
-\bibcite{zhang2025code}{{62}{2025}{{Zhang et~al.}}{{Zhang, Colas, Poesia, Tenenbaum, and Andreas}}}
-\bibcite{zhang2018personalizing}{{63}{2018}{{Zhang et~al.}}{{Zhang, Dinan, Urbanek, Szlam, Kiela, and Weston}}}
-\bibcite{OdysSim}{{64}{2026{a}}{{Zhou et~al.}}{{Zhou, Sun, Du, Liu, Sun, Ma, Wu, Yang, and Sap}}}
-\bibcite{sim2real}{{65}{2026{b}}{{Zhou et~al.}}{{Zhou, Sun, Ma, Xie, Liu, Du, Welleck, Yang, Neubig, Wu, and Sap}}}
-\bibcite{ziems2024can}{{66}{2024}{{Ziems et~al.}}{{Ziems, Held, Shaikh, Chen, Zhang, and Yang}}}
+\bibcite{du2026memguide}{{15}{2026}{{Du et~al.}}{{Du, Wang, He, Liang, Wang, Li, Gui, Pan, Xu, and Wong}}}
+\bibcite{frith2005theory}{{16}{2005}{{Frith and Frith}}{{}}}
+\bibcite{gandhi2026dialogue}{{17}{2026}{{Gandhi et~al.}}{{Gandhi, Bhatia, and Goodman}}}
+\bibcite{griffiths2024bayesian}{{18}{2024}{{Griffiths et~al.}}{{Griffiths, Chater, and Tenenbaum}}}
+\bibcite{guo2025deepseek}{{19}{2025}{{Guo et~al.}}{{Guo, Yang, Zhang, Song, Wang, Zhu, Xu, Zhang, Ma, Bi et~al.}}}
+\bibcite{guo2024large}{{20}{2024}{{Guo et~al.}}{{Guo, Chen, Wang, Chang, Pei, Chawla, Wiest, and Zhang}}}
+\bibcite{horton2023large}{{21}{2023}{{Horton et~al.}}{{Horton, Filippas, and Manning}}}
+\bibcite{lora}{{22}{2021}{{Hu et~al.}}{{Hu, Shen, Wallis, Allen-Zhu, Li, Wang, and Chen}}}
+\bibcite{hwang2023aligning}{{23}{2023}{{Hwang et~al.}}{{Hwang, Majumder, and Tandon}}}
+\bibcite{jha2025modeling}{{24}{2025}{{Jha et~al.}}{{Jha, Huang, Ye, Jaques, and Kleiman-Weiner}}}
+\bibcite{jiang2024personallm}{{25}{2024}{{Jiang et~al.}}{{Jiang, Zhang, Cao, Breazeal, Roy, and Kabbara}}}
+\bibcite{jiang2024indievalue}{{26}{2025}{{Jiang et~al.}}{{Jiang, Sorensen, Levine, and Choi}}}
+\bibcite{kahneman2013prospect}{{27}{2013}{{Kahneman and Tversky}}{{}}}
+\bibcite{kargupta2025cognitive}{{28}{2025}{{Kargupta et~al.}}{{Kargupta, Li, Wang, Lee, Chen, Ahia, Light, Griffiths, Kleiman-Weiner, Han et~al.}}}
+\bibcite{kirk2024prism}{{29}{2024}{{Kirk et~al.}}{{Kirk, Whitefield, R{\"o}ttger, Bean, Margatina, Ciro, Mosquera, Bartolo, Williams, He, Vidgen, and Hale}}}
+\bibcite{lazer2009computational}{{30}{2009}{{Lazer et~al.}}{{Lazer, Pentland, Adamic, Aral, Barab{\'a}si, Brewer, Christakis, Contractor, Fowler, Gutmann et~al.}}}
+\bibcite{li2026simulating}{{31}{2026}{{Li et~al.}}{{Li, Wu, Mo, Qu, Tang, Zhao, Gan, Fan, Yu, Zhao et~al.}}}
+\bibcite{li2016diversity}{{32}{2016}{{Li et~al.}}{{Li, Galley, Brockett, Gao, and Dolan}}}
+\bibcite{liu2026cognitive}{{33}{2026}{{Liu et~al.}}{{Liu, Arumugam, Zhang, Escola, Pitkow, and Griffiths}}}
+\bibcite{lu2026llmagentssimulatemultiturn}{{34}{2026}{{Lu et~al.}}{{Lu, Huang, Han, Yao, Bei, Gesi, Xie, Sang, Zheshen, Wang, He, and Wang}}}
+\bibcite{lu2025multiturn}{{35}{2025}{{Lu et~al.}}{{Lu, Huang, Han, Yao, Bei, Gesi, Xie, Wang, He, and Wang}}}
+\bibcite{peft}{{36}{2022}{{Mangrulkar et~al.}}{{Mangrulkar, Gugger, Debut, Belkada, Paul, Bossan, and Tietz}}}
+\bibcite{mehri2025goal}{{37}{2025}{{Mehri et~al.}}{{Mehri, Yang, Kim, Tur, Mehri, and Hakkani-T{\"u}r}}}
+\bibcite{naous2025flipping}{{38}{2025}{{Naous et~al.}}{{Naous, Laban, Xu, and Neville}}}
+\bibcite{newell1994unified}{{39}{1994}{{Newell}}{{}}}
+\bibcite{user_sim_survey}{{40}{2026}{{Ni et~al.}}{{Ni, Wang, Wang, Kveton, Dernoncourt, Xia, Chen, Luera, Basu, Mukherjee, Mathur, Ahmed, Wu, Li, Zhang, Zhang, Yu, Kim, Gu, Tu, Siu, Wang, Yoon, Lipka, Park, Lin, Bui, Zhao, Derr, and Rossi}}}
+\bibcite{park2023generative}{{41}{2023}{{Park et~al.}}{{Park, O'Brien, Cai, Morris, Liang, and Bernstein}}}
+\bibcite{park2024generative}{{42}{2024}{{Park et~al.}}{{Park, Zou, Shaw, Hill, Cai, Morris, Willer, Liang, and Bernstein}}}
+\bibcite{peterson2021using}{{43}{2021}{{Peterson et~al.}}{{Peterson, Bourgin, Agrawal, Reichman, and Griffiths}}}
+\bibcite{qwenteam2026qwen35omni}{{44}{2026}{{Qwen Team}}{{}}}
+\bibcite{rabinowitz2018machine}{{45}{2018}{{Rabinowitz et~al.}}{{Rabinowitz, Perbet, Song, Zhang, Eslami, and Botvinick}}}
+\bibcite{ryan2025synthesizeme}{{46}{2025}{{Ryan et~al.}}{{Ryan, Shaikh, Bhagirath, Frees, Held, and Yang}}}
+\bibcite{santurkar2023opinions}{{47}{2023}{{Santurkar et~al.}}{{Santurkar, Durmus, Ladhak, Lee, Liang, and Hashimoto}}}
+\bibcite{sekulic2024simulating}{{48}{2024}{{Sekuli{\'c} et~al.}}{{Sekuli{\'c}, Ferraro, and Aliannejadi}}}
+\bibcite{shah2018bootstrapping}{{49}{2018}{{Shah et~al.}}{{Shah, Hakkani-T{\"u}r, Liu, and T{\"u}r}}}
+\bibcite{shao2024deepseekmath}{{50}{2024}{{Shao et~al.}}{{Shao, Wang, Zhu, Xu, Song, Bi, Zhang, Zhang, Li, Wu et~al.}}}
+\bibcite{verl}{{51}{2024}{{Sheng et~al.}}{{Sheng, Zhang, Ye, Wu, Zhang, Zhang, Peng, Lin, and Wu}}}
+\bibcite{simon1955behavioral}{{52}{1955}{{Simon}}{{}}}
+\bibcite{utility}{{53}{2026}{{Suh et~al.}}{{Suh, Raj, Kang, and Chang}}}
+\bibcite{sumers2023cognitive}{{54}{2023}{{Sumers et~al.}}{{Sumers, Yao, Narasimhan, and Griffiths}}}
+\bibcite{verbal_feedback}{{55}{2026}{{Sun et~al.}}{{Sun, Zhou, Liu, Du, Sun, Xie, Ma, Chen, Wan, Yang, Zhou, Wu, Welleck, Neubig, Yang, and Sap}}}
+\bibcite{tomavsev2026intelligent}{{56}{2026}{{Toma{\v {s}}ev et~al.}}{{Toma{\v {s}}ev, Franklin, and Osindero}}}
+\bibcite{turing1950computing}{{57}{1950}{{Turing}}{{}}}
+\bibcite{TRL}{{58}{2020}{{von Werra et~al.}}{{von Werra, Belkada, Tunstall, Beeching, Thrush, Lambert, Huang, Rasul, and Gallouédec}}}
+\bibcite{transformers}{{59}{2020}{{Wolf et~al.}}{{Wolf, Debut, Sanh, Chaumond, Delangue, Moi, Cistac, Rault, Louf, Funtowicz, Davison, Shleifer, von Platen, Ma, Jernite, Plu, Xu, Le~Scao, Gugger, Drame, Lhoest, and Rush}}}
+\bibcite{wolf2019transfertransfo}{{60}{2019}{{Wolf et~al.}}{{Wolf, Sanh, Chaumond, and Delangue}}}
+\bibcite{wu2026humanlm}{{61}{2026}{{Wu et~al.}}{{Wu, Choi, Khatua, Wang, He-Yueya, Weerasooriya, Wei, Yang, Leskovec, and Zou}}}
+\bibcite{wurgaft2025scaling}{{62}{2025}{{Wurgaft et~al.}}{{Wurgaft, Prystawski, Gandhi, Zhang, Tenenbaum, and Goodman}}}
+\bibcite{zhang2025code}{{63}{2025}{{Zhang et~al.}}{{Zhang, Colas, Poesia, Tenenbaum, and Andreas}}}
+\bibcite{zhang2018personalizing}{{64}{2018}{{Zhang et~al.}}{{Zhang, Dinan, Urbanek, Szlam, Kiela, and Weston}}}
+\bibcite{OdysSim}{{65}{2026{a}}{{Zhou et~al.}}{{Zhou, Sun, Du, Liu, Sun, Ma, Wu, Yang, and Sap}}}
+\bibcite{sim2real}{{66}{2026{b}}{{Zhou et~al.}}{{Zhou, Sun, Ma, Xie, Liu, Du, Welleck, Yang, Neubig, Wu, and Sap}}}
+\bibcite{ziems2024can}{{67}{2024}{{Ziems et~al.}}{{Ziems, Held, Shaikh, Chen, Zhang, and Yang}}}
 \citation{lu2026llmagentssimulatemultiturn}
 \citation{transformers,TRL,peft}
 \@writefile{toc}{\contentsline {section}{\numberline {A}Dataset Details}{14}{appendix.A}\protected@file@percent }
 \newlabel{app:dataset-stats}{{A}{14}{Dataset Details}{appendix.A}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Dataset Preprocessing}{14}{subsection.A.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt  {r/tifu} and \texttt  {r/worldnews}.}}{14}{table.caption.28}\protected@file@percent }
-\newlabel{tab:preprocessing_stats}{{3}{14}{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt {r/tifu} and \texttt {r/worldnews}}{table.caption.28}{}}
-\@writefile{toc}{\contentsline {paragraph}{(Chat) PRISM.}{14}{section*.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{(Reddit) ConvoKit.}{14}{section*.30}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt  {r/tifu} and \texttt  {r/worldnews}.}}{14}{table.caption.29}\protected@file@percent }
+\newlabel{tab:preprocessing_stats}{{4}{14}{Dataset statistics after preprocessing. History counts are sampled per user. PRISM and ConvoKit use disjoint SFT, GRPO, and held-out test users; the held-out ConvoKit test set comes from \texttt {r/tifu} and \texttt {r/worldnews}}{table.caption.29}{}}
+\@writefile{toc}{\contentsline {paragraph}{(Chat) PRISM.}{14}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{(Reddit) ConvoKit.}{14}{section*.31}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Persona Induction}{14}{subsection.A.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {B}Generation Details}{14}{appendix.B}\protected@file@percent }
 \newlabel{sec:sampling_params}{{B}{14}{Generation Details}{appendix.B}{}}
@@ -204,20 +208,20 @@
 \newlabel{app:sft_training_details}{{C.1}{14}{SFT Training Details}{subsection.C.1}{}}
 \newlabel{app:thinking-trace-prompt}{{C.1}{14}{SFT Training Details}{subsection.C.1}{}}
 \newlabel{app:hyperparams}{{C.1}{14}{SFT Training Details}{subsection.C.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Persona induction prompt (part 1 of 2). The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho $.}}{15}{figure.caption.31}\protected@file@percent }
-\newlabel{fig:persona_induction}{{7}{15}{Persona induction prompt (part 1 of 2). The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho $}{figure.caption.31}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Persona induction prompt (part 2 of 2). Continuation of rules and field descriptions, followed by the expected model output schema.}}{16}{figure.caption.32}\protected@file@percent }
-\newlabel{fig:persona_induction_2}{{8}{16}{Persona induction prompt (part 2 of 2). Continuation of rules and field descriptions, followed by the expected model output schema}{figure.caption.32}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Held-out generation sampling parameters. For Qwen3-8B, Reddit generations use temperature 0.4 and Chat generations use temperature 0.6. All Qwen3-8B rows use one generation per target.}}{16}{table.caption.33}\protected@file@percent }
-\newlabel{tab:heldout_generation_params}{{4}{16}{Held-out generation sampling parameters. For Qwen3-8B, Reddit generations use temperature 0.4 and Chat generations use temperature 0.6. All Qwen3-8B rows use one generation per target}{table.caption.33}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces System message shared across all prompt configurations. The \texttt  {[PERSONA]} block is included only in persona-conditioned settings; the \texttt  {[TASK]} block specifies the prediction objective and output format.}}{17}{figure.caption.34}\protected@file@percent }
-\newlabel{fig:system_prompt}{{9}{17}{System message shared across all prompt configurations. The \texttt {[PERSONA]} block is included only in persona-conditioned settings; the \texttt {[TASK]} block specifies the prediction objective and output format}{figure.caption.34}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces User message layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt  {<Conversation>} tags; the current context lists turns up to the prediction point.}}{18}{figure.caption.35}\protected@file@percent }
-\newlabel{fig:prism_format}{{10}{18}{User message layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt {<Conversation>} tags; the current context lists turns up to the prediction point}{figure.caption.35}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Prompt layout for ConvoKit (Reddit forum). History threads are wrapped in numbered \texttt  {<Post>} tags; the original poster is marked \texttt  {[OTHER - OP]}. The current context shows the OP and ancestor reply chain up to the prediction point.}}{18}{figure.caption.36}\protected@file@percent }
-\newlabel{fig:convokit_format}{{11}{18}{Prompt layout for ConvoKit (Reddit forum). History threads are wrapped in numbered \texttt {<Post>} tags; the original poster is marked \texttt {[OTHER - OP]}. The current context shows the OP and ancestor reply chain up to the prediction point}{figure.caption.36}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces  Thinking trace elicitation prompt. A teacher model receives the user's history $h$, persona $\rho $, current context $x$, and ground-truth response $y$, and generates a reasoning trace explaining what could lead the user to write that response without reproducing it. }}{19}{figure.caption.37}\protected@file@percent }
-\newlabel{fig:thinking_trace_prompt}{{12}{19}{Thinking trace elicitation prompt. A teacher model receives the user's history $h$, persona $\rho $, current context $x$, and ground-truth response $y$, and generates a reasoning trace explaining what could lead the user to write that response without reproducing it}{figure.caption.37}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Persona induction prompt (part 1 of 2). The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho $.}}{15}{figure.caption.32}\protected@file@percent }
+\newlabel{fig:persona_induction}{{7}{15}{Persona induction prompt (part 1 of 2). The inducer receives the user's reserved history $h$ formatted with speaker labels and bold-delimited target-user responses, and outputs a structured JSON persona $\rho $}{figure.caption.32}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Persona induction prompt (part 2 of 2). Continuation of rules and field descriptions, followed by the expected model output schema.}}{16}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:persona_induction_2}{{8}{16}{Persona induction prompt (part 2 of 2). Continuation of rules and field descriptions, followed by the expected model output schema}{figure.caption.33}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Held-out generation sampling parameters. For Qwen3-8B, Reddit generations use temperature 0.4 and Chat generations use temperature 0.6. All Qwen3-8B rows use one generation per target.}}{16}{table.caption.34}\protected@file@percent }
+\newlabel{tab:heldout_generation_params}{{5}{16}{Held-out generation sampling parameters. For Qwen3-8B, Reddit generations use temperature 0.4 and Chat generations use temperature 0.6. All Qwen3-8B rows use one generation per target}{table.caption.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces System message shared across all prompt configurations. The \texttt  {[PERSONA]} block is included only in persona-conditioned settings; the \texttt  {[TASK]} block specifies the prediction objective and output format.}}{17}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:system_prompt}{{9}{17}{System message shared across all prompt configurations. The \texttt {[PERSONA]} block is included only in persona-conditioned settings; the \texttt {[TASK]} block specifies the prediction objective and output format}{figure.caption.35}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces User message layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt  {<Conversation>} tags; the current context lists turns up to the prediction point.}}{18}{figure.caption.36}\protected@file@percent }
+\newlabel{fig:prism_format}{{10}{18}{User message layout for PRISM (multi-turn dialogue). History conversations are wrapped in numbered \texttt {<Conversation>} tags; the current context lists turns up to the prediction point}{figure.caption.36}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Prompt layout for ConvoKit (Reddit forum). History threads are wrapped in numbered \texttt  {<Post>} tags; the original poster is marked \texttt  {[OTHER - OP]}. The current context shows the OP and ancestor reply chain up to the prediction point.}}{18}{figure.caption.37}\protected@file@percent }
+\newlabel{fig:convokit_format}{{11}{18}{Prompt layout for ConvoKit (Reddit forum). History threads are wrapped in numbered \texttt {<Post>} tags; the original poster is marked \texttt {[OTHER - OP]}. The current context shows the OP and ancestor reply chain up to the prediction point}{figure.caption.37}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces  Thinking trace elicitation prompt. A teacher model receives the user's history $h$, persona $\rho $, current context $x$, and ground-truth response $y$, and generates a reasoning trace explaining what could lead the user to write that response without reproducing it. }}{19}{figure.caption.38}\protected@file@percent }
+\newlabel{fig:thinking_trace_prompt}{{12}{19}{Thinking trace elicitation prompt. A teacher model receives the user's history $h$, persona $\rho $, current context $x$, and ground-truth response $y$, and generates a reasoning trace explaining what could lead the user to write that response without reproducing it}{figure.caption.38}{}}
 \citation{verl}
 \citation{shao2024deepseekmath}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.2}GRPO Training Details}{20}{subsection.C.2}\protected@file@percent }
@@ -228,49 +232,51 @@
 \newlabel{app:human-eval}{{D}{20}{Human Evaluation Details}{appendix.D}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {D.1}Design}{20}{subsection.D.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {D.2}Comprehension Filtering}{20}{subsection.D.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces SFT training hyperparameters.}}{21}{table.caption.38}\protected@file@percent }
-\newlabel{tab:sft_hyperparams}{{5}{21}{SFT training hyperparameters}{table.caption.38}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces GRPO training hyperparameters shared across all reward variants.}}{21}{table.caption.39}\protected@file@percent }
-\newlabel{tab:hyperparams}{{6}{21}{GRPO training hyperparameters shared across all reward variants}{table.caption.39}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Length penalty parameters for each domain.}}{21}{table.caption.40}\protected@file@percent }
-\newlabel{tab:reward-shaping}{{7}{21}{Length penalty parameters for each domain}{table.caption.40}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces SFT training hyperparameters.}}{21}{table.caption.39}\protected@file@percent }
+\newlabel{tab:sft_hyperparams}{{6}{21}{SFT training hyperparameters}{table.caption.39}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces GRPO training hyperparameters shared across all reward variants.}}{21}{table.caption.40}\protected@file@percent }
+\newlabel{tab:hyperparams}{{7}{21}{GRPO training hyperparameters shared across all reward variants}{table.caption.40}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Length penalty parameters for each domain.}}{21}{table.caption.41}\protected@file@percent }
+\newlabel{tab:reward-shaping}{{8}{21}{Length penalty parameters for each domain}{table.caption.41}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {D.3}Balancing}{21}{subsection.D.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {D.4}Metric}{21}{subsection.D.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {D.5}Testing for Statistical Significance}{21}{subsection.D.5}\protected@file@percent }
 \newlabel{app:human-eval-significance}{{D.5}{21}{Testing for Statistical Significance}{subsection.D.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Paired target-level significance tests for Table~\ref {tab:human_eval_winrate}. Mean differences are Turing-RL win rate minus the comparison model's win rate; $\pm $ values are 95\% bootstrap CI.}}{22}{table.caption.41}\protected@file@percent }
-\newlabel{tab:human_eval_significance}{{8}{22}{Paired target-level significance tests for Table~\ref {tab:human_eval_winrate}. Mean differences are Turing-RL win rate minus the comparison model's win rate; $\pm $ values are 95\% bootstrap CI}{table.caption.41}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Word counts for the displayed human-evaluation stimuli. Values show mean words per target with 95\% CI.}}{22}{table.caption.42}\protected@file@percent }
-\newlabel{tab:human_eval_word_counts}{{9}{22}{Word counts for the displayed human-evaluation stimuli. Values show mean words per target with 95\% CI}{table.caption.42}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Paired target-level significance tests for Table~\ref {tab:human_eval_winrate}. Mean differences are Turing-RL win rate minus the comparison model's win rate; $\pm $ values are 95\% bootstrap CI.}}{22}{table.caption.42}\protected@file@percent }
+\newlabel{tab:human_eval_significance}{{9}{22}{Paired target-level significance tests for Table~\ref {tab:human_eval_winrate}. Mean differences are Turing-RL win rate minus the comparison model's win rate; $\pm $ values are 95\% bootstrap CI}{table.caption.42}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Word counts for the displayed human-evaluation stimuli. Values show mean words per target with 95\% CI.}}{22}{table.caption.43}\protected@file@percent }
+\newlabel{tab:human_eval_word_counts}{{10}{22}{Word counts for the displayed human-evaluation stimuli. Values show mean words per target with 95\% CI}{table.caption.43}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {D.6}Word Counts}{22}{subsection.D.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {D.7}Reaction Time}{22}{subsection.D.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {E}Judge Prompts}{22}{appendix.E}\protected@file@percent }
 \newlabel{app:judge-prompts}{{E}{22}{Judge Prompts}{appendix.E}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Reaction times on the judgment page for the human-evaluation responses. Values show mean RT with 95\% CI and median RT. Aggregating across models, the Reddit and Chat mean RTs are 72.83s and 50.95s. The Reddit/Chat mean RT ratio is 1.43.}}{23}{table.caption.43}\protected@file@percent }
-\newlabel{tab:human_eval_rt}{{10}{23}{Reaction times on the judgment page for the human-evaluation responses. Values show mean RT with 95\% CI and median RT. Aggregating across models, the Reddit and Chat mean RTs are 72.83s and 50.95s. The Reddit/Chat mean RT ratio is 1.43}{table.caption.43}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Reaction times normalized by the total history and context word counts for each target user. Values show mean RT per word with 95\% CI and median RT per word. Aggregating across models, the Reddit and Chat mean RT/word are 0.185s and 0.125s. The Reddit/Chat mean RT/word ratio is 1.48.}}{23}{table.caption.44}\protected@file@percent }
-\newlabel{tab:human_eval_rt_per_word}{{11}{23}{Reaction times normalized by the total history and context word counts for each target user. Values show mean RT per word with 95\% CI and median RT per word. Aggregating across models, the Reddit and Chat mean RT/word are 0.185s and 0.125s. The Reddit/Chat mean RT/word ratio is 1.48}{table.caption.44}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces User interface used for human annotation in the Reddit domain.}}{24}{figure.caption.45}\protected@file@percent }
-\newlabel{fig:ui_reddit}{{13}{24}{User interface used for human annotation in the Reddit domain}{figure.caption.45}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces User interface used for human annotation in the Chat domain.}}{25}{figure.caption.46}\protected@file@percent }
-\newlabel{fig:ui_chat}{{14}{25}{User interface used for human annotation in the Chat domain}{figure.caption.46}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces User interface consent and instructions.}}{26}{figure.caption.47}\protected@file@percent }
-\newlabel{fig:ui_consent}{{15}{26}{User interface consent and instructions}{figure.caption.47}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Exact Turing distinguishability judge prompt used in the experiments, split across nine parts for typesetting.}}{27}{figure.caption.48}\protected@file@percent }
-\newlabel{fig:turing_prompt}{{16}{27}{Exact Turing distinguishability judge prompt used in the experiments, split across nine parts for typesetting}{figure.caption.48}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Exact HumanLM response-only similarity judge prompt used in sim evaluation, split across three parts for typesetting.}}{37}{figure.caption.59}\protected@file@percent }
-\newlabel{fig:sim_prompt}{{17}{37}{Exact HumanLM response-only similarity judge prompt used in sim evaluation, split across three parts for typesetting}{figure.caption.59}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Exact batched response specificity judge prompt used in the experiments, split across five parts for typesetting.}}{39}{figure.caption.62}\protected@file@percent }
-\newlabel{fig:specificity_prompt}{{18}{39}{Exact batched response specificity judge prompt used in the experiments, split across five parts for typesetting}{figure.caption.62}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Reaction times on the judgment page for the human-evaluation responses. Values show mean RT with 95\% CI and median RT. Aggregating across models, the Reddit and Chat mean RTs are 72.83s and 50.95s. The Reddit/Chat mean RT ratio is 1.43.}}{23}{table.caption.44}\protected@file@percent }
+\newlabel{tab:human_eval_rt}{{11}{23}{Reaction times on the judgment page for the human-evaluation responses. Values show mean RT with 95\% CI and median RT. Aggregating across models, the Reddit and Chat mean RTs are 72.83s and 50.95s. The Reddit/Chat mean RT ratio is 1.43}{table.caption.44}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Reaction times normalized by the total history and context word counts for each target user. Values show mean RT per word with 95\% CI and median RT per word. Aggregating across models, the Reddit and Chat mean RT/word are 0.185s and 0.125s. The Reddit/Chat mean RT/word ratio is 1.48.}}{23}{table.caption.45}\protected@file@percent }
+\newlabel{tab:human_eval_rt_per_word}{{12}{23}{Reaction times normalized by the total history and context word counts for each target user. Values show mean RT per word with 95\% CI and median RT per word. Aggregating across models, the Reddit and Chat mean RT/word are 0.185s and 0.125s. The Reddit/Chat mean RT/word ratio is 1.48}{table.caption.45}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces User interface used for human annotation in the Reddit domain.}}{24}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:ui_reddit}{{13}{24}{User interface used for human annotation in the Reddit domain}{figure.caption.46}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces User interface used for human annotation in the Chat domain.}}{25}{figure.caption.47}\protected@file@percent }
+\newlabel{fig:ui_chat}{{14}{25}{User interface used for human annotation in the Chat domain}{figure.caption.47}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces User interface consent and instructions.}}{26}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:ui_consent}{{15}{26}{User interface consent and instructions}{figure.caption.48}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Exact Turing distinguishability judge prompt used in the experiments, split across nine parts for typesetting.}}{27}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:turing_prompt}{{16}{27}{Exact Turing distinguishability judge prompt used in the experiments, split across nine parts for typesetting}{figure.caption.49}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Exact HumanLM response-only similarity judge prompt used in sim evaluation, split across three parts for typesetting.}}{37}{figure.caption.60}\protected@file@percent }
+\newlabel{fig:sim_prompt}{{17}{37}{Exact HumanLM response-only similarity judge prompt used in sim evaluation, split across three parts for typesetting}{figure.caption.60}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Exact batched response specificity judge prompt used in the experiments, split across five parts for typesetting.}}{39}{figure.caption.63}\protected@file@percent }
+\newlabel{fig:specificity_prompt}{{18}{39}{Exact batched response specificity judge prompt used in the experiments, split across five parts for typesetting}{figure.caption.63}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {F}Training-Time Turing Judge Example}{44}{appendix.F}\protected@file@percent }
 \newlabel{app:training-judge-example}{{F}{44}{Training-Time Turing Judge Example}{appendix.F}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {G}Training Dynamics}{46}{appendix.G}\protected@file@percent }
 \newlabel{app:training-dynamics}{{G}{46}{Training Dynamics}{appendix.G}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {H}More Qualitative Examples}{46}{appendix.H}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Raw per-step GRPO training scores for Reddit and Chat. The first row shows the unadjusted Turing reward for Turing-RL under user input ablations $u=h$, $u=\rho $, and $u=(h,\rho )$. The second and third rows show the raw similarity and log-probability reward scores for Sim-RL and Logprob-RL. Curves use every logged training step.}}{47}{figure.caption.68}\protected@file@percent }
-\newlabel{fig:grpo_training_raw_scores}{{19}{47}{Raw per-step GRPO training scores for Reddit and Chat. The first row shows the unadjusted Turing reward for Turing-RL under user input ablations $u=h$, $u=\rho $, and $u=(h,\rho )$. The second and third rows show the raw similarity and log-probability reward scores for Sim-RL and Logprob-RL. Curves use every logged training step}{figure.caption.68}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Ablation on the persona induction model for Turing-RL. We compare the history-only no-persona baseline $u=h$ with history-and-persona models $u=(h,\rho )$ using personas induced by GPT-5.4 nano, Qwen3-8B with thinking enabled, and Opus 4.8. Values are mean $\pm $ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf  {Persona inductor choice has a limited effect relative to confidence intervals}, though Opus performs best on Reddit and GPT-5.4-nano performs best on Chat.}}{47}{table.caption.70}\protected@file@percent }
-\newlabel{tab:persona_inductor_ablation}{{12}{47}{Ablation on the persona induction model for Turing-RL. We compare the history-only no-persona baseline $u=h$ with history-and-persona models $u=(h,\rho )$ using personas induced by GPT-5.4 nano, Qwen3-8B with thinking enabled, and Opus 4.8. Values are mean $\pm $ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf {Persona inductor choice has a limited effect relative to confidence intervals}, though Opus performs best on Reddit and GPT-5.4-nano performs best on Chat}{table.caption.70}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Qualitative examples from Chat and Reddit. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, Logprob-RL, and Qwen3-8B produce verbose responses.}}{48}{figure.caption.69}\protected@file@percent }
-\newlabel{fig:qualitative_examples}{{20}{48}{Qualitative examples from Chat and Reddit. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, Logprob-RL, and Qwen3-8B produce verbose responses}{figure.caption.69}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Raw per-step GRPO training scores for Reddit and Chat. The first row shows the unadjusted Turing reward for Turing-RL under user input ablations $u=h$, $u=\rho $, and $u=(h,\rho )$. The second and third rows show the raw similarity and log-probability reward scores for Sim-RL and Logprob-RL. Curves use every logged training step.}}{47}{figure.caption.69}\protected@file@percent }
+\newlabel{fig:grpo_training_raw_scores}{{19}{47}{Raw per-step GRPO training scores for Reddit and Chat. The first row shows the unadjusted Turing reward for Turing-RL under user input ablations $u=h$, $u=\rho $, and $u=(h,\rho )$. The second and third rows show the raw similarity and log-probability reward scores for Sim-RL and Logprob-RL. Curves use every logged training step}{figure.caption.69}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces Qualitative MS-TOD transfer example. Models were trained on Chat and evaluated out of domain on MS-TOD.}}{47}{table.caption.71}\protected@file@percent }
+\newlabel{tab:mstod_example}{{13}{47}{Qualitative MS-TOD transfer example. Models were trained on Chat and evaluated out of domain on MS-TOD}{table.caption.71}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces Ablation on the persona induction model for Turing-RL. We compare the history-only no-persona baseline $u=h$ with history-and-persona models $u=(h,\rho )$ using personas induced by GPT-5.4 nano, Qwen3-8B with thinking enabled, and Opus 4.8. Values are mean $\pm $ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf  {Persona inductor choice has a limited effect relative to confidence intervals}, though Opus performs best on Reddit and GPT-5.4-nano performs best on Chat.}}{47}{table.caption.72}\protected@file@percent }
+\newlabel{tab:persona_inductor_ablation}{{14}{47}{Ablation on the persona induction model for Turing-RL. We compare the history-only no-persona baseline $u=h$ with history-and-persona models $u=(h,\rho )$ using personas induced by GPT-5.4 nano, Qwen3-8B with thinking enabled, and Opus 4.8. Values are mean $\pm $ 95\% CI half-width; Turing is on a 1--7 scale, Sim is reported as a percentage, and Specificity is in $[0,1]$. \textbf {Persona inductor choice has a limited effect relative to confidence intervals}, though Opus performs best on Reddit and GPT-5.4-nano performs best on Chat}{table.caption.72}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Qualitative examples from Chat and Reddit. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, Logprob-RL, and Qwen3-8B produce verbose responses.}}{48}{figure.caption.70}\protected@file@percent }
+\newlabel{fig:qualitative_examples}{{20}{48}{Qualitative examples from Chat and Reddit. Each column shows the conversation context, the ground truth user response, and generations from five models. GPT-5, Qwen3.5-397B-A17B, Logprob-RL, and Qwen3-8B produce verbose responses}{figure.caption.70}{}}
 \gdef \@abspage@last{48}

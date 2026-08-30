@@ -14,45 +14,45 @@ Warning--entry type for "TRL" isn't style-file defined
 Warning--empty booktitle in davidson2023user
 Warning--empty booktitle in sekulic2024simulating
 Warning--empty journal in OdysSim
-You've used 66 entries,
+You've used 67 entries,
             3764 wiz_defined-function locations,
-            1086 strings with 22404 characters,
-and the built_in function-call counts, 59836 in all, are:
-= -- 4769
-> -- 4186
+            1094 strings with 22763 characters,
+and the built_in function-call counts, 61057 in all, are:
+= -- 4862
+> -- 4281
 < -- 23
-+ -- 1753
-- -- 1314
-* -- 4308
-:= -- 8910
-add.period$ -- 272
-call.type$ -- 66
-change.case$ -- 808
-chr.to.int$ -- 69
-cite$ -- 69
-duplicate$ -- 3303
-empty$ -- 3569
-format.name$ -- 1495
-if$ -- 12562
++ -- 1793
+- -- 1344
+* -- 4411
+:= -- 9087
+add.period$ -- 276
+call.type$ -- 67
+change.case$ -- 823
+chr.to.int$ -- 70
+cite$ -- 70
+duplicate$ -- 3362
+empty$ -- 3638
+format.name$ -- 1528
+if$ -- 12811
 int.to.chr$ -- 2
 int.to.str$ -- 9
-missing$ -- 826
-newline$ -- 335
-num.names$ -- 264
-pop$ -- 2191
+missing$ -- 843
+newline$ -- 340
+num.names$ -- 268
+pop$ -- 2233
 preamble$ -- 1
-purify$ -- 703
+purify$ -- 717
 quote$ -- 0
-skip$ -- 2998
+skip$ -- 3048
 stack$ -- 0
-substring$ -- 1478
-swap$ -- 1850
-text.length$ -- 17
+substring$ -- 1527
+swap$ -- 1892
+text.length$ -- 18
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 585
+type$ -- 594
 warning$ -- 3
-while$ -- 258
+while$ -- 263
 width$ -- 0
-write$ -- 840
+write$ -- 853
 (There were 4 warnings)
