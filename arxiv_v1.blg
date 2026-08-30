@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2023/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: arxiv_v1.aux
+The style file: colm2026_conference.bst
+Database file #1: references.bib
+Warning--entry type for "TRL" isn't style-file defined
+--line 232 of file references.bib
+Warning--empty booktitle in davidson2023user
+Warning--empty booktitle in sekulic2024simulating
+Warning--empty journal in OdysSim
+You've used 56 entries,
+            2773 wiz_defined-function locations,
+            897 strings with 19254 characters,
+and the built_in function-call counts, 37193 in all, are:
+= -- 2974
+> -- 3507
+< -- 20
++ -- 1173
+- -- 1116
+* -- 3409
+:= -- 5942
+add.period$ -- 191
+call.type$ -- 56
+change.case$ -- 532
+chr.to.int$ -- 55
+cite$ -- 115
+duplicate$ -- 1280
+empty$ -- 2186
+format.name$ -- 1176
+if$ -- 7554
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 51
+newline$ -- 305
+num.names$ -- 230
+pop$ -- 1124
+preamble$ -- 1
+purify$ -- 478
+quote$ -- 0
+skip$ -- 1190
+stack$ -- 0
+substring$ -- 754
+swap$ -- 187
+text.length$ -- 12
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 601
+warning$ -- 3
+while$ -- 224
+width$ -- 0
+write$ -- 744
+(There were 4 warnings)

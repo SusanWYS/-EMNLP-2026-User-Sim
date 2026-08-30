@@ -1,0 +1,507 @@
+\begin{thebibliography}{66}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Abdulhai et~al.(2025)Abdulhai, Cheng, Clay, Althoff, Levine, and
+  Jaques}]{abdulhai2025consistently}
+Marwa Abdulhai, Ryan Cheng, Donovan Clay, Tim Althoff, Sergey Levine, and
+  Natasha Jaques. 2025.
+\newblock Consistently simulating human personas with multi-turn reinforcement
+  learning.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}.
+\newblock ArXiv:2511.00222.
+
+\bibitem[{Aher et~al.(2023)Aher, Arriaga, and Kalai}]{aher2023using}
+Gati~V Aher, Rosa~I Arriaga, and Adam~Tauman Kalai. 2023.
+\newblock Using large language models to simulate multiple humans and replicate
+  human subject studies.
+\newblock In \emph{International conference on machine learning}, pages
+  337--371. PMLR.
+
+\bibitem[{Anderson(2013)}]{anderson2013adaptive}
+John~R Anderson. 2013.
+\newblock \emph{The adaptive character of thought}.
+\newblock Psychology Press.
+
+\bibitem[{Anthropic(2026)}]{anthropic2026claudesonnet46}
+Anthropic. 2026.
+\newblock System card: {Claude} {Sonnet} 4.6.
+\newblock \url{https://www.anthropic.com/claude-sonnet-4-6-system-card}.
+
+\bibitem[{Argyle et~al.(2023)Argyle, Busby, Fulda, Gubler, Rytting, and
+  Wingate}]{argyle2023out}
+Lisa~P Argyle, Ethan~C Busby, Nancy Fulda, Joshua~R Gubler, Christopher
+  Rytting, and David Wingate. 2023.
+\newblock Out of one, many: Using language models to simulate human samples.
+\newblock \emph{Political Analysis}, 31(3):337--351.
+
+\bibitem[{Baker et~al.(2017)Baker, Jara-Ettinger, Saxe, and
+  Tenenbaum}]{baker2017rational}
+Chris~L Baker, Julian Jara-Ettinger, Rebecca Saxe, and Joshua~B Tenenbaum.
+  2017.
+\newblock Rational quantitative attribution of beliefs, desires and percepts in
+  human mentalizing.
+\newblock \emph{Nature Human Behaviour}, 1(4):0064.
+
+\bibitem[{Baker et~al.(2009)Baker, Saxe, and Tenenbaum}]{baker2009action}
+Chris~L Baker, Rebecca Saxe, and Joshua~B Tenenbaum. 2009.
+\newblock Action understanding as inverse planning.
+\newblock \emph{Cognition}, 113(3):329--349.
+
+\bibitem[{Binz et~al.(2025)Binz, Akata, Bethge, Br{\"a}ndle, Callaway,
+  Coda-Forno, Dayan, Demircan, Eckstein, {\'E}ltet{\H{o}}
+  et~al.}]{binz2025foundation}
+Marcel Binz, Elif Akata, Matthias Bethge, Franziska Br{\"a}ndle, Fred Callaway,
+  Julian Coda-Forno, Peter Dayan, Can Demircan, Maria~K Eckstein, No{\'e}mi
+  {\'E}ltet{\H{o}}, and 1 others. 2025.
+\newblock A foundation model to predict and capture human cognition.
+\newblock \emph{Nature}, 644(8078):1002--1009.
+
+\bibitem[{Bourgin et~al.(2019)Bourgin, Peterson, Reichman, Russell, and
+  Griffiths}]{bourgin2019cognitive}
+David~D Bourgin, Joshua~C Peterson, Daniel Reichman, Stuart~J Russell, and
+  Thomas~L Griffiths. 2019.
+\newblock Cognitive model priors for predicting human decisions.
+\newblock In \emph{International conference on machine learning}, pages
+  5133--5141. PMLR.
+
+\bibitem[{Chang et~al.(2020)Chang, Chiam, Fu, Wang, Zhang, and
+  Danescu-Niculescu-Mizil}]{chang2020convokit}
+Jonathan~P. Chang, Caleb Chiam, Liye Fu, Andrew Wang, Justine Zhang, and
+  Cristian Danescu-Niculescu-Mizil. 2020.
+\newblock {ConvoKit}: A toolkit for the analysis of conversations.
+\newblock In \emph{Proceedings of the 21th Annual Meeting of the Special
+  Interest Group on Discourse and Dialogue (SIGDIAL)}, pages 57--60.
+
+\bibitem[{Cheng et~al.(2025)Cheng, Yu, and Jurafsky}]{humt}
+Myra Cheng, Sunny Yu, and Dan Jurafsky. 2025.
+\newblock \href {https://doi.org/10.18653/v1/2025.acl-long.1261} {{H}um{T}
+  {D}um{T}: Measuring and controlling human-like language in {LLM}s}.
+\newblock In \emph{Proceedings of the 63rd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 25983--26008,
+  Vienna, Austria. Association for Computational Linguistics.
+
+\bibitem[{Collins et~al.(2024)Collins, Sucholutsky, Bhatt, Chandra, Wong, Lee,
+  Zhang, Zhi-Xuan, Ho, Mansinghka, Weller, Tenenbaum, and
+  Griffiths}]{collins2024building}
+Katherine~M. Collins, Ilia Sucholutsky, Umang Bhatt, Kartik Chandra, Lionel
+  Wong, Mina Lee, Cedegao~E. Zhang, Tan Zhi-Xuan, Mark Ho, Vikash Mansinghka,
+  Adrian Weller, Joshua~B. Tenenbaum, and Thomas~L. Griffiths. 2024.
+\newblock \href {https://doi.org/10.1038/s41562-024-01991-9} {Building machines
+  that learn and think with people}.
+\newblock \emph{Nature Human Behaviour}, 8(10):1851--1863.
+
+\bibitem[{Davidson et~al.(2023)Davidson, Romeo, Shu, Gung, Gupta, Mansour, and
+  Zhang}]{davidson2023user}
+Sam Davidson, Salvatore Romeo, Raphael Shu, James Gung, Arshit Gupta, Saab
+  Mansour, and Yi~Zhang. 2023.
+\newblock User simulation with large language models for evaluating
+  task-oriented dialogue.
+
+\bibitem[{Dettmers et~al.(2023)Dettmers, Pagnoni, Holtzman, and
+  Zettlemoyer}]{qlora}
+Tim Dettmers, Artidoro Pagnoni, Ari Holtzman, and Luke Zettlemoyer. 2023.
+\newblock \href {https://api.semanticscholar.org/CorpusID:258841328} {Qlora:
+  Efficient finetuning of quantized llms}.
+\newblock \emph{ArXiv}, abs/2305.14314.
+
+\bibitem[{Frith and Frith(2005)}]{frith2005theory}
+Chris Frith and Uta Frith. 2005.
+\newblock Theory of mind.
+\newblock \emph{Current biology}, 15(17):R644--R645.
+
+\bibitem[{Gandhi et~al.(2026)Gandhi, Bhatia, and Goodman}]{gandhi2026dialogue}
+Kanishk Gandhi, Agam Bhatia, and Noah~D. Goodman. 2026.
+\newblock Learning to simulate human dialogue.
+\newblock \emph{arXiv preprint arXiv:2601.04436}.
+
+\bibitem[{Griffiths et~al.(2024)Griffiths, Chater, and
+  Tenenbaum}]{griffiths2024bayesian}
+Thomas~L Griffiths, Nick Chater, and Joshua~B Tenenbaum. 2024.
+\newblock \emph{Bayesian models of cognition: Reverse engineering the mind}.
+\newblock MIT Press.
+
+\bibitem[{Guo et~al.(2025)Guo, Yang, Zhang, Song, Wang, Zhu, Xu, Zhang, Ma, Bi
+  et~al.}]{guo2025deepseek}
+Daya Guo, Dejian Yang, Haowei Zhang, Junxiao Song, Peiyi Wang, Qihao Zhu,
+  Runxin Xu, Ruoyu Zhang, Shirong Ma, Xiao Bi, and 1 others. 2025.
+\newblock Deepseek-r1 incentivizes reasoning in llms through reinforcement
+  learning.
+\newblock \emph{Nature}, 645(8081):633--638.
+
+\bibitem[{Guo et~al.(2024)Guo, Chen, Wang, Chang, Pei, Chawla, Wiest, and
+  Zhang}]{guo2024large}
+Taicheng Guo, Xiuying Chen, Yaqi Wang, Ruidi Chang, Shichao Pei, Nitesh~V
+  Chawla, Olaf Wiest, and Xiangliang Zhang. 2024.
+\newblock Large language model based multi-agents: A survey of progress and
+  challenges.
+\newblock \emph{arXiv preprint arXiv:2402.01680}.
+
+\bibitem[{Horton et~al.(2023)Horton, Filippas, and Manning}]{horton2023large}
+John~J Horton, Apostolos Filippas, and Benjamin~S Manning. 2023.
+\newblock Large language models as simulated economic agents: What can we learn
+  from homo silicus?
+\newblock Technical report, National Bureau of Economic Research.
+
+\bibitem[{Hu et~al.(2021)Hu, Shen, Wallis, Allen-Zhu, Li, Wang, and
+  Chen}]{lora}
+J.~Edward Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean
+  Wang, and Weizhu Chen. 2021.
+\newblock \href {https://api.semanticscholar.org/CorpusID:235458009} {Lora:
+  Low-rank adaptation of large language models}.
+\newblock \emph{ArXiv}, abs/2106.09685.
+
+\bibitem[{Hwang et~al.(2023)Hwang, Majumder, and Tandon}]{hwang2023aligning}
+EunJeong Hwang, Bodhisattwa~Prasad Majumder, and Niket Tandon. 2023.
+\newblock Aligning language models to user opinions.
+\newblock \emph{arXiv preprint arXiv:2305.14929}.
+
+\bibitem[{Jha et~al.(2025)Jha, Huang, Ye, Jaques, and
+  Kleiman-Weiner}]{jha2025modeling}
+Kunal Jha, Aydan~Yuenan Huang, Eric Ye, Natasha Jaques, and Max Kleiman-Weiner.
+  2025.
+\newblock Modeling others' minds as code.
+\newblock \emph{arXiv preprint arXiv:2510.01272}.
+
+\bibitem[{Jiang et~al.(2024)Jiang, Zhang, Cao, Breazeal, Roy, and
+  Kabbara}]{jiang2024personallm}
+Hang Jiang, Xiajie Zhang, Xubo Cao, Cynthia Breazeal, Deb Roy, and Jad Kabbara.
+  2024.
+\newblock Personallm: Investigating the ability of large language models to
+  express personality traits.
+\newblock In \emph{Findings of the association for computational linguistics:
+  NAACL 2024}, pages 3605--3627.
+
+\bibitem[{Jiang et~al.(2025)Jiang, Sorensen, Levine, and
+  Choi}]{jiang2024indievalue}
+Liwei Jiang, Taylor Sorensen, Sydney Levine, and Yejin Choi. 2025.
+\newblock Can language models reason about individualistic human values and
+  preferences?
+\newblock In \emph{Proceedings of the 63rd Annual Meeting of the Association
+  for Computational Linguistics (ACL)}.
+\newblock ArXiv:2410.03868.
+
+\bibitem[{Kahneman and Tversky(2013)}]{kahneman2013prospect}
+Daniel Kahneman and Amos Tversky. 2013.
+\newblock Prospect theory: An analysis of decision under risk.
+\newblock In \emph{Handbook of the fundamentals of financial decision making:
+  Part I}, pages 99--127. World Scientific.
+
+\bibitem[{Kargupta et~al.(2025)Kargupta, Li, Wang, Lee, Chen, Ahia, Light,
+  Griffiths, Kleiman-Weiner, Han et~al.}]{kargupta2025cognitive}
+Priyanka Kargupta, Shuyue~Stella Li, Haocheng Wang, Jinu Lee, Shan Chen,
+  Orevaoghene Ahia, Dean Light, Thomas~L Griffiths, Max Kleiman-Weiner, Jiawei
+  Han, and 1 others. 2025.
+\newblock Cognitive foundations for reasoning and their manifestation in llms.
+\newblock \emph{arXiv preprint arXiv:2511.16660}.
+
+\bibitem[{Kirk et~al.(2024)Kirk, Whitefield, R{\"o}ttger, Bean, Margatina,
+  Ciro, Mosquera, Bartolo, Williams, He, Vidgen, and Hale}]{kirk2024prism}
+Hannah~Rose Kirk, Alexander Whitefield, Paul R{\"o}ttger, Andrew Bean, Katerina
+  Margatina, Juan Ciro, Rafael Mosquera, Max Bartolo, Adina Williams, He~He,
+  Bertie Vidgen, and Scott~A. Hale. 2024.
+\newblock The {PRISM} alignment dataset: What participatory, representative and
+  individualised human feedback reveals about the subjective and multicultural
+  alignment of large language models.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}.
+\newblock ArXiv:2404.16019.
+
+\bibitem[{Lazer et~al.(2009)Lazer, Pentland, Adamic, Aral, Barab{\'a}si,
+  Brewer, Christakis, Contractor, Fowler, Gutmann
+  et~al.}]{lazer2009computational}
+David Lazer, Alex Pentland, Lada Adamic, Sinan Aral, Albert-L{\'a}szl{\'o}
+  Barab{\'a}si, Devon Brewer, Nicholas Christakis, Noshir Contractor, James
+  Fowler, Myron Gutmann, and 1 others. 2009.
+\newblock Computational social science.
+\newblock \emph{Science}, 323(5915):721--723.
+
+\bibitem[{Li et~al.(2026)Li, Wu, Mo, Qu, Tang, Zhao, Gan, Fan, Yu, Zhao
+  et~al.}]{li2026simulating}
+Chance~Jiajie Li, Jiayi Wu, Zhenze Mo, Ao~Qu, Yuhan Tang, Kaiya Zhao, Yulu Gan,
+  Jie Fan, Jiangbo Yu, Jinhua Zhao, and 1 others. 2026.
+\newblock Simulating society requires simulating thought.
+\newblock \emph{Advances in Neural Information Processing Systems}, 38.
+
+\bibitem[{Li et~al.(2016)Li, Galley, Brockett, Gao, and
+  Dolan}]{li2016diversity}
+Jiwei Li, Michel Galley, Chris Brockett, Jianfeng Gao, and William~B Dolan.
+  2016.
+\newblock A diversity-promoting objective function for neural conversation
+  models.
+\newblock In \emph{Proceedings of the 2016 conference of the North American
+  chapter of the association for computational linguistics: human language
+  technologies}, pages 110--119.
+
+\bibitem[{Liu et~al.(2026)Liu, Arumugam, Zhang, Escola, Pitkow, and
+  Griffiths}]{liu2026cognitive}
+Ryan Liu, Dilip Arumugam, Cedegao~E Zhang, Sean Escola, Xaq Pitkow, and
+  Thomas~L Griffiths. 2026.
+\newblock Cognitive models and ai algorithms provide templates for designing
+  language agents.
+\newblock \emph{arXiv preprint arXiv:2602.22523}.
+
+\bibitem[{Lu et~al.(2026)Lu, Huang, Han, Yao, Bei, Gesi, Xie, Sang, Zheshen,
+  Wang, He, and Wang}]{lu2026llmagentssimulatemultiturn}
+Yuxuan Lu, Jing Huang, Yan Han, Bingsheng Yao, Sisong Bei, Jiri Gesi, Yaochen
+  Xie, Yisi Sang, Zheshen, Wang, Qi~He, and Dakuo Wang. 2026.
+\newblock \href {https://arxiv.org/abs/2503.20749} {Can llm agents simulate
+  multi-turn human behavior? evidence from real online customer behavior data}.
+\newblock \emph{Preprint}, arXiv:2503.20749.
+
+\bibitem[{Lu et~al.(2025)Lu, Huang, Han, Yao, Bei, Gesi, Xie, Wang, He, and
+  Wang}]{lu2025multiturn}
+Yuxuan Lu, Jing Huang, Yan Han, Bingsheng Yao, Sisong Bei, Jiri Gesi, Yaochen
+  Xie, Jessie Wang, Qi~He, and Dakuo Wang. 2025.
+\newblock Can {LLM} agents simulate multi-turn human behavior? {E}vidence from
+  real online customer behavior data.
+\newblock \emph{arXiv preprint arXiv:2503.20749}.
+
+\bibitem[{Mangrulkar et~al.(2022)Mangrulkar, Gugger, Debut, Belkada, Paul,
+  Bossan, and Tietz}]{peft}
+Sourab Mangrulkar, Sylvain Gugger, Lysandre Debut, Younes Belkada, Sayak Paul,
+  Benjamin Bossan, and Marian Tietz. 2022.
+\newblock {PEFT}: State-of-the-art parameter-efficient fine-tuning methods.
+\newblock \url{https://github.com/huggingface/peft}.
+
+\bibitem[{Mehri et~al.(2025)Mehri, Yang, Kim, Tur, Mehri, and
+  Hakkani-T{\"u}r}]{mehri2025goal}
+Shikib Mehri, Xuhan Yang, Tae Kim, Gokhan Tur, Shikib Mehri, and Dilek
+  Hakkani-T{\"u}r. 2025.
+\newblock Goal alignment in {LLM}-based user simulators for conversational
+  {AI}.
+\newblock \emph{arXiv preprint arXiv:2507.20152}.
+
+\bibitem[{Naous et~al.(2025)Naous, Laban, Xu, and Neville}]{naous2025flipping}
+Tarek Naous, Philippe Laban, Wei Xu, and Jennifer Neville. 2025.
+\newblock Flipping the dialogue: Training and evaluating user language models.
+\newblock In \emph{Proceedings of the 63rd Annual Meeting of the Association
+  for Computational Linguistics (ACL)}.
+\newblock ArXiv:2510.06552.
+
+\bibitem[{Newell(1994)}]{newell1994unified}
+Allen Newell. 1994.
+\newblock \emph{Unified theories of cognition}.
+\newblock Harvard University Press.
+
+\bibitem[{Ni et~al.(2026)Ni, Wang, Wang, Kveton, Dernoncourt, Xia, Chen, Luera,
+  Basu, Mukherjee, Mathur, Ahmed, Wu, Li, Zhang, Zhang, Yu, Kim, Gu, Tu, Siu,
+  Wang, Yoon, Lipka, Park, Lin, Bui, Zhao, Derr, and Rossi}]{user_sim_survey}
+Bo~Ni, Yu~Wang, Leyao Wang, Branislav Kveton, Franck Dernoncourt, Yu~Xia,
+  Hongjie Chen, Reuben Luera, Samyadeep Basu, Subhojyoti Mukherjee, Puneet
+  Mathur, Nesreen~K. Ahmed, Junda Wu, Li~Li, Huixin Zhang, Ruiyi Zhang, Tong
+  Yu, Sungchul Kim, Jiuxiang Gu, and 11 others. 2026.
+\newblock \href {https://doi.org/10.18653/v1/2026.eacl-long.200} {A survey on
+  {LLM}-based conversational user simulation}.
+\newblock In \emph{Proceedings of the 19th Conference of the {E}uropean Chapter
+  of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long
+  Papers)}, pages 4266--4301, Rabat, Morocco. Association for Computational
+  Linguistics.
+
+\bibitem[{Park et~al.(2023)Park, O'Brien, Cai, Morris, Liang, and
+  Bernstein}]{park2023generative}
+Joon~Sung Park, Joseph~C. O'Brien, Carrie~Jun Cai, Meredith~Ringel Morris,
+  Percy Liang, and Michael~S. Bernstein. 2023.
+\newblock Generative agents: Interactive simulacra of human behavior.
+\newblock In \emph{Proceedings of the 36th Annual ACM Symposium on User
+  Interface Software and Technology (UIST)}.
+
+\bibitem[{Park et~al.(2024)Park, Zou, Shaw, Hill, Cai, Morris, Willer, Liang,
+  and Bernstein}]{park2024generative}
+Joon~Sung Park, Carolyn~Q Zou, Aaron Shaw, Benjamin~Mako Hill, Carrie Cai,
+  Meredith~Ringel Morris, Robb Willer, Percy Liang, and Michael~S Bernstein.
+  2024.
+\newblock Generative agent simulations of 1,000 people.
+\newblock \emph{arXiv preprint arXiv:2411.10109}, 52.
+
+\bibitem[{Peterson et~al.(2021)Peterson, Bourgin, Agrawal, Reichman, and
+  Griffiths}]{peterson2021using}
+Joshua~C Peterson, David~D Bourgin, Mayank Agrawal, Daniel Reichman, and
+  Thomas~L Griffiths. 2021.
+\newblock Using large-scale experiments and machine learning to discover
+  theories of human decision-making.
+\newblock \emph{Science}, 372(6547):1209--1214.
+
+\bibitem[{{Qwen Team}(2026)}]{qwenteam2026qwen35omni}
+{Qwen Team}. 2026.
+\newblock Qwen3.5-omni technical report.
+\newblock \emph{arXiv preprint arXiv:2604.15804}.
+
+\bibitem[{Rabinowitz et~al.(2018)Rabinowitz, Perbet, Song, Zhang, Eslami, and
+  Botvinick}]{rabinowitz2018machine}
+Neil Rabinowitz, Frank Perbet, Francis Song, Chiyuan Zhang, SM~Ali Eslami, and
+  Matthew Botvinick. 2018.
+\newblock Machine theory of mind.
+\newblock In \emph{International conference on machine learning}, pages
+  4218--4227. PMLR.
+
+\bibitem[{Ryan et~al.(2025)Ryan, Shaikh, Bhagirath, Frees, Held, and
+  Yang}]{ryan2025synthesizeme}
+Michael~J Ryan, Omar Shaikh, Aditri Bhagirath, Daniel Frees, William Held, and
+  Diyi Yang. 2025.
+\newblock {SynthesizeMe}! inducing persona-guided prompts for personalized
+  reward models in {LLMs}.
+\newblock In \emph{Proceedings of the 63rd Annual Meeting of the Association
+  for Computational Linguistics (ACL)}.
+\newblock ArXiv:2506.05598.
+
+\bibitem[{Santurkar et~al.(2023)Santurkar, Durmus, Ladhak, Lee, Liang, and
+  Hashimoto}]{santurkar2023opinions}
+Shibani Santurkar, Esin Durmus, Faisal Ladhak, Cinoo Lee, Percy Liang, and
+  Tatsunori Hashimoto. 2023.
+\newblock Whose opinions do language models reflect?
+\newblock \emph{arXiv preprint arXiv:2303.17548}.
+
+\bibitem[{Sekuli{\'c} et~al.(2024)Sekuli{\'c}, Ferraro, and
+  Aliannejadi}]{sekulic2024simulating}
+Ivan Sekuli{\'c}, Nicola Ferraro, and Mohammad Aliannejadi. 2024.
+\newblock Reliable {LLM}-based user simulator for task-oriented dialogue
+  systems.
+
+\bibitem[{Shah et~al.(2018)Shah, Hakkani-T{\"u}r, Liu, and
+  T{\"u}r}]{shah2018bootstrapping}
+Pararth Shah, Dilek Hakkani-T{\"u}r, Bing Liu, and G{\"o}khan T{\"u}r. 2018.
+\newblock Bootstrapping a neural conversational agent with dialogue self-play,
+  crowdsourcing and on-line reinforcement learning.
+\newblock In \emph{Proceedings of the 2018 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies (NAACL-HLT), Industry Papers}, pages 41--51.
+
+\bibitem[{Shao et~al.(2024)Shao, Wang, Zhu, Xu, Song, Bi, Zhang, Zhang, Li, Wu
+  et~al.}]{shao2024deepseekmath}
+Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei
+  Zhang, Mingchuan Zhang, Y.K. Li, Yang Wu, and 1 others. 2024.
+\newblock {DeepSeekMath}: Pushing the limits of mathematical reasoning in open
+  language models.
+\newblock \emph{arXiv preprint arXiv:2402.03300}.
+
+\bibitem[{Sheng et~al.(2024)Sheng, Zhang, Ye, Wu, Zhang, Zhang, Peng, Lin, and
+  Wu}]{verl}
+Guangming Sheng, Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru~Zhang,
+  Yanghua Peng, Haibin Lin, and Chuan Wu. 2024.
+\newblock \href {https://api.semanticscholar.org/CorpusID:272987758}
+  {Hybridflow: A flexible and efficient rlhf framework}.
+\newblock \emph{Proceedings of the Twentieth European Conference on Computer
+  Systems}.
+
+\bibitem[{Simon(1955)}]{simon1955behavioral}
+Herbert~A Simon. 1955.
+\newblock A behavioral model of rational choice.
+\newblock \emph{The quarterly journal of economics}, pages 99--118.
+
+\bibitem[{Suh et~al.(2026)Suh, Raj, Kang, and Chang}]{utility}
+Joseph Suh, Ayush Raj, Minwoo Kang, and Serina Chang. 2026.
+\newblock \href {https://arxiv.org/abs/2605.09808} {Quantifying the utility of
+  user simulators for building collaborative llm assistants}.
+\newblock \emph{Preprint}, arXiv:2605.09808.
+
+\bibitem[{Sumers et~al.(2023)Sumers, Yao, Narasimhan, and
+  Griffiths}]{sumers2023cognitive}
+Theodore~R Sumers, Shunyu Yao, Karthik Narasimhan, and Thomas~L Griffiths.
+  2023.
+\newblock Cognitive architectures for language agents.
+\newblock \emph{arXiv preprint arXiv:2309.02427}.
+
+\bibitem[{Sun et~al.(2026)Sun, Zhou, Liu, Du, Sun, Xie, Ma, Chen, Wan, Yang,
+  Zhou, Wu, Welleck, Neubig, Yang, and Sap}]{verbal_feedback}
+Weiwei Sun, Xuhui Zhou, Jiarui Liu, Weihua Du, Haojia Sun, Yiqing Xie, Qianou
+  Ma, Sihao Chen, Mengting Wan, Longqi Yang, Pei Zhou, Sherry Wu, Sean Welleck,
+  Graham Neubig, Yiming Yang, and Maarten Sap. 2026.
+\newblock \href {https://arxiv.org/abs/2605.20506} {Reinforcing human behavior
+  simulation via verbal feedback}.
+\newblock \emph{Preprint}, arXiv:2605.20506.
+
+\bibitem[{Toma{\v{s}}ev et~al.(2026)Toma{\v{s}}ev, Franklin, and
+  Osindero}]{tomavsev2026intelligent}
+Nenad Toma{\v{s}}ev, Matija Franklin, and Simon Osindero. 2026.
+\newblock Intelligent ai delegation.
+\newblock \emph{arXiv preprint arXiv:2602.11865}.
+
+\bibitem[{Turing(1950)}]{turing1950computing}
+A.~M. Turing. 1950.
+\newblock Computing machinery and intelligence.
+\newblock \emph{Mind}, 59(236):433--460.
+
+\bibitem[{von Werra et~al.(2020)von Werra, Belkada, Tunstall, Beeching, Thrush,
+  Lambert, Huang, Rasul, and Gallouédec}]{TRL}
+Leandro von Werra, Younes Belkada, Lewis Tunstall, Edward Beeching, Tristan
+  Thrush, Nathan Lambert, Shengyi Huang, Kashif Rasul, and Quentin Gallouédec.
+  2020.
+\newblock \href {https://github.com/huggingface/trl} {{TRL: Transformers
+  Reinforcement Learning}}.
+
+\bibitem[{Wolf et~al.(2020)Wolf, Debut, Sanh, Chaumond, Delangue, Moi, Cistac,
+  Rault, Louf, Funtowicz, Davison, Shleifer, von Platen, Ma, Jernite, Plu, Xu,
+  Le~Scao, Gugger, Drame, Lhoest, and Rush}]{transformers}
+Thomas Wolf, Lysandre Debut, Victor Sanh, Julien Chaumond, Clement Delangue,
+  Anthony Moi, Pierric Cistac, Tim Rault, Remi Louf, Morgan Funtowicz, Joe
+  Davison, Sam Shleifer, Patrick von Platen, Clara Ma, Yacine Jernite, Julien
+  Plu, Canwen Xu, Teven Le~Scao, Sylvain Gugger, and 3 others. 2020.
+\newblock \href {https://doi.org/10.18653/v1/2020.emnlp-demos.6} {Transformers:
+  State-of-the-art natural language processing}.
+\newblock In \emph{Proceedings of the 2020 Conference on Empirical Methods in
+  Natural Language Processing: System Demonstrations}, pages 38--45, Online.
+  Association for Computational Linguistics.
+
+\bibitem[{Wolf et~al.(2019)Wolf, Sanh, Chaumond, and
+  Delangue}]{wolf2019transfertransfo}
+Thomas Wolf, Victor Sanh, Julien Chaumond, and Clement Delangue. 2019.
+\newblock {TransferTransfo}: A transfer learning approach for neural network
+  based conversational agents.
+\newblock \emph{arXiv preprint arXiv:1901.08149}.
+
+\bibitem[{Wu et~al.(2026)Wu, Choi, Khatua, Wang, He-Yueya, Weerasooriya, Wei,
+  Yang, Leskovec, and Zou}]{wu2026humanlm}
+Shirley Wu, Evelyn Choi, Arpandeep Khatua, Zhanghan Wang, Joy He-Yueya,
+  Tharindu~Cyril Weerasooriya, Wei Wei, Diyi Yang, Jure Leskovec, and James
+  Zou. 2026.
+\newblock {HumanLM}: Simulating users with state alignment beats response
+  imitation.
+\newblock \emph{arXiv preprint arXiv:2603.03303}.
+
+\bibitem[{Wurgaft et~al.(2025)Wurgaft, Prystawski, Gandhi, Zhang, Tenenbaum,
+  and Goodman}]{wurgaft2025scaling}
+Daniel Wurgaft, Ben Prystawski, Kanishk Gandhi, Cedegao~E Zhang, Joshua~B
+  Tenenbaum, and Noah~D Goodman. 2025.
+\newblock Scaling up the think-aloud method.
+\newblock \emph{arXiv preprint arXiv:2505.23931}.
+
+\bibitem[{Zhang et~al.(2025)Zhang, Colas, Poesia, Tenenbaum, and
+  Andreas}]{zhang2025code}
+Cedegao~E Zhang, C{\'e}dric Colas, Gabriel Poesia, Joshua~B Tenenbaum, and
+  Jacob Andreas. 2025.
+\newblock Code-enabled language models can outperform reasoning models on
+  diverse tasks.
+\newblock \emph{arXiv preprint arXiv:2510.20909}.
+
+\bibitem[{Zhang et~al.(2018)Zhang, Dinan, Urbanek, Szlam, Kiela, and
+  Weston}]{zhang2018personalizing}
+Saizheng Zhang, Emily Dinan, Jack Urbanek, Arthur Szlam, Douwe Kiela, and Jason
+  Weston. 2018.
+\newblock Personalizing dialogue agents: {I} have a dog, do you have pets too?
+\newblock In \emph{Proceedings of the 56th Annual Meeting of the Association
+  for Computational Linguistics (ACL)}, pages 2204--2213.
+
+\bibitem[{Zhou et~al.(2026{\natexlab{a}})Zhou, Sun, Du, Liu, Sun, Ma, Wu, Yang,
+  and Sap}]{OdysSim}
+Xuhui Zhou, Weiwei Sun, Weihua Du, Jiarui Liu, Haojia Sun, Qianou Ma,
+  Tongshuang Wu, Yiming Yang, and Maarten Sap. 2026{\natexlab{a}}.
+\newblock Odyssim: Building foundation models for human behavior simulation.
+
+\bibitem[{Zhou et~al.(2026{\natexlab{b}})Zhou, Sun, Ma, Xie, Liu, Du, Welleck,
+  Yang, Neubig, Wu, and Sap}]{sim2real}
+Xuhui Zhou, Weiwei Sun, Qianou Ma, Yiqing Xie, Jiarui Liu, Weihua Du, Sean
+  Welleck, Yiming Yang, Graham Neubig, Sherry~Tongshuang Wu, and Maarten Sap.
+  2026{\natexlab{b}}.
+\newblock \href {https://arxiv.org/abs/2603.11245} {Mind the sim2real gap in
+  user simulation for agentic tasks}.
+\newblock \emph{Preprint}, arXiv:2603.11245.
+
+\bibitem[{Ziems et~al.(2024)Ziems, Held, Shaikh, Chen, Zhang, and
+  Yang}]{ziems2024can}
+Caleb Ziems, William Held, Omar Shaikh, Jiaao Chen, Zhehao Zhang, and Diyi
+  Yang. 2024.
+\newblock Can large language models transform computational social science?
+\newblock \emph{Computational Linguistics}, 50(1):237--291.
+
+\end{thebibliography}

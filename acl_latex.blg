@@ -1,0 +1,58 @@
+This is BibTeX, Version 0.99d (TeX Live 2023/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: acl_latex.aux
+The style file: acl_natbib.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: references.bib
+Warning--entry type for "TRL" isn't style-file defined
+--line 232 of file references.bib
+Warning--empty booktitle in davidson2023user
+Warning--empty booktitle in sekulic2024simulating
+Warning--empty journal in OdysSim
+You've used 66 entries,
+            3764 wiz_defined-function locations,
+            1086 strings with 22404 characters,
+and the built_in function-call counts, 59836 in all, are:
+= -- 4769
+> -- 4186
+< -- 23
++ -- 1753
+- -- 1314
+* -- 4308
+:= -- 8910
+add.period$ -- 272
+call.type$ -- 66
+change.case$ -- 808
+chr.to.int$ -- 69
+cite$ -- 69
+duplicate$ -- 3303
+empty$ -- 3569
+format.name$ -- 1495
+if$ -- 12562
+int.to.chr$ -- 2
+int.to.str$ -- 9
+missing$ -- 826
+newline$ -- 335
+num.names$ -- 264
+pop$ -- 2191
+preamble$ -- 1
+purify$ -- 703
+quote$ -- 0
+skip$ -- 2998
+stack$ -- 0
+substring$ -- 1478
+swap$ -- 1850
+text.length$ -- 17
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 585
+warning$ -- 3
+while$ -- 258
+width$ -- 0
+write$ -- 840
+(There were 4 warnings)
