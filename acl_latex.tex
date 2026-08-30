@@ -88,6 +88,40 @@
   }
 }
 
+\newtcblisting{artifactbox}[1][]{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=black,
+  boxrule=0.5pt,
+  arc=2pt,
+  left=6pt,
+  right=6pt,
+  top=5pt,
+  bottom=5pt,
+  colbacktitle=gray!10,
+  coltitle=black,
+  fonttitle=\bfseries\small,
+  title={#1},
+  listing only,
+  listing options={
+    language=none,
+    basicstyle=\ttfamily\footnotesize,
+    columns=fullflexible,
+    breaklines=true,
+    breakatwhitespace=false,
+    breakautoindent=false,
+    breakindent=0pt,
+    showstringspaces=false,
+    literate=
+      {"}{{\char34}}1
+      {’}{{'}}1
+      {“}{{\char34}}1
+      {”}{{\char34}}1
+      {—}{{\textemdash}}1
+  }
+}
+
 \newcommand{\subtle}[1]{{\tiny\color[gray]{0.4}#1}}
 \newcommand{\M}[1]{\qty{#1}{\million}}
 
@@ -473,7 +507,7 @@ $u = h$ (user history only)      & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$}
 
 \subsection{Qualitative Examples}
 
-Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL. On Chat, the ground truth is a natural pivot often observed in human-AI conversations. All of the model generations stay anchored to the previous response, and Sim-RL aligns with GPT-5 and Qwen3.5-397B in content. Both SFT-Init and Turing-RL ask plausible follow-ups, although the question raised by SFT-Init is already partially answered in the context. On Reddit, the ground truth is a sharp comment. GPT-5 and Qwen3.5-397B write overly verbose responses in an assistant-like style. SFT-Init responds by paraphrasing a main point in the context. Sim-RL matches GPT-5 in content but is more succinct. Turing-RL provides a plausible human-like reaction. Additional examples including more baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}. We also present qualitative outputs from the training-time judge in Appendix x.
+Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL. On Chat, the ground truth is a natural pivot often observed in human-AI conversations. All of the model generations stay anchored to the previous response, and Sim-RL aligns with GPT-5 and Qwen3.5-397B in content. Both SFT-Init and Turing-RL ask plausible follow-ups, although the question raised by SFT-Init is already partially answered in the context. On Reddit, the ground truth is a sharp comment. GPT-5 and Qwen3.5-397B write overly verbose responses in an assistant-like style. SFT-Init responds by paraphrasing a main point in the context. Sim-RL matches GPT-5 in content but is more succinct. Turing-RL provides a plausible human-like reaction. Additional examples including more baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}. We also present a qualitative output from the training-time judge in Appendix~\ref{app:training-judge-example}.
 
 \begin{figure*}[t]
 \centering
@@ -887,6 +921,103 @@ We use three judge prompts. The Turing distinguishability judge scores how indis
 \input{prompts/turing_prompt}
 \input{prompts/sim_prompt}
 \input{prompts/specificity_prompt}
+
+\section{Training-Time Turing Judge Example}
+\label{app:training-judge-example}
+
+We reproduce one complete example from the Chat training split below. The Qwen3.5-397B-A17B training-time judge received the target user's historical context, the current conversation, and the ground-truth and model-generated responses in randomized order. In this instance, the ground truth was Response~A and the model output was Response~B. The judge assigned the model a Turing score of 3 on the 1--7 scale: although the model response was a coherent local continuation, the judge found the ground truth more consistent with the user's terse, lowercase style and tendency to pivot to a practical question. The blocks below preserve the context and parsed judge output verbatim.
+
+\begin{artifactbox}[Historical user context]
+[HISTORICAL CONTEXT]
+Below are previous conversations involving [HUMAN]. Use them to infer [HUMAN]'s style, values, preferences, and likely responses.
+
+<Conversation 1>
+[MESSAGES]
+[HUMAN]: Why is the sky blue?
+[OTHER]: The sky appears blue because of a phenomenon called Rayleigh scattering, where shorter (blue) wavelengths of light are scattered more than longer (red) wavelengths by the tiny molecules of gases in the atmosphere, giving the sky its blue appearance.
+[HUMAN]: do you like blue?
+[OTHER]: Yes, I do! Blue is a beautiful and calming color. It's also associated with trust, loyalty, and wisdom.
+</Conversation 1>
+
+<Conversation 2>
+[MESSAGES]
+[HUMAN]: why do people still believe in a god?
+[OTHER]: Many individuals believe in a god or higher power due to a sense of spirituality or a desire for moral guidance. Some find comfort and solace in the idea of a higher being who cares for them and the world. Additionally, religious traditions and cultural influences can shape beliefs and practices.
+[HUMAN]: Is science a good thing?
+[OTHER]: Science is a powerful tool for understanding the world and improving our lives. It has led to numerous scientific advancements, technological innovations, and improvements in healthcare and quality of life. However, it can also be used to develop harmful weapons and technologies, so it is important to use science responsibly.
+</Conversation 2>
+
+<Conversation 3>
+[MESSAGES]
+[HUMAN]: What should I do when I grow old?
+[OTHER]: When you grow old, focus on maintaining your physical and mental health, stay social, and pursue activities that bring you joy and fulfillment. Consider hobbies, volunteering, and spending time with loved ones to keep your mind and body active. Age is just a number, and you can still live a vibrant life!
+[HUMAN]: How old will i get before I pass on
+[OTHER]: Life expectancy varies based on factors like lifestyle, genetics, and health conditions. On average, a person in good health can live until their mid-80s to early 90s. However, it's important to focus on living a healthy and fulfilling life, rather than setting a specific age goal.
+</Conversation 3>
+\end{artifactbox}
+
+\begin{artifactbox}[Current conversation]
+[MESSAGES SO FAR]
+[HUMAN]: Where does rain come from?
+[OTHER]: Rain is formed when water vapor in the clouds condenses into larger and larger droplets of water. When the drops are heavy enough, they fall to the ground as rain. Would you like to know more about the water cycle?
+\end{artifactbox}
+
+\begin{artifactbox}[Responses shown to the judge (randomized order)]
+Response A (ground-truth human response):
+is it safe to drink the rain
+
+Response B (model-generated response):
+What is the water cycle?
+\end{artifactbox}
+
+\begin{artifactbox}[Parsed training-time Turing judge output]
+{
+  "response_a_source_copy": "",
+  "response_b_source_copy": "",
+  "source_copy_penalty_a": 0.0,
+  "source_copy_penalty_b": 0.0,
+  "response_a_assistant_like": "",
+  "response_b_assistant_like": "",
+  "assistant_like_penalty_a": 0.0,
+  "assistant_like_penalty_b": 0.0,
+  "response_a_wrong_target_or_role": "",
+  "response_b_wrong_target_or_role": "",
+  "wrong_target_or_role_penalty_a": 0.0,
+  "wrong_target_or_role_penalty_b": 0.0,
+  "response_a_unsupported_adversarial_reframing": "",
+  "response_b_unsupported_adversarial_reframing": "",
+  "unsupported_adversarial_reframing_penalty_a": 0.0,
+  "unsupported_adversarial_reframing_penalty_b": 0.0,
+  "immediate_target_score_a": 0.9,
+  "immediate_target_score_b": 1.0,
+  "human_goal_score_a": 0.9,
+  "human_goal_score_b": 0.7,
+  "communication_style_score_a": 1.0,
+  "communication_style_score_b": 0.3,
+  "base_score_a": 2.8,
+  "base_score_b": 2.0,
+  "penalty_a": 0.0,
+  "penalty_b": 0.0,
+  "response_a_score": 2.8,
+  "response_b_score": 2.0,
+  "score_gap": -0.7999999999999998,
+  "reasoning": "Response A is the clear winner based on communication style. The [HUMAN] consistently types in lowercase, often omits question marks, and uses simple, direct phrasing (e.g., 'do you like blue?', 'How old will i get...'). Response A ('is it safe to drink the rain') mimics this lowercase, no-punctuation style perfectly. Response B ('What is the water cycle?') uses standard capitalization and punctuation, which breaks the established persona pattern. While Response B is a logically perfect follow-up to the bot's offer, Response A represents a more natural, human-like pivot to a practical concern, executed in the user's specific stylistic voice.",
+  "rating": 3,
+  "parse_error": false,
+  "source_copy_warning_a": {
+    "triggered": false,
+    "ngram_size": 5,
+    "longest_match_tokens": 0,
+    "matches": []
+  },
+  "source_copy_warning_b": {
+    "triggered": false,
+    "ngram_size": 5,
+    "longest_match_tokens": 0,
+    "matches": []
+  }
+}
+\end{artifactbox}
 
 \section{Training Dynamics}
 \label{app:training-dynamics}

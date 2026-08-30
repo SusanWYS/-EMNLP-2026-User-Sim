@@ -1,14 +1,46 @@
 {
-  "label_1": {
-    "context_specificity": {"score": 0.0, "reason": "..."},
-    "user_evidence_compatibility": {"score": 0.0, "reason": "..."},
-    "overall": 0.0,
-    "reasoning": "..."
+  "response_a_source_copy": "",
+  "response_b_source_copy": "",
+  "source_copy_penalty_a": 0.0,
+  "source_copy_penalty_b": 0.0,
+  "response_a_assistant_like": "",
+  "response_b_assistant_like": "",
+  "assistant_like_penalty_a": 0.0,
+  "assistant_like_penalty_b": 0.0,
+  "response_a_wrong_target_or_role": "",
+  "response_b_wrong_target_or_role": "",
+  "wrong_target_or_role_penalty_a": 0.0,
+  "wrong_target_or_role_penalty_b": 0.0,
+  "response_a_unsupported_adversarial_reframing": "",
+  "response_b_unsupported_adversarial_reframing": "",
+  "unsupported_adversarial_reframing_penalty_a": 0.0,
+  "unsupported_adversarial_reframing_penalty_b": 0.0,
+  "immediate_target_score_a": 0.9,
+  "immediate_target_score_b": 1.0,
+  "human_goal_score_a": 0.9,
+  "human_goal_score_b": 0.7,
+  "communication_style_score_a": 1.0,
+  "communication_style_score_b": 0.3,
+  "base_score_a": 2.8,
+  "base_score_b": 2.0,
+  "penalty_a": 0.0,
+  "penalty_b": 0.0,
+  "response_a_score": 2.8,
+  "response_b_score": 2.0,
+  "score_gap": -0.7999999999999998,
+  "reasoning": "Response A is the clear winner based on communication style. The [HUMAN] consistently types in lowercase, often omits question marks, and uses simple, direct phrasing (e.g., 'do you like blue?', 'How old will i get...'). Response A ('is it safe to drink the rain') mimics this lowercase, no-punctuation style perfectly. Response B ('What is the water cycle?') uses standard capitalization and punctuation, which breaks the established persona pattern. While Response B is a logically perfect follow-up to the bot's offer, Response A represents a more natural, human-like pivot to a practical concern, executed in the user's specific stylistic voice.",
+  "rating": 3,
+  "parse_error": false,
+  "source_copy_warning_a": {
+    "triggered": false,
+    "ngram_size": 5,
+    "longest_match_tokens": 0,
+    "matches": []
   },
-  "label_2": {
-    "context_specificity": {"score": 0.0, "reason": "..."},
-    "user_evidence_compatibility": {"score": 0.0, "reason": "..."},
-    "overall": 0.0,
-    "reasoning": "..."
+  "source_copy_warning_b": {
+    "triggered": false,
+    "ngram_size": 5,
+    "longest_match_tokens": 0,
+    "matches": []
   }
 }
