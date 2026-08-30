@@ -525,7 +525,7 @@ To test transfer beyond open-ended chat, we evaluate the three Chat-trained simu
 \centering
 \small
 \setlength{\tabcolsep}{5pt}
-\begin{tabular}{@{}lcc@{}}
+\begin{tabular*}{0.75\columnwidth}{@{\extracolsep{\fill}}lcc@{}}
 \toprule
 Model & Turing & Sim $[0,1]$ \\
 \midrule
@@ -533,8 +533,8 @@ SFT-Init & 3.265 & .1791 \\
 Sim-RL & 3.645 & .3133 \\
 Turing-RL & \textbf{3.857} & \textbf{.3190} \\
 \bottomrule
-\end{tabular}
-\caption{Out-of-domain transfer to the first 100 MS-TOD users. Higher is better.}
+\end{tabular*}
+\caption{Out-of-domain transfer to the first 100 MS-TOD users. Higher is better; bold indicates the best result in each column.}
 \label{tab:mstod_transfer}
 \vspace{-0.6em}
 \end{table}
