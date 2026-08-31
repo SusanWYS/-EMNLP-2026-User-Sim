@@ -135,9 +135,9 @@
 
 % The ACL review option anonymizes the author block for submission.
 
-\author{Yingshan Susan Wang$^{1*}$, Cedegao E. Zhang$^{1*}$, Linlu Qiu$^{1*}$, Zexue He$^{2}\thanks{Core contributors.}$\:\:, \\
+\author{Yingshan Susan Wang$^{1*}$ \hspace{1mm} Cedegao E. Zhang$^{1*}$ \hspace{1mm} Linlu Qiu$^{1*}$ \hspace{1mm} Zexue He$^{2}\thanks{Core contributors.}$ \\
 \vspace{2mm}
-\textbf{Pengyuan Li$^3$, Alex Pentland$^{1,2}$, Roger P. Levy$^1$, Yoon Kim$^1$} \\
+\textbf{Pengyuan Li$^3$ \hspace{1mm} Alex Pentland$^{1,2}$ \hspace{1mm} Roger P. Levy$^1$ \hspace{1mm} Yoon Kim$^1$} \\
   $^1$Massachusetts Institute of Technology, $^2$Stanford University, $^3$MIT-IBM Watson AI Lab    \vspace{1mm} \\
   \texttt{\{susanw26, cedzhang, linluqiu\}@mit.edu}, \texttt{zexueh@stanford.edu} 
 }
@@ -340,21 +340,23 @@ In addition to LLM-as-a-judge evaluation, we also recruit 360 human participants
 \subsection{LLM-as-a-Judge Evaluation}
 \paragraph{Turing-RL trains  human-like simulators.}
 \begin{figure}[t]
+\vspace{0.5mm}
 \centering
 \includegraphics[width=\columnwidth]{figures/sonnet46_turing_dot1.pdf}
-\vspace{-2mm}
+\vspace{-7mm}
 \caption{\textbf{LLMs trained with Turing rewards (Turing-RL) outperforms other training signals on human-likeness in both domains.} Turing judge scores (1--7 Likert; higher = more human-like) from Sonnet~4.6 on Chat and Reddit, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI.}
 \label{fig:turing_dot}
-% \vspace{-3mm}
+\vspace{-4mm}
 \end{figure}
 
 \begin{figure}[t]
-\vspace{2mm}
+% \vspace{2mm}
 \centering
 \includegraphics[width=0.98\columnwidth]{figures/sonnet46_sim_dot1.pdf}
 \vspace{-2mm}
 \caption{\textbf{Turing-RL matches Sim-RL even though Sim-RL is   explicitly trained to maximize similarity}, showing that optimizing for indistinguishability does not sacrifice content alignment. Response similarity to ground truth (Sim, \%; higher = more similar to what the user actually said) from Sonnet~4.6 on Chat and Reddit, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. The dashed line with shaded band marks the Qwen3-8B base model performance with 95\% CI.}
 \label{fig:sim_dot}
+\vspace{-4mm}
 \end{figure}
 
 Figure~\ref{fig:turing_dot} shows Turing judge scores across both domains. Turing-RL outperforms all other models, including Sim-RL and SFT-Init, on both Reddit and Chat. The gap is large on Chat, where Turing-RL exceeds the next-best model by a wide margin.
@@ -368,10 +370,10 @@ Figure~\ref{fig:sim_dot} reports similarity to the ground truth response. Among 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\columnwidth]{figures/sonnet46_specificity_dot1.pdf}
-% \vspace{-4mm}
+\vspace{-3mm}
 \caption{\textbf{Turing-RL is among the strongest on Chat, while Turing-RL and Sim-RL are strongest among the trained models on Reddit},  outperforming SFT-Init and Logprob-RL. Response specificity ($[0,1]$; higher = more grounded in the interaction context and compatible with the target user) from Sonnet~4.6, with 95\% CIs. Hollow markers indicate untrained baselines, while solid markers denote trained Qwen3-8B variants. GT is the ground truth human response, and the dashed line marks the Qwen3-8B base model with 95\% CI.}
 \label{fig:specificity}
-% \vspace{-0.5cm}
+\vspace{-0.3cm}
 \end{figure}
 
 Beyond matching content, we measure whether generated responses are specifically grounded in the interaction context and compatible with the target user, rather than being generic but plausible replies. Figure~\ref{fig:specificity} shows that Turing-RL and Sim-RL outperform SFT-Init and Logprob-RL in both domains.
@@ -382,7 +384,7 @@ On Chat, Qwen3.5-397B scores highest overall, followed by Turing-RL, which excee
 
 Table~\ref{tab:human_eval_winrate} reports mean win rates over ground truth responses. These estimates are computed from 100 heldout users per dataset (Reddit/Chat) with 6 selected annotators per heldout user, yielding 600 binary judgments per dataset--model pair.  On Chat, Turing-RL has the highest win rate (WR $= .57$), while SFT-Init and Sim-RL remain close to chance. On Reddit, both Sim-RL and Turing-RL are near chance and much higher than SFT-Init. 
 
-\begin{table}[t]
+\begin{table}[b]
 \centering
 \small
 \setlength{\tabcolsep}{6pt}
@@ -398,6 +400,7 @@ Turing-RL & .57\subtle{$\pm.050$} & {.50\subtle{$\pm.051$}} \\
 \end{tabular*}
 \caption{Human Turing Test, model win rates against ground truth ($\pm$ 95\% CI).}
 \label{tab:human_eval_winrate}
+% \vspace{-0.3cm}
 \end{table}
 
 We perform target-level paired permutation tests between Turing-RL and the other two models. On Chat, Turing-RL significantly outperforms both SFT-Init ($p=0.044$) and Sim-RL ($p=0.022$). On Reddit, Turing-RL significantly improves on human-likeness compared to SFT-Init ($p=0.0095$), and no statistically significant difference is detected between Turing-RL and Sim-RL. Further statistical test details are given in Appendix~\ref{app:human-eval-significance}. 
@@ -408,36 +411,34 @@ We note that Reddit is significantly harder for humans to judge than Chat. As sh
 
 \begin{figure}[t]
 \centering
-\vspace{0.4cm}
+% \vspace{0.4cm}
 \includegraphics[width=0.95\columnwidth]{figures/human_vs_sonnet46_binary_gt_accuracy1.pdf}
-% \vspace{-4mm}
+\vspace{-2mm}
 \caption{\textbf{Comparing human and LLM judge accuracy at identifying the real user's response.} For each of 50 target users per domain, we take the majority vote from ${\sim}6$ human annotators (solid) and from the Sonnet~4.6 Turing judge. \textit{GT Accuracy} is the fraction of targets correctly identified. Both evaluators agree that Turing-RL is the hardest model to distinguish from real users. \textbf{Sonnet~4.6 matches or exceeds human accuracy in most conditions, supporting its use as an automatic evaluation proxy.}}
 \label{fig:binary_gt_accuracy}
-% \vspace{-0.2cm}
+\vspace{-0.3cm}
 \end{figure}
+
+\begin{table}[b]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular*}{0.75\columnwidth}{@{\extracolsep{\fill}}lcc@{}}
+\toprule
+Model & Turing & Sim \\
+\midrule
+SFT-Init & 3.265 & .1791 \\
+Sim-RL & 3.645 & .3133 \\
+Turing-RL & \textbf{3.857} & \textbf{.3190} \\
+\bottomrule
+\end{tabular*}
+\caption{Out-of-domain transfer to the first 100 MS-TOD users. Higher is better; bold indicates the best result in each column.}
+\label{tab:mstod_transfer}
+% \vspace{-1em}
+\end{table}
+
 Our human evaluation results are less obviously in favor of the Turing-RL approach. But is it possible that human judges are actually less reliable than the Sonnet 4.6 LLM judge?
 
-We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Concretely, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.  Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators recruited under our experimental setup generally underperform Sonnet~4.6, except for judging Turing-RL on Chat, where the results are similar. 
-% \llq{the last sentence seems a bit repetitive of the second to last one}
-% We do however observe that  both evaluators agree on the model rankings: Turing-RL is the hardest to detect.
-\section{Ablations and Analysis}
-\subsection{User Representations}
-User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM. How helpful is the induced persona? We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
-
-Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history. The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, suggests that the persona captures stylistic and behavioral patterns sufficient for human-likeness, even when it does not help reproduce the exact content of the ground truth response. We also include the normalized Turing reward curves in [0, 1] during GRPO training for the three input conditions, confirming that training dynamics is not much affected by input types (Figure~\ref{fig:grpo_training_raw_scores}).
-
-To mitigate the bias from a single persona inductor model, we further test whether the user representation results depend on the auxiliary model used to induce the persona $\rho$ in Table~\ref{tab:persona_inductor_ablation} of the appendix. We find that larger models do not reliably produce better persona for user representation, and training with $u=(h, \rho)$ does not necessarily improve performance. we leave more systematic investigation of better user representation as future work.
-% Training with $u=h$ yields most stable performance overall. 
-% \llq{this seems to go against the reason we use history + persona in the first place.}
-% We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
-
-% \subsection{LLM Judge vs. Human Judges}
-
-% Our goal is to train a model to generate responses that are indistinguishable from human responses. However, different judges may be fooled in different ways. We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Specifically, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.
-
-% Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators generally underperform Sonnet~4.6, except in the chat domain, where the LLM judge is more easily fooled by Turing-RL than human annotators. Nevertheless, both evaluators agree on the model ranking: Turing-RL is the hardest to detect.
-
-% However, the two evaluators diverge in sensitivity. Sonnet~4.6 is more sensitive than humans on Reddit, correctly identifying ground truth at a higher rate for SFT and Sim-RL, while on Chat it is more easily fooled by Turing-RL than human annotators are.
 \begin{table*}[t]
 \centering
 \small
@@ -456,7 +457,36 @@ $u = h$ (user history only)      & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$}
 \vspace{-0.3cm}
 \caption{Ablation on user representation for Turing-RL. We compare three input conditions: history and persona $u = (h, \rho)$, history only $u = h$, and persona only $u = \rho$.  Values are mean $\pm$ 95\% CI; Turing is on a 1--7 scale, Sim is reported in \%, and Specificity is in $[0,1]$.}
 \label{tab:ablation_combined}
+\vspace{-0.2cm}
 \end{table*}
+
+We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Concretely, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.  Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators recruited under our experimental setup generally underperform Sonnet~4.6, except for judging Turing-RL on Chat, where the results are similar. 
+% \llq{the last sentence seems a bit repetitive of the second to last one}
+% We do however observe that  both evaluators agree on the model rankings: Turing-RL is the hardest to detect.
+
+
+
+\subsection{Cross-Domain Generalization}
+Can models trained to simulate open-ended chat transfer to task-oriented dialogues? We evaluate the three Chat-trained simulators on the first 100 users of MS-TOD, a multi-session task-oriented dialogue benchmark designed to evaluate agents rather than user simulators~\citep{du2026memguide}. As in our Chat evaluation, each simulator conditions on two to four sessions of fixed user history, an inferred persona, and the current context. Table~\ref{tab:mstod_transfer} shows that both RL variants transfer beyond their training domain, with Turing-RL achieving the highest Turing and similarity scores. As MS-TOD provides no established simulator-specific task metrics, we evaluate human-likeness and response similarity rather than goal completion. Appendix Table~\ref{tab:mstod_example} gives a qualitative example.
+\section{Ablations and Analysis}
+\subsection{User Representations}
+User representation is a core aspect of user simulation. As discussed in \S\ref{sec:problem}, we condition our models on both the user behavior data $h$ and the induced persona $\rho = f_{\text{LLM}}(h)$ from an auxiliary LLM. How helpful is the induced persona? We ablate on the user representation in both domains and study three different user representations: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both).
+
+Table~\ref{tab:ablation_combined} shows the results. Turing scores are largely robust to the choice of user representation, while specificity is more domain dependent: Chat remains stable across the three inputs, whereas Reddit favors representations that include history. The fact that persona alone achieves comparable Turing scores, but not comparable similarity scores, suggests that the persona captures stylistic and behavioral patterns sufficient for human-likeness, even when it does not help reproduce the exact content of the ground truth response. We also include the normalized Turing reward curves in [0, 1] during GRPO training for the three input conditions, confirming that training dynamics is not much affected by input types (Figure~\ref{fig:grpo_training_raw_scores}).
+
+To mitigate the bias from a single persona inductor model, we further test whether the user representation results depend on the auxiliary model used to induce the persona $\rho$ in Appendix Table~\ref{tab:persona_inductor_ablation}. We find that larger models do not reliably produce better persona for user representation, and training with $u=(h, \rho)$ does not necessarily improve performance. We leave more systematic investigation of better user representation for future work.
+% Training with $u=h$ yields most stable performance overall. 
+% \llq{this seems to go against the reason we use history + persona in the first place.}
+% We fix the training signal to the Turing reward and compare three input conditions: $u = h$ (history only), $u = \rho$ (persona only), and $u = (h, \rho)$ (both). This isolates the contribution of each component.
+
+% \subsection{LLM Judge vs. Human Judges}
+
+% Our goal is to train a model to generate responses that are indistinguishable from human responses. However, different judges may be fooled in different ways. We compare the behavior of the LLM judge and human judges by measuring their accuracy in distinguishing human responses from responses generated by different models. Specifically, we binarize the Sonnet~4.6 Turing score for each evaluation thread (score ${<}\,4 \to$ GT, ${>}\,4 \to$ model, ${=}\,4$ excluded) and take the majority vote per target user, mirroring the human forced-choice setup.
+
+% Figure~\ref{fig:binary_gt_accuracy} compares the resulting GT accuracy with human majority-vote accuracy across model on 50 target users for each domain. Human annotators generally underperform Sonnet~4.6, except in the chat domain, where the LLM judge is more easily fooled by Turing-RL than human annotators. Nevertheless, both evaluators agree on the model ranking: Turing-RL is the hardest to detect.
+
+% However, the two evaluators diverge in sensitivity. Sonnet~4.6 is more sensitive than humans on Reddit, correctly identifying ground truth at a higher rate for SFT and Sim-RL, while on Chat it is more easily fooled by Turing-RL than human annotators are.
+
 
 % \begin{table}[t]
 % \centering
@@ -506,10 +536,6 @@ $u = h$ (user history only)      & 4.26\subtle{$\pm .08$} & 4.7\subtle{$\pm .8$}
 % \label{tab:ablation_specificity}
 % \end{table}
 
-\subsection{Qualitative Examples}
-
-Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL. On Chat, the ground truth is a natural pivot often observed in human-AI conversations. All of the model generations stay anchored to the previous response, and Sim-RL aligns with GPT-5 and Qwen3.5-397B in content. Both SFT-Init and Turing-RL ask plausible follow-ups, although the question raised by SFT-Init is already partially answered in the context. On Reddit, the ground truth is a sharp comment. GPT-5 and Qwen3.5-397B write overly verbose responses in an assistant-like style. SFT-Init responds by paraphrasing a main point in the context. Sim-RL matches GPT-5 in content but is more succinct. Turing-RL provides a plausible human-like reaction. Additional examples including more baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}. We also present a qualitative output from the training-time judge in Appendix~\ref{app:training-judge-example}.
-
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/qual_exs.pdf}
@@ -518,26 +544,13 @@ Figure~\ref{fig:qualitative_examples_2} shows representative examples from both 
 \label{fig:qualitative_examples_2}
 \vspace{-1em}
 \end{figure*}
-\subsection{Cross-Domain Generalization}
-Can models trained to simulate open-ended chat transfer to task-oriented dialogues? We evaluate the three Chat-trained simulators on the first 100 users of MS-TOD, a multi-session task-oriented dialogue benchmark designed to evaluate agents rather than user simulators~\citep{du2026memguide}. As in our Chat evaluation, each simulator conditions on two to four sessions of fixed user history, an inferred persona, and the current context. Table~\ref{tab:mstod_transfer} shows that both RL variants transfer beyond their training domain, with Turing-RL achieving the highest Turing and similarity scores. As MS-TOD provides no established simulator-specific task metrics, we evaluate human-likeness and response similarity rather than goal completion. Appendix Table~\ref{tab:mstod_example} gives a qualitative example.
 
-\begin{table}[t]
-\centering
-\small
-\setlength{\tabcolsep}{5pt}
-\begin{tabular*}{0.75\columnwidth}{@{\extracolsep{\fill}}lcc@{}}
-\toprule
-Model & Turing & Sim \\
-\midrule
-SFT-Init & 3.265 & .1791 \\
-Sim-RL & 3.645 & .3133 \\
-Turing-RL & \textbf{3.857} & \textbf{.3190} \\
-\bottomrule
-\end{tabular*}
-\caption{Out-of-domain transfer to the first 100 MS-TOD users. Higher is better; bold indicates the best result in each column.}
-\label{tab:mstod_transfer}
-\vspace{-0.6em}
-\end{table}
+\vspace{-0.2em}
+\subsection{Qualitative Examples}
+
+Figure~\ref{fig:qualitative_examples_2} shows representative examples from both domains comparing the ground truth, GPT-5, Qwen3.5-397B, SFT-Init, Sim-RL, and Turing-RL. On Chat, the ground truth is a natural pivot often observed in human-AI conversations. All of the model generations stay anchored to the previous response, and Sim-RL aligns with GPT-5 and Qwen3.5-397B in content. Both SFT-Init and Turing-RL ask plausible follow-ups, although the question raised by SFT-Init is already partially answered in the context. On Reddit, the ground truth is a sharp comment. GPT-5 and Qwen3.5-397B write overly verbose responses in an assistant-like style. SFT-Init responds by paraphrasing a main point in the context. Sim-RL matches GPT-5 in content but is more succinct. Turing-RL provides a plausible human-like reaction. Additional examples including more baselines are shown in Appendix Figure~\ref{fig:qualitative_examples}. We also present a qualitative output from the training-time judge in Appendix~\ref{app:training-judge-example}.
+
+
 
 \section{Discussion}
 \label{sec:discussion}
@@ -562,10 +575,10 @@ Beyond standard supervised fine-tuning~\citep{wolf2019transfertransfo} for user 
 % We show this signal generalizes across evaluation metrics and interaction formats.
 
 \paragraph{Persona and user representation.}
-It is a common practice to use a natural language description of personality, demographics, and traits to represent a character. Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo}, and \citet{jiang2024personallm} more recently show that LLMs can reliably express assigned personality profiles in both self-report and free-form writing. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. In this work we combine raw history with an induced persona, providing analysis on different user representations.
+It is a common practice to use a natural language description of personality, demographics, and traits to represent a character. Persona-conditioned generation was introduced by \citet{zhang2018personalizing} and extended with pretrained models by \citet{wolf2019transfertransfo}, and \citet{jiang2024personallm} show that LLMs can express assigned personality profiles in both self-report and free-form writing. Subsequent work enriches user representations: \citet{hwang2023aligning} show that retrieving relevant past opinions outperforms demographic prompting; \citet{ryan2025synthesizeme} induce synthetic personas from behavioral traces for personalized reward modeling; and \citet{jiang2024indievalue} demonstrate that individual values cannot be approximated by group-level categories. More recently, \citet{xiao2026chameleon} discover that LLM agents assigned distinct profiles still converge into narrow behavioral patterns, providing evidence for the lack of generation diversity in persona prompting. In this work we combine raw history with an induced persona, providing analysis on training models with different user representations.
 
 \paragraph{Human behavior prediction.} Predicting human behaviors, such as people's choices, actions, and utterances, is a cornerstone task in cognitive and social sciences. Classical approaches model human decision-making include symbolic cognitive architectures \citep{newell1994unified, anderson2013adaptive}, the framework of bounded rationality \citep{simon1955behavioral}, and prospect theory that explains heuristics and biases \citep{kahneman2013prospect}. Bayesian cognitive science has become a successful paradigm in predicting human behaviors in controlled experimental settings through building structured models that perform probabilistic inference \citep{griffiths2024bayesian}, which has been applied to studying how people simulate the minds of other people \citep{baker2009action, baker2017rational}, the ability known as Theory of Mind \citep{frith2005theory}.
-A complementary, data-driven approach trains neural networks on large datasets of human choices, combining cognitive priors and achieving the strong predictive accuracy \citep{bourgin2019cognitive, peterson2021using}. More recently, LLMs have been evaluated as proxies for human participants in surveys, economic games, and social experiments~\citep{argyle2023out, horton2023large, aher2023using, park2024generative}. \citet{binz2025foundation} fine-tune a foundation model on hundreds of psychology experiments to predict trial-level human responses. These approaches have largely focused on constrained, single-turn settings, such as a survey response or an experimental trial. 
+A complementary, data-driven approach trains neural networks on large datasets of human choices, combining cognitive priors and achieving the strong predictive accuracy \citep{bourgin2019cognitive, peterson2021using}. Nowadays, LLMs have been evaluated as proxies for human participants in surveys, economic games, and social experiments~\citep{argyle2023out, horton2023large, aher2023using, park2024generative}. \citet{binz2025foundation} fine-tune a foundation model on hundreds of psychology experiments to predict trial-level human responses. These approaches have largely focused on constrained, single-turn settings, such as a survey response or an experimental trial, whereas our setting targets open-ended, free-form generations. 
 % trial-level human responses
 % constrained, single-turn settings, such as a survey response, an experimental trial, or a single decision
 % , with mixed evidence on their fidelity to real human distributions~\citep{santurkar2023whose}
